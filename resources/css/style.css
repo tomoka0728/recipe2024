@@ -1,0 +1,211 @@
+html, body {
+    @apply font-sans;
+  }
+
+
+/* フォームアレンジ */
+.custom-form {
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.input-error {
+    border-color: red;
+    background-color: #ffe6e6;
+}
+
+.rq-box{
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.op-box{
+    background-color:#fff1f1;
+    padding: 30px;
+}
+
+/* ステップナビゲーション */
+.progressbar {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 50%;
+}
+
+.progressbar li {
+    position: relative;
+    list-style-type: none;
+    text-align: center;
+    text-transform: uppercase;
+    width: 33.333%;  /* 各リストアイテムが横に並び3等分される */
+    color: #999999;
+    font-weight: bold;
+    counter-increment: steps;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.progressbar li:before {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin: 7px auto 10px auto;
+    content: counter(steps);
+    line-height: 26px;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #F5F5F5;
+}
+
+.progressbar li:after {
+    position: absolute;
+    z-index: -1;
+    top: 15px;
+    left: -50%;
+    width: 100%;
+    height: 2px;
+    content: '';
+    background-color: #F5F5F5;
+}
+
+.progressbar li:first-child:after {
+    content: none;
+}
+
+.progressbar li.active,
+.progressbar li.complete {
+    color: #ff8d8d;
+}
+
+.progressbar li.active:before,
+.progressbar li.complete:before {
+    background-color: #ff8d8d;
+    color: #FFF;
+}
+
+.progressbar li.active:after,
+.progressbar li.complete:after {
+    background-color: #0070BD;
+}
+
+  /* ラジオボタン - 検索フォーム */
+
+.radio-2 {
+    border: none;
+    display: flex;
+    gap: 10px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.radio-2 label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0 .5em;
+    position: relative;
+    max-width: 100%;
+    padding: .5em .7em;
+    border: 1px solid #dab7b7;
+    border-radius: 3px;
+    background-color: #ffffff;
+    cursor: pointer;
+    color: #dab7b7;
+    flex-grow: 1;
+}
+
+.radio-2 label:has(:checked) {
+    background-color: #e9d5d5;
+    color: #5c3d3d;
+}
+
+.radio-2 label::before,
+.radio-2 label:has(:checked)::after {
+    border-radius: 50%;
+    content: '';
+}
+
+.radio-2 label::before {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #d0bdbd;
+    background-color: #fff;
+}
+
+.radio-2 label:has(:checked)::after {
+    position: absolute;
+    top: 50%;
+    left: calc(7px + .7em);
+    transform: translate(-50%, -50%);
+    width: 7px;
+    height: 7px;
+    background-color: #5c3d3d;
+}
+
+.radio-2 input {
+    display: none;
+}
+
+
+  /* ラジオボタン - 会員ランク選択 */
+
+.radio-3 {
+    border: none;
+    display: flex;
+    gap: 10px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.radio-3 label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0 .5em;
+    position: relative;
+    max-width: 100%;
+    padding: .5em .7em;
+    border: 1px solid #e5a4a4;
+    border-radius: 3px;
+    background-color: #f5ebeb;
+    cursor: pointer;
+    color: #815b5b;
+    flex-grow: 1;
+}
+
+.radio-3 label:has(:checked) {
+    background-color: #e5a4a4;
+    color: #fff;
+}
+
+.radio-3 label::before,
+.radio-3 label:has(:checked)::after {
+    border-radius: 50%;
+    content: '';
+}
+
+.radio-3 label::before {
+    width: 14px;
+    height: 14px;
+    background-color: #fff;
+}
+
+.radio-3 label:has(:checked)::after {
+    position: absolute;
+    top: 50%;
+    left: calc(7px + .7em);
+    transform: translate(-50%, -50%);
+    width: 7px;
+    height: 7px;
+    background-color: #e5a4a4;
+}
+
+.radio-3 input {
+    display: none;
+}
