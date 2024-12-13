@@ -57,12 +57,12 @@
     </div>
     <div class="block mt-1">
         <x-secondary-button class="ms-3">
-            <a class="text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="/">
+            <a href="/" class="text-sm text-gray-600 hover:text-gray-900 rounded-md">
                 アカウントを登録する
         </x-secondary-button>
     </div>
 </x-guest-layout>
-
+<x-footer />
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

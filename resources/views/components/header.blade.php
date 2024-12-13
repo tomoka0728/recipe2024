@@ -1,28 +1,22 @@
 <header class="text-gray-600 body-font">
     <div class="container mx-auto px-4 flex flex-wrap flex-col md:flex-row items-center">
     {{-- タイトル --}}
-      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-        </svg>
-        <span class="ml-3 text-xl">Tailblocks</span>
+      <a href="/" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <img src="{{ Vite::asset('resources/img/logo.png') }}" width="40px">
+        <span class="text-xl">Tailblocks</span>
       </a>
 
     {{-- 検索フォーム --}}
-        <form onsubmit="return false;" class="w-40 sm:w-72 lg:w-96 mt-4 flex md:ml-auto md:mr-auto items-center text-base justify-center">
+        <form onsubmit="return false;" class="mt-4 flex md:ml-auto md:mr-auto items-center text-base justify-center">
             {{-- ラジオボタン --}}
             <fieldset class="radio-2 flex items-center">
                 <label class="flex items-center">
                     <input type="radio" name="radio-2" checked/>
-                    radio1
+                    レシピ
                 </label>
                 <label class="flex items-center">
                     <input type="radio" name="radio-2"/>
-                    radio2
-                </label>
-                <label class="flex items-center">
-                    <input type="radio" name="radio-2"/>
-                    radio3
+                    食材
                 </label>
             </fieldset>
 
@@ -43,10 +37,10 @@
                 </div>
                 <input
                     type="text"
-                    class="block w-96 sm:w-72 lg:w-96 rounded-full border-transparent bg-original3 py-3 pe-5 ps-12 text-sm leading-5 text-yellow-800 placeholder:text-yellow-900/50 hover:border-transparent focus:border-transparent focus:ring focus:ring-original4  focus:ring-1"
+                    class="block w-96 sm:w-72 lg:w-96 border-transparent bg-original3 py-3 pe-5 ps-12 text-sm leading-5 text-yellow-800 placeholder:text-yellow-900/50 hover:border-transparent focus:border-transparent focus:ring focus:ring-original4  focus:ring-1"
                     id="search"
                     name="search"
-                    placeholder="レシピ名・食材で検索"
+                    placeholder="キーワードで検索"
                 />
             </div>
         </form>

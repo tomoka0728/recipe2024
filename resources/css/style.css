@@ -16,6 +16,12 @@ html, body {
 }
 
 .rq-box{
+    max-width: 700px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.rq2-box{
     max-width: 400px;
     margin: 0 auto;
     width: 100%;
@@ -93,8 +99,39 @@ html, body {
 
 .progressbar li.active:after,
 .progressbar li.complete:after {
-    background-color: #0070BD;
+    background-color: #ff8d8d;
 }
+
+  /* パンくずリスト */
+.bc {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    list-style: none;
+    color: #999999;
+    font-size: 14px;
+}
+
+.bc-item {
+    display: inline-block;
+}
+
+.bc-item + .bc-item::before {
+    content: "/";
+    padding: 0 0.5rem;
+    color: #999999; /* 区切りの色 */
+}
+
+.bc-item a {
+    text-decoration: none;
+    color: #999999;
+}
+
+.bc-item a:hover {
+    text-decoration: underline;
+}
+
+
 
   /* ラジオボタン - 検索フォーム */
 
@@ -102,7 +139,7 @@ html, body {
     border: none;
     display: flex;
     gap: 10px;
-    width: 80%;
+    width: auto;
     margin: 0 auto;
 }
 

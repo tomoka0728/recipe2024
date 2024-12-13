@@ -1,72 +1,11 @@
 <footer class="text-gray-600 body-font bg-original">
-  <div class="container px-5 py-10 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-    <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-      <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-    {{-- タイトル --}}
-        <a href="/" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <img src="{{ Vite::asset('resources/img/logo.png') }}" width="40px">
-            <span class="text-xl">Tailblocks</span>
-        </a>
-      </a>
-    </div>
-    <div class="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 mb-5 md:text-left text-center">
-      <div class="lg:w-1/3 md:w-1/2 w-full px-4">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Titleについて</h2>
-        <nav class="list-none mb-10">
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">会社概要</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">環境への取り組み</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">採用情報</a>
-          </li>
-        </nav>
-      </div>
-      <div class="lg:w-1/3 md:w-1/2 w-full px-4">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Titleでのお支払い</h2>
-        <nav class="list-none mb-10">
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">Titleポイント</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">Titleギフトカード</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">ポイントプログラム</a>
-          </li>
-        </nav>
-      </div>
-      <div class="lg:w-1/3 md:w-1/2 w-full px-4">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">ヘルプ＆ガイド</h2>
-        <nav class="list-none mb-10">
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">配送料と配送情報</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">商品の返品・交換</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">価格について</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">お客様サポート</a>
-          </li>
-        </nav>
-      </div>
-    </div>
-  </div>
+<footer>
   <div class="bg-original">
     <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col items-center sm:flex-row">
       <p class="text-gray-500 text-sm text-center sm:text-left">© 2024 title Co., Ltd.</p>
 
       <nav class="text-gray-500 text-sm text-center sm:mx-auto my-2">
         <ul class="inline-flex list-none items-center">
-            <li>
-                <a href="#" class="mr-1 rounded-md px-4 py-1 text-gray-500 ring-offset-2 ring-offset-current transition duration-500 ease-in-out">よくある質問</a>
-                <span class="mx-1 border-l border-yellow-900/20 h-5"></span>
-            </li>
             <li>
                 <a href="#" class="mr-1 rounded-md px-4 py-1 text-gray-500 ring-offset-2 ring-offset-current transition duration-500 ease-in-out">利用規約</a>
                 <span class="mx-1 border-l border-yellow-900/20 h-5"></span>
