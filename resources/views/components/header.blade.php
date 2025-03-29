@@ -1,4 +1,4 @@
-<header class="text-gray-600 body-font">
+<header class="text-gray-600 body-font pt-4">
     <div class="container mx-auto px-4 flex flex-wrap flex-col md:flex-row items-center">
     {{-- タイトル --}}
       <a href="/" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
@@ -7,7 +7,7 @@
       </a>
 
     {{-- 検索フォーム --}}
-        <form onsubmit="return false;" class="mt-4 flex md:ml-auto md:mr-auto items-center text-base justify-center">
+        <form onsubmit="return false;" class="flex md:ml-auto md:mr-auto items-center text-base justify-center">
             {{-- ラジオボタン --}}
             <fieldset class="radio-2 flex items-center">
                 <label class="flex items-center">
@@ -49,35 +49,66 @@
         <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white  items-end justify-center">
             @auth
             <li class="flex flex-col items-center">
-                <img src="{{ Storage::disk('s3')->url('user.png') }}" width="20px" class="mb-3">
-                <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">マイページ</a>
+                <a href="{{ route('mypage') }}" class="flex flex-col items-center block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">
+                    <img src="{{ Storage::disk('s3')->url('user.png') }}" width="30px" class="mb-1">
+                    マイページ
+                </a>
             </li>
             <li class="flex flex-col items-center">
-                <img src="{{ Storage::disk('s3')->url('logout.png') }}" width="20px" class="mb-3">
-                <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">ログアウト</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="flex flex-col items-center block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0">
+                        <img src="{{ Storage::disk('s3')->url('logout.png') }}" width="30px" class="mb-1">
+                        ログアウト
+                    </button>
+                </form>
+            </li>
+            @else
+            <li class="flex flex-col items-center">
+                <a href="{{ route('login') }}" class="flex flex-col items-center block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">
+                    <img src="{{ Storage::disk('s3')->url('user.png') }}" width="30px" class="mb-1">
+                    ログイン
+                </a>
+            </li>
+            <li class="flex flex-col items-center">
+                <a href="{{ route('register') }}" class="flex flex-col items-center block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">
+                    <img src="{{ Storage::disk('s3')->url('register.png') }}" width="30px" class="mb-1">
+                    会員登録
+                </a>
             </li>
             @endauth
             <li class="flex flex-col items-center">
-                <img src="{{ Storage::disk('s3')->url('support.png') }}" width="20px" class="mb-3">
-                <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">ご利用ガイド</a>
+                <a href="#" class="flex flex-col items-center block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">
+                    <img src="{{ Storage::disk('s3')->url('support.png') }}" width="30px" class="mb-1">
+                    ご利用ガイド
+                </a>
             </li>
 
         </ul>
       </nav>
       <ul class="flex flex-col p-4 md:p-0 mt-4  font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
         <li class="flex flex-col items-center ml-8">
-            <img src="{{ Storage::disk('s3')->url('cart.png') }}" width="20px" class="mb-3">
-            <span class="absolute top-6 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">3</span>
-            <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0" >カート</a>
+            <a href="{{ route('cart.show') }}" class="flex flex-col items-center block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0" >
+                <img src="{{ Storage::disk('s3')->url('cart.png') }}" width="30px" class="mb-1">
+                @php
+                $cartCount = session('cart', []);
+            @endphp
+            @if($cartCount && count($cartCount) > 0)  {{-- カート内にアイテムがあれば表示 --}}
+                <span class="absolute top-6 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                    {{ count($cartCount) }} {{-- カートのアイテム数 --}}
+                </span>
+            @endif
+                カート
+            </a>
         </li>
     </ul>
     </div>
 </header>
 
-  <section>
-    <div class="flex justify-center bg-original">
-        <div class="flex items-center p-5">
-            <ul class="inline-flex list-none items-center">
+  <section  class="w-full bg-original">
+    <div class="flex justify-center">
+        <div class="flex items-center p-5 w-full">
+            <ul class="inline-flex list-none items-center w-full justify-center">
                 <li>
                     <a href="#" class="mr-1 rounded-md px-4 py-1 text-base text-rose-950 ring-offset-2 ring-offset-current transition duration-500 ease-in-out">食材</a>
                     <span class="mx-1 border-l border-yellow-900/20 h-5"></span>

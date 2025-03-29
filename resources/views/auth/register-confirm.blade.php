@@ -25,6 +25,14 @@
                     <div class="flex items-center text-gray-500 mt-2">{{ $name }}</div>
                 </div>
 
+                <!-- NickName -->
+                <div class="mt-4">
+                    <div class="flex items-center">
+                        <label for="nickname" class="font-extrabold text-yellow-900 border-b border-gray-300 w-full">ニックネーム</label>
+                    </div>
+                    <div class="flex items-center text-gray-500 mt-2">{{ $nickname }}</div>
+                </div>
+
                 <!-- Birth -->
                 <div class="mt-4">
                     <div class="flex items-center">

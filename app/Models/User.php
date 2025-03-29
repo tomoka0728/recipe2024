@@ -42,6 +42,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'nickname',
+        'birth',
+        'terms_accepted'
     ];
 
     /**
@@ -76,5 +79,10 @@ class User extends Authenticatable
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
         });
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 }

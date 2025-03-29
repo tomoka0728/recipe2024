@@ -48,12 +48,25 @@
                     <x-input-error :messages="$errors->get('name')" class="mt-2"  id="name-error" />
                 </div>
 
+                <!-- Nickname -->
+                <div class="mt-4">
+                    <div class="flex items-center">
+                        <x-input-label for="nickname" :value="__('ニックネーム')" class="mr-2" />
+                        <div class="border border-red-500 bg-white text-red-500 px-1 rounded text-xs">
+                            必須
+                        </div>
+                    </div>
+                    <x-text-input id="nickname" class="block mt-1 w-full {{ $errors->has('nickname') ? 'border-red-500 bg-red-100' : '' }} "
+                        type="text" name="nickname" :value="old('nickname')" required autocomplete="nickname" />
+                    <x-input-error :messages="$errors->get('nickname')" class="mt-2"  id="nickname-error" />
+                </div>
+
                 <!-- Birth -->
                 <div class="mt-4">
                 <x-input-label for="birth" value="{{ __('生年月日') }}" />
                 <x-text-input id="birth" class="block mt-1 w-full" type="date" name="birth" :value="old('birth')" />
                 <x-input-error :messages="$errors->get('birth')" class="mt-2"  id="birth-error" />
-                </div
+                </div>
 
                 <!-- Email Address -->
                 <div class="mt-4">
@@ -64,7 +77,7 @@
                         </div>
                     </div>
                     <x-text-input id="email" class="block mt-1 w-full {{ $errors->has('email') ? 'border-red-500 bg-red-100' : '' }} "
-                        type="email" name="email" :value="old('email')" required autocomplete="username" />
+                        type="email" name="email" :value="old('email')" required autocomplete="email" />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" id="email-error" />
                 </div>
 
@@ -98,7 +111,7 @@
                 <!-- Terms of Service -->
                 <div class="flex items-center mt-4">
                     <input id="link-checkbox" type="checkbox" name="terms" value="1"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600
+                        class="w-4 h-4 text-blue-600 bg-gray-100 checked:bg-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600
                         {{ $errors->has('terms') ? 'border-red-500 bg-red-100' : '' }}">
 
                     <label for="link-checkbox" class="ms-2 text-sm text-gray-900 dark:text-gray-300">
@@ -124,55 +137,6 @@
 </x-guest-layout>
 <x-footer2 />
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const nameInput = document.getElementById('name');
-        const nameErrorElement = document.getElementById('name-error');
-        const emailInput = document.getElementById('email');
-        const emailErrorElement = document.getElementById('email-error');
-        const passwordInput = document.getElementById('password');
-        const passwordErrorElement = document.getElementById('password-error');
-        const checkbox = document.getElementById('link-checkbox');
-        const errorElement = document.getElementById('terms-error');
-
-        checkbox.addEventListener('change', function () {
-            if (checkbox.checked) {
-                errorElement.style.display = 'none';
-                checkboxInput.classList.remove('border-red-500', 'bg-red-100');
-            } else {
-                errorElement.style.display = 'block';
-                checkboxInput.classList.add('border-red-500', 'bg-red-100');
-            }
-        });
-
-        nameInput.addEventListener('input', function () {
-            if (nameInput.value.trim() !== '') {
-                nameErrorElement.style.display = 'none';
-                nameInput.classList.remove('border-red-500', 'bg-red-100');
-            } else {
-                nameErrorElement.style.display = 'block';
-                nameInput.classList.add('border-red-500', 'bg-red-100');
-            }
-        });
-
-        emailInput.addEventListener('input', function () {
-            if (emailInput.value.trim() !== '') {
-                emailErrorElement.style.display = 'none';
-                emailInput.classList.remove('border-red-500', 'bg-red-100');
-            } else {
-                emailErrorElement.style.display = 'block';
-                emailInput.classList.add('border-red-500', 'bg-red-100');
-            }
-        });
-
-        passwordInput.addEventListener('input', function () {
-            if (passwordInput.value.trim() !== '') {
-                passwordErrorElement.style.display = 'none';
-                passwordInput.classList.remove('border-red-500', 'bg-red-100');
-            } else {
-                passwordErrorElement.style.display = 'block';
-                passwordInput.classList.add('border-red-500', 'bg-red-100');
-            }
-        });
-    });
-</script>
+@push('scripts')
+    @vite('resources/js/registerValidation.js')
+@endpush

@@ -10,6 +10,7 @@
 
     <form method="POST" action="{{ route('login') }}" novalidate>
         @csrf
+        <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
 
         <!-- Email Address -->
         <div>

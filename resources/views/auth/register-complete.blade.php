@@ -15,7 +15,7 @@
     </div>
 
     <div class="flex items-center justify-center mt-10 mb-20">
-        <a href="{{ route('login') }}">
+        <a href="{{ route('top') }}">
             <x-primary-button class="ms-4">
                 {{ __('トップページへ') }}
             </x-primary-button>

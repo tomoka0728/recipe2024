@@ -34,6 +34,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'nickname' => ['required', 'string', 'max:255', 'unique:users,nickname'],
             'birth' => ['nullable', 'date', 'before:today'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -50,6 +51,7 @@ class RegisteredUserController extends Controller
 
         // 値保管
         $request->session()->put('name', $request->name);
+        $request->session()->put('nickname', $request->nickname);
         $request->session()->put('birth', $request->birth);
         $request->session()->put('email', $request->email);
         $request->session()->put('password', Hash::make($request->password));
@@ -59,6 +61,7 @@ class RegisteredUserController extends Controller
         // 確認画面を表示
         return view('auth.register-confirm', [
             'name' => $request->name,
+            'nickname' => $request->nickname,
             'birth' => $formattedBirth,
             'email' => $request->email,
             'terms_accepted' => $request->terms,
@@ -74,6 +77,7 @@ class RegisteredUserController extends Controller
 
             $user = User::create([
                 'name' => $request->session()->get('name'),
+                'nickname' => $request->session()->get('nickname'),
                 'birth' => $request->session()->get('birth'),
                 'email' => $request->session()->get('email'),
                 'password' => $request->session()->get('password'), // ハッシュ化済みのパスワードを使用

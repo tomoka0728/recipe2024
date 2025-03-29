@@ -1,0 +1,440 @@
+@charset "UTF-8";
+* { margin:0;padding:0; }
+
+
+header {
+  background-color: #ffffff ;
+	width: 100%;
+	height: 70px;
+}
+header nav {
+	float: right;
+	right: 10px;
+	top: 0px;
+	line-height: 50px;
+}
+
+.nav_menu{
+  margin: 10px;
+}
+
+
+
+/*-------------------------------------------
+search
+-------------------------------------------*/
+#form2{
+  position:relative;
+  max-width:300px;
+  margin-bottom:20px;
+  }
+  #sbox2{
+  height: 30px;
+  padding: 0 10px;
+  position: absolute;
+  top: 20px;
+  border: none;
+  right: -500px;
+  border-radius: 2px;
+  background: #ffecec;
+  }
+  #sbtn2{
+  height: 40px;
+  position: absolute;
+  left: 330px;
+  top: 17px;
+  right: -944px;
+  background: none;
+  color: #eababa;
+  border: none;
+  font-size: 15px;
+  }
+  #sbtn5:hover{
+  color:#7fbfff;
+  }
+
+/*------------------------------------------*/
+
+.menu{
+  padding: 10px;
+}
+
+footer {
+	background-color: #efefef ;
+	text-align: center;
+	padding: 30px;
+}
+
+html {
+  font-size: 100%;
+}
+body {
+  color: #333;
+  font-size: 1rem;
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  overflow-x: hidden;
+}
+a {
+  color: #333;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+li {
+  list-style: none;
+}
+
+.article-title {
+  padding: 0.2em;/*文字周りの余白*/
+  color: #494949;/*文字色*/
+  background: #ffffff;/*背景色*/
+  border-left: solid 5px #ffaf58;/*左線（実線 太さ 色）*/
+}
+
+.balloon3-right {
+  position: relative;
+  margin-left: 30px;
+  margin-right: 10px;
+  margin-top: 20px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #FFF;
+  font-weight: bold;
+  background: #ffaf58;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.balloon3-right:before {
+  content: "";
+  position: absolute;
+  top: 80%;
+  right: -8px;
+  margin-top: -15px;
+  border: 5px solid transparent;
+  border-left: 5px solid #ffaf58;
+  z-index: 0;
+}
+
+.process{
+  display: flex;
+}
+
+.box-img:active {
+  justify-content: space-between;
+  }
+
+/*
+コンテンツ幅を設定するための共通クラス
+*/
+.wrapper {
+  max-width: 1200px;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+/*-------------------------------------------
+comment
+-------------------------------------------*/
+.comment{
+  background-color: #e8f2ea ;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+/*-------------------------------------------
+count
+-------------------------------------------*/
+.count{
+  border-bottom: solid  1px rgb(255, 228, 228);
+  border-top: solid  1px rgb(255, 228, 228);
+  padding: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+
+
+/*-------------------------------------------
+title
+-------------------------------------------*/
+#container2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* タイトルとお気に入りボタンを横並びに */
+.header-container {
+    display: flex;
+    justify-content: flex-end !important;
+    align-items: center; /* 縦方向中央揃え */
+    padding: 20px; /* 余白調整 */
+}
+
+/* タイトルの余白調整 */
+.top_title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: rgb(97, 73, 73);
+}
+
+.favo {
+     margin-left: auto;
+     padding: 0px 0px 10px 0px;
+     width: 23%;
+}
+
+.btn-flat-border {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.btn-flat-border:hover {
+    background-color: #f0f0f0;
+}
+
+.wrapper2 {
+  max-width: 1200px;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+
+#container2 {
+  display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+
+hr {
+  width: 100%;
+	border-style: dashed;
+	border-color: #ffb300;
+}
+
+/*-------------------------------------------
+container
+-------------------------------------------*/
+#container {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+main {
+  width: 65%;
+}
+
+main .article-title {
+  font-size: 1.5rem;
+  margin: 10px 0 15px 0;
+}
+main ul {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+main li {
+  font-size: 0.875rem;
+  margin-right: 20px;
+}
+main .text {
+  padding: 20px 20px 20px 10px;
+  width: 60%;
+}
+
+.box-img {
+  display: inline-block;
+  max-width: 200px;
+  height: auto;
+  margin: 10px;
+  text-align: right;
+}
+
+/*-------------------------------------------
+aside
+-------------------------------------------*/
+#sidebar {
+  width: 33%;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+#sidebar .side-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  padding: 10px;
+}
+.author {
+  text-align: center;
+}
+.author img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin-bottom: 5px;
+}
+.author .profile {
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.photo {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.photo article {
+  margin-bottom: 30px;
+}
+.photo .article-title {
+  font-size: 0.875rem;
+  font-weight: normal;
+  text-align: left;
+}
+.photo img {
+  width: 200px;
+  margin-bottom: 30px;
+}
+.item {
+  text-align: center;
+  margin-bottom: 60px;
+  background-color: rgb(255, 242, 224) ;
+}
+.item ul {
+  border-bottom: solid  1px rgb(255, 255, 255);
+}
+.item li {
+  font-size: 0.875rem;
+  border-top: solid  1px rgb(255, 255, 255);
+  padding: 10px;
+  text-align: right;
+}
+.cm {
+  width: 80%;
+  margin: 10px auto;
+}
+.subject {
+  text-align: left;  /* 文章を左寄せする(※) */
+  float: left;     /* 左端に寄せて、後続を右側へ回り込ませる */
+  padding-left:32px;
+  padding-right:32px;
+}
+
+.item a{
+  color: #c06702;
+}
+
+.amount {
+  text-align: right; /* 文章を右寄せする */
+  padding-left:35px;
+  padding-right:35px;
+}
+
+.ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.ingredients-list li {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+}
+.subject, .amount {
+    display: inline-block;
+    margin: 0;
+}
+
+/*-------------------------------------------
+button
+-------------------------------------------*/
+
+.btn-flat-border {
+  display: inline-block;
+  padding: 0.3em 1em;
+  text-decoration: none;
+  color: #ffffff;
+  background: #ff6b6b;
+  border: solid 2px #ff6b6b;
+  border-radius: 3px;
+  transition: .4s;
+}
+
+.btn-flat-border:hover {
+  background: #ffffff;
+  color: #ff6b6b;
+}
+
+
+.follow{
+  text-align: right;
+  display: flex;
+  justify-content: flex-end
+}
+
+.follow-me {
+  list-style: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.follow-me li {
+  float: right;
+  margin: 0 8px 8px 0;
+  padding: 0;
+}
+.follow-me li a::before {
+  background-color: #fff;
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  color: #fff;
+  display: inline-block;
+  font-family: FontAwesome;
+  font-size: 16px;
+  height: 42px; /* Button height */
+  line-height: 42px; /* Button height */
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
+  text-align: center;
+  width: 42px; /* Button width */
+}
+
+.follow-me li a[href*="x.com"]::before              { border-color: #000000; color: #000000; content: "\e61b"; }
+.follow-me li a[href*="facebook.com"]::before       { border-color: #3b5998; color: #3b5998; content: "\f09a"; }
+.follow-me li a[href$="/feed"]::before              { border-color: #ffa500; color: #ffa500; content: "\f09e"; }
+.follow-me li a:hover::before {
+  color: #fff;
+}
+
+.follow-me li a[href*="x.com"]:hover::before              { background-color: #000000; }
+.follow-me li a[href*="facebook.com"]:hover::before       { background-color: #3b5998; }
+.follow-me li a[href$="/feed"]:hover::before              { background-color: #ffa500; }
+.follow-me li a::before {
+  -webkit-border-radius: 2px; /* for Android ~4.3 */
+  border-radius: 30px;
+  font-size: 16px;
+  height: 30px;
+  line-height: 30px;
+  width: 90px;
+}

@@ -26,6 +26,13 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
+        if ($this->routeIs('admin.*')) {
+            return [
+                'admin_id' => ['required', 'string', 'max:255'],
+                'password' => ['required', 'string'],
+            ];
+        }
+
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
@@ -41,11 +48,18 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if($this->routeIs('admin.*')){
+            $guard = 'admin';
+            $credentials = $this->only('admin_id', 'password');
+        } else {
+            $guard = 'web';
+            $credentials = $this->only('email', 'password');
+        }
+        if (! Auth::guard($guard)->attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                $guard === 'admin' ? 'admin_id' : 'email' => trans('auth.failed'),
             ]);
         }
 
@@ -80,6 +94,7 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        $key = $this->routeIs('admin.*') ? $this->input('admin_id') : $this->input('email');
+        return Str::transliterate(Str::lower($key) . '|' . $this->ip());
     }
 }
