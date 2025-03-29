@@ -2,8 +2,8 @@
     <div class="container mx-auto px-4 flex flex-wrap flex-col md:flex-row items-center">
     {{-- タイトル --}}
       <a href="/" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-        <img src="{{ Vite::asset('resources/img/logo.png') }}" width="40px">
-        <span class="text-xl">Tailblocks</span>
+        <img src="{{ Storage::disk('s3')->url('logo.png') }}" alt="Logo" width="40px">
+        <span class="text-xl">RecipeApp</span>
       </a>
 
     {{-- 検索フォーム --}}
@@ -46,27 +46,29 @@
         </form>
         <!-- 検索ここまで -->
       <nav>
-        <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+        <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white  items-end justify-center">
+            @auth
             <li class="flex flex-col items-center">
-                <img src="{{ Vite::asset('resources/img/user.png') }}" width="20px" class="mb-3">
+                <img src="{{ Storage::disk('s3')->url('user.png') }}" width="20px" class="mb-3">
                 <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">マイページ</a>
             </li>
             <li class="flex flex-col items-center">
-                <img src="{{ Vite::asset('resources/img/logout.png') }}" width="20px" class="mb-3">
+                <img src="{{ Storage::disk('s3')->url('logout.png') }}" width="20px" class="mb-3">
                 <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">ログアウト</a>
             </li>
+            @endauth
             <li class="flex flex-col items-center">
-                <img src="{{ Vite::asset('resources/img/support.png') }}" width="20px" class="mb-3">
-                <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0">ご利用ガイド</a>
+                <img src="{{ Storage::disk('s3')->url('support.png') }}" width="20px" class="mb-3">
+                <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0 ">ご利用ガイド</a>
             </li>
 
         </ul>
       </nav>
       <ul class="flex flex-col p-4 md:p-0 mt-4  font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
         <li class="flex flex-col items-center ml-8">
-            <img src="{{ Vite::asset('resources/img/cart.png') }}" width="20px" class="mb-3">
+            <img src="{{ Storage::disk('s3')->url('cart.png') }}" width="20px" class="mb-3">
             <span class="absolute top-6 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">3</span>
-            <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0">カート</a>
+            <a href="#" class="block py-2 px-3 text-gray-900 text-xs rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-gray-300 md:p-0" >カート</a>
         </li>
     </ul>
     </div>

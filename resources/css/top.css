@@ -1,0 +1,455 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* header {
+  background-color: #ffffff ;
+  border-bottom: 1px solid #ff6767;
+	width: 100%;
+	height: 70px;
+}
+header nav {
+	float: right;
+	right: 10px;
+	top: 0px;
+	line-height: 50px;
+}
+header img {
+  height: 50px;
+	object-fit: cover;
+  float: left;
+  padding: 10px;
+  } */
+
+.top-page {
+    .nav_menu {
+        margin: 10px;
+    }
+
+    /*-------------------------------------------
+search
+-------------------------------------------*/
+    #form2 {
+        position: relative;
+        max-width: 300px;
+        margin-bottom: 20px;
+    }
+
+    #sbox2 {
+        height: 30px;
+        padding: 0 10px;
+        position: absolute;
+        top: 20px;
+        border: none;
+        right: -500px;
+        border-radius: 2px;
+        background: #ffecec;
+    }
+
+    #sbtn2 {
+        height: 40px;
+        position: absolute;
+        left: 330px;
+        top: 17px;
+        right: -944px;
+        background: none;
+        color: #eababa;
+        border: none;
+        font-size: 15px;
+    }
+
+    #sbtn5:hover {
+        color: #7fbfff;
+    }
+
+    /*------------------------------------------*/
+
+    .menu {
+        padding: 10px;
+    }
+
+    footer {
+        background-color: #efefef;
+        text-align: center;
+        padding: 30px;
+    }
+
+    html {
+        font-size: 100%;
+    }
+
+    body {
+        color: #333;
+        font-size: 1rem;
+        font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+    }
+
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    /*
+コンテンツ幅を設定するための共通クラス
+*/
+    .wrapper {
+        max-width: 1200px;
+        padding: 0 16px;
+        margin: 0 auto;
+    }
+
+
+    /*-------------------------------------------
+container
+-------------------------------------------*/
+    #container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 60px;
+        margin-top: 30px;
+    }
+
+    main {
+        width: 75%;
+    }
+
+    main article {
+        margin-bottom: 80px;
+    }
+
+    main .text {
+        padding: 10px 40px 30px 40px;
+    }
+
+    main img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    /*-------------------------------------------
+aside
+-------------------------------------------*/
+    #sidebar {
+        width: 25%;
+        margin-left: 10px;
+        margin-bottom: 20px;
+    }
+
+    #sidebar .side-title {
+        font-size: 1.125rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .author {
+        text-align: center;
+    }
+
+    .author img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin-bottom: 5px;
+    }
+
+    .author .profile {
+        font-size: 0.875rem;
+        text-align: left;
+    }
+
+    /*-------------------------------------------
+recipe
+-------------------------------------------*/
+
+    .cp_hr11 {
+        content: "";
+        height: 7px;
+        border-width: 0;
+        background-color: #ffffff;
+        background-image: -webkit-linear-gradient(135deg,
+                #e3e3e3 0px, #e3e3e3 2px, transparent 2px, transparent 4px,
+                #e3e3e3 4px, #e3e3e3 6px, transparent 6px, transparent);
+        background-image: linear-gradient(-45deg,
+                #e3e3e3 0px, #e3e3e3 2px, transparent 2px, transparent 4px,
+                #e3e3e3 4px, #e3e3e3 6px, transparent 6px, transparent);
+        background-size: 6px 6px;
+    }
+
+    .recipe {
+        margin-top: 50px;
+    }
+
+    .recipe2 {
+        margin-bottom: 50px;
+    }
+
+    .recipe4 {
+        margin-top: 50px;
+    }
+
+    .title {
+        font-size: 1em;
+        text-align: center;
+        color: rgb(95, 43, 43);
+        font-weight: bold;
+        letter-spacing: 0.05em;
+    }
+
+    .title2 {
+        font-size: 1.2em;
+        text-align: center;
+        color: rgb(95, 43, 43);
+        font-weight: bold;
+        letter-spacing: 0.05em;
+    }
+
+    .title3 {
+        font-size: 1em;
+        margin-bottom: 40px;
+        text-align: center;
+        color: rgb(156, 125, 125);
+        font-weight: bold;
+        letter-spacing: 0.05em;
+    }
+
+    /*-------------------------------------------
+ranking
+-------------------------------------------*/
+
+    .recipe3 {
+        padding: 10px 0 0;
+        margin-bottom: 50px;
+    }
+
+    @media screen and (min-width: 1024px) {
+        .recipe3 ul {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .recipe3 ul li {
+            margin-bottom: 20px;
+            justify-content: space-around;
+        }
+    }
+
+    .recipe3 ul li:hover .title {
+        background-size: 100% 8px;
+        transition: 0.3s;
+    }
+
+    .recipe3 ul li a {
+        text-decoration: none;
+        margin-bottom: -20px;
+        padding-bottom: 20px;
+    }
+
+    .recipe3 ul li img {
+        margin: 0 auto;
+        width: 280px;
+        height: 198px;
+        object-fit: cover;
+    }
+
+    .ranking {
+        display: grid;
+        counter-reset: rank;
+    }
+
+    .ranking li {
+        position: relative;
+    }
+
+    .ranking li:not(:last-child) {
+        margin-bottom: 10px;
+    }
+
+    .ranking li:nth-child(-n + 3)::before {
+        /* 王冠のスタイル */
+        font-family: "Font Awesome 5 Free";
+        content: "\f521";
+        font-weight: 900;
+        position: absolute;
+        top: -45px;
+        /* 王冠の位置（縦軸） */
+        left: -20px;
+        /* 王冠の位置（横軸） */
+        font-size: 60px;
+        /* 王冠の大きさ */
+    }
+
+    .ranking li:nth-child(1)::before {
+        /* 1位（王冠）のスタイル */
+        color: #e6c300;
+
+    }
+
+    .ranking li:nth-child(2)::before {
+        /* 2位（王冠）のスタイル */
+        color: #a9a9a9;
+    }
+
+    .ranking li:nth-child(3)::before {
+        /* 3位（王冠）のスタイル */
+        color: #815a2b;
+    }
+
+    .ranking li::after {
+        /* 順位（文字）のスタイル */
+        counter-increment: rank;
+        content: counter(rank) " 位";
+        position: absolute;
+        top: -15px;
+        font-size: 1em;
+        color: #fff;
+    }
+
+    /*==================================================
+スライダーのためのcss
+===================================*/
+    .slider {
+        /*横幅94%で左右に余白を持たせて中央寄せ*/
+        width: 94%;
+        margin: 0 auto;
+    }
+
+    .slider img {
+        margin: 0 auto;
+        width: 280px;
+        height: 198px;
+        object-fit: cover;
+    }
+
+    /*slickのJSで書かれるタグ内、スライド左右の余白調整*/
+
+    .slider .slick-slide {
+        margin: 0 10px;
+    }
+
+    /*矢印の設定*/
+
+    /*戻る、次へ矢印の位置*/
+    .slick-prev,
+    .slick-next {
+        position: absolute;
+        /*絶対配置にする*/
+        top: 32%;
+        cursor: pointer;
+        /*マウスカーソルを指マークに*/
+        outline: none;
+        /*クリックをしたら出てくる枠線を消す*/
+        border-top: 2px solid #666;
+        /*矢印の色*/
+        border-right: 2px solid #666;
+        /*矢印の色*/
+        height: 15px;
+        width: 15px;
+    }
+
+    .slick-prev {
+        /*戻る矢印の位置と形状*/
+        left: -1.5%;
+        transform: rotate(-135deg);
+    }
+
+    .slick-next {
+        /*次へ矢印の位置と形状*/
+        right: -1.5%;
+        transform: rotate(45deg);
+    }
+
+    /*ドットナビゲーションの設定*/
+
+    .slick-dots {
+        text-align: center;
+        margin: 20px 0 0 0;
+    }
+
+    .slick-dots li {
+        display: inline-block;
+        margin: 0 5px;
+    }
+
+    .slick-dots button {
+        color: transparent;
+        outline: rgb(255, 255, 255);
+        width: 8px;
+        /*ドットボタンのサイズ*/
+        height: 8px;
+        /*ドットボタンのサイズ*/
+        display: block;
+        border-radius: 50%;
+        background: #ccc;
+        /*ドットボタンの色*/
+    }
+
+    .slick-dots .slick-active button {
+        outline: none;
+        background: rgb(132, 50, 50);
+        /*ドットボタンの現在地表示の色*/
+    }
+
+    /*==================================================
+category
+===================================*/
+
+    .recipe5 {
+        padding: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        min-height: 170px;
+    }
+
+    .item-title {
+        text-align: center;
+        font-size: 1.125rem;
+        font-weight: bold;
+        padding: 10px;
+    }
+
+    .item {
+        width: calc(100% / 2 - 30px);
+        height: 350px;
+        margin: 10px;
+        margin-bottom: 80px;
+        background-color: #f9f2f2;
+    }
+
+    main .item img {
+        width: auto;
+        height: 140px;
+    }
+
+    .item li {
+        font-size: 1.1em;
+        font-weight: bold;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .item ul {
+        margin-bottom: 30px;
+    }
+
+    .menu-m {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .menu p {
+        color: rgb(95, 43, 43);
+    }
+}

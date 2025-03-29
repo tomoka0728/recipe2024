@@ -15,7 +15,7 @@ return [
     'terms' => '同意がない場合は会員登録ができません。',
     'array' => ':attributeは配列でなくてはなりません。',
     'ascii' => ':attributeは半角の英数字や記号のみで指定してください。',
-    'before' => ':attributeには:dateより前の日付を指定してください。',
+    'before' => ':attributeには本日より前の日付を指定してください。',
     'before_or_equal' => ':attributeには:date以前の日付を指定してください。',
     'between' => [
         'numeric' => ':attributeは、:minから:maxの間で指定してください。',

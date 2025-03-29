@@ -53,7 +53,7 @@
                 <x-input-label for="birth" value="{{ __('生年月日') }}" />
                 <x-text-input id="birth" class="block mt-1 w-full" type="date" name="birth" :value="old('birth')" />
                 <x-input-error :messages="$errors->get('birth')" class="mt-2"  id="birth-error" />
-                </div>
+                </div
 
                 <!-- Email Address -->
                 <div class="mt-4">
@@ -102,7 +102,7 @@
                         {{ $errors->has('terms') ? 'border-red-500 bg-red-100' : '' }}">
 
                     <label for="link-checkbox" class="ms-2 text-sm text-gray-900 dark:text-gray-300">
-                        アプリ名
+                        RecipeApp
                         <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">利用規約</a> 並びに
                         <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">個人情報保護方針</a>に同意します
                     </label>

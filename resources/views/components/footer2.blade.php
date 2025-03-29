@@ -2,7 +2,7 @@
 <footer>
   <div class="bg-original">
     <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col items-center sm:flex-row">
-      <p class="text-gray-500 text-sm text-center sm:text-left">© 2024 title Co., Ltd.</p>
+      <p class="text-gray-500 text-sm text-center sm:text-left">© 2024 RecipeApp Co., Ltd.</p>
 
       <nav class="text-gray-500 text-sm text-center sm:mx-auto my-2">
         <ul class="inline-flex list-none items-center">
