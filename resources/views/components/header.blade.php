@@ -110,7 +110,7 @@
         <div class="flex items-center p-5 w-full">
             <ul class="inline-flex list-none items-center w-full justify-center">
                 <li>
-                    <a href="#" class="mr-1 rounded-md px-4 py-1 text-base text-rose-950 ring-offset-2 ring-offset-current transition duration-500 ease-in-out">食材</a>
+                    <a href="{{ route('ingredients.index') }}" class="mr-1 rounded-md px-4 py-1 text-base text-rose-950 ring-offset-2 ring-offset-current transition duration-500 ease-in-out">食材</a>
                     <span class="mx-1 border-l border-yellow-900/20 h-5"></span>
                 </li>
                 <li>

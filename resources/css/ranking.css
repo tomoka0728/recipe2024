@@ -276,14 +276,17 @@ h1{
   }
 
   .cart-push {
-    position: absolute; /* 絶対位置で配置 */
+    width: 8%;
+    position: absolute;
     transform: translate(0%, -120%); /* 完全に中央に配置 */
-    background-color: #ff9090;
-    color: white;
-    font-size: 10px;
-    padding: 2px;
-    margin: 2px;
-    display: none; /* 初期状態は非表示 */
+    text-align: center;
+    background-color:#ff9090;
+    color:white;
+    font-size:10px;
+    padding:2px;
+    margin-bottom: 2px;
+    box-sizing: border-box;
+    display: none;
   }
 
 .num{

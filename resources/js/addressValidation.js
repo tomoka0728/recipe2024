@@ -10,33 +10,53 @@ document.addEventListener('DOMContentLoaded', function () {
     const phoneInput = document.getElementById('phone');
     const phoneErrorElement = document.getElementById('phone-error');
 
-    function validateInput(input, errorElement, condition) {
-        if (condition(input.value.trim())) {
-            errorElement.style.display = 'none';
-            input.classList.remove('border-red-500', 'bg-red-100');
-        } else {
-            errorElement.style.display = 'block';
-            input.classList.add('border-red-500', 'bg-red-100');
-        }
-    }
-
     zipcodeInput.addEventListener('input', function () {
-        validateInput(zipcodeInput, zipcodeErrorElement, value => value !== '');
+        if (/^\d{7}$/.test(zipcodeInput.value.trim())) {
+            zipcodeErrorElement.style.display = 'none';
+            zipcodeInput.classList.remove('border-red-500', 'bg-red-100');
+        } else {
+            zipcodeErrorElement.style.display = 'block';
+            zipcodeInput.classList.add('border-red-500', 'bg-red-100');
+        }
     });
 
     prefecturesInput.addEventListener('change', function () {
-        validateInput(prefecturesInput, prefecturesErrorElement, value => value !== '');
+        if (prefecturesInput.value.trim() !== '') {
+            prefecturesErrorElement.style.display = 'none';
+            prefecturesInput.classList.remove('border-red-500', 'bg-red-100');
+        } else {
+            prefecturesErrorElement.style.display = 'block';
+            prefecturesInput.classList.add('border-red-500', 'bg-red-100');
+        }
     });
 
     cityInput.addEventListener('input', function () {
-        validateInput(cityInput, cityErrorElement, value => value !== '');
+        if (cityInput.value.trim() !== '') {
+            cityErrorElement.style.display = 'none';
+            cityInput.classList.remove('border-red-500', 'bg-red-100');
+        } else {
+            cityErrorElement.style.display = 'block';
+            cityInput.classList.add('border-red-500', 'bg-red-100');
+        }
     });
 
     addressInput.addEventListener('input', function () {
-        validateInput(addressInput, addressErrorElement, value => value !== '');
+        if (addressInput.value.trim() !== '') {
+            addressErrorElement.style.display = 'none';
+            addressInput.classList.remove('border-red-500', 'bg-red-100');
+        } else {
+            addressErrorElement.style.display = 'block';
+            addressInput.classList.add('border-red-500', 'bg-red-100');
+        }
     });
 
     phoneInput.addEventListener('input', function () {
-        validateInput(phoneInput, phoneErrorElement, value => /^\d{10,11}$/.test(value));
+        if (/^\d{10,11}$/.test(phoneInput.value.trim())) {
+            phoneErrorElement.style.display = 'none';
+            phoneInput.classList.remove('border-red-500', 'bg-red-100');
+        } else {
+            phoneErrorElement.style.display = 'block';
+            phoneInput.classList.add('border-red-500', 'bg-red-100');
+        }
     });
 });

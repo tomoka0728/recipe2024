@@ -39,7 +39,7 @@ export function addToCart() {
     $('.into-cart').on('click', function () {
         console.log('click');
         const button = $(this);
-        const form = button.closest('.item3');
+        const form = button.closest('.item3, .all-products-item');
         const ingredientUuid = $(this).data('ingredient-id');
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
         let quantity = $(this).data('quantity');  // ここでデフォルトで1を設定
@@ -62,10 +62,10 @@ export function addToCart() {
                 button.prop('disabled', true);  // 二重クリック防止
             },
             success: function(response) {
-                const cartPush = form.find('.cart-push');
+                const cartPush = form.find('.cart-push, .cart-push2');
 
                 // 他のメッセージを非表示にする
-                $('.cart-push').fadeOut();
+                $('.cart-push, .cart-push2').fadeOut();
 
                 // メッセージを表示
                 cartPush.fadeIn("slow", function () {
@@ -84,6 +84,7 @@ export function addToCart() {
         });
     });
 }
+
 //TODO: 以下の処理をコメントアウトしても動作するので、不要な処理の可能性がある
 // ページ読み込み時に処理を初期化
 // $(function() {

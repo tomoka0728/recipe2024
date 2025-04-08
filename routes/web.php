@@ -10,6 +10,7 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AddressController;
 
 
 // TOP
@@ -18,16 +19,28 @@ Route::get('/', [HomeController::class, 'index'])->name('top');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::get('/mypage', [MypageController::class, 'show'])->name('mypage');
 Route::get('/recipes/{uuid}', [RecipeController::class, 'show'])->name('recipes.show');
+Route::get('/ingredients', [IngredientsController::class, 'index'])->name('ingredients.index');
+Route::get('/ingredients/add', [IngredientsController::class, 'add'])->name('ingredients.add');
 Route::get('/ingredients/{uuid}', [IngredientsController::class, 'show'])->name('ingredients.show');
 Route::get('/ranking/{category?}', [RankingController::class, 'show'])->name('ranking.show');
+Route::get('/ranking/{category?}/add', [RankingController::class, 'add'])->name('ranking.add');
 
 //カート
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::get('/payment', [PaymentController::class, 'show'])->name('payment.show');
+Route::get('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');
+Route::get('/payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
+Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
+Route::middleware(['web'])->group(function () {
+    Route::post('/address/confirm', [AddressController::class, 'confirm'])->name('address.confirm');
+});
 
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add'); //カートへ追加するAPI
 Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update'); //カートの数量を更新するAPI
 Route::delete('/cart/remove/{ingredientUuid}', [CartController::class, 'remove'])->name('cart.remove');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -42,7 +55,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Language Switcher Route 言語切替用ルートだよ
+// Language Switcher Route
 Route::get('language/{locale}', function ($locale) {
     app()->setLocale($locale);
     session()->put('locale', $locale);

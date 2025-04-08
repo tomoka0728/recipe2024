@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     const deleteForms = document.querySelectorAll(".delete-form");
-    console.log(document.querySelector('meta[name="csrf-token"]').getAttribute("content"));
     deleteForms.forEach(form => {
         const button = form.querySelector(".remove-button");
 
@@ -11,10 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault(); // フォームの送信を防ぐ
 
             const ingredientUuid = form.dataset.ingredientUuid;
-
-            if (!confirm("本当に削除しますか？")) {
-                return;
-            }
+            console.log(`削除リクエスト送信: /cart/remove/${ingredientUuid}`);
 
             fetch(`/cart/remove/${ingredientUuid}`, {
                 method: "DELETE",

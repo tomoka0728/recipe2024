@@ -5,57 +5,32 @@
 
     <div id="container" class="wrapper">
         <main>
-            <div class="item">
-                <div class="item_img">
-                    <img src="{{ Storage::disk('s3')->url($ingredient->image_path) }}" alt="">
-                </div>
-                <div class="item2">
-                    <div class="item_title">
-                        <p><h1>{{ $ingredient->name }}</h1></p>
+            <article>
+                <div class="item_title"><h1>すべての材料(全{{ count($ingredients) }}件)</h1></div>
+                <hr class="cp_hr11" />
+    
+                <div class="all-products-grid">
+                    @foreach($ingredients as $ingredient)
+                    <div class="all-products-item">
+                        <div class="all-products-item-img">
+                            <img src="{{ Storage::disk('s3')->url($ingredient->image_path) }}" alt="{{ $ingredient->name }}">
+                        </div>
+                        <div class="all-products-title">
+                            <h2>{{ $ingredient->name }}</h2>
+                        </div>
+                        <div class="all-products-info">
+                            <h3 class="price">{{ number_format($ingredient->price) }}円</h3>
+                            <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->price * 1.08) }}円</span>)</p>
+                        </div>
+                        <div class="cart-push2" style="display: none;">
+                            カートに追加しました
+                        </div>
+                        <div class="all-products-btn">
+                        <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->uuid }}"data-quantity="1">カートに入れる</a></div>
                     </div>
-                    <div class="item3">
-                        <form class="cart-form" data-uuid="{{ $ingredient->uuid }}">
-                            @csrf
-                        <div>
-                            <label for="quantity">数量:</label>
-                            <select name="num" class="quantity-select" data-price="{{ $ingredient->price }}" data-tax-price="{{ $ingredient->price * 1.08 }}">
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}" >{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="item_info">
-                            <p><h1 class="price">{{ number_format($ingredient->price) }}円</h1></p>
-                            <p class="total-price">(税込み <span class="total-price-display">{{  number_format($ingredient->price * 1.08)  }}円</span>)</p>
-                        </div>
-                        <div class="kart mt-6">
-                            <div class="cart-push" style="display: none;">
-                                カートに追加しました
-                            </div>
-                            <div class="btn">
-                                <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->uuid }}">カートに入れる</a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-            </div>
-            <div class="recipe">
-                <div class="title2">
-                    この食材を使用したレシピ
-                </div>
-                <div class="recipe2">
-                    <ul class="stylenone grid">
-                        @foreach($recipes as $recipe)
-                        <li>
-                            <a href="{{ route('recipes.show', $recipe->uuid) }}">
-                                <img src="{{ Storage::disk('s3')->url($recipe->image_path) }}" alt="">
-                                <p class="title">{{ $recipe->title }}</p>
-                            </a>
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
+            </article>
         </main>
 
         <aside id="sidebar">

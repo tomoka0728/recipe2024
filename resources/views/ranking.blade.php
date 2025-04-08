@@ -34,7 +34,7 @@
                                                 カートに追加しました
                                             </div>
                                             <div class="btn">
-                                                <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->id }}"data-quantity="1">カートに入れる</a>
+                                                <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->uuid }}"data-quantity="1">カートに入れる</a>
                                             </div>
                                         </div>
                                     </div>

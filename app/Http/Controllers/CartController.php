@@ -12,7 +12,6 @@ class CartController extends Controller
     public function show()
     {
         $carts = session()->get('carts', []);
-
         // 合計金額の計算
         $sum = 0;
         foreach ($carts as $item) {

@@ -14,35 +14,41 @@ class AddressController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function confirm(Request $request): View
+    public function confirm(Request $request)
     {
-        $request->validate([
-            'zipcode' => ['required', 'integer', 'max:255'],
+        $validatedData = $request->validate([
+            'zipcode' => ['required', 'regex:/^\d{7}$/'],
             'prefectures' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'room' => ['nullable', 'string', 'max:255'],
-            'phone' => ['required', 'integer','max:15'],
+            'phone' => ['required', 'regex:/^\d{10,11}$/'],
+            'method' => ['required', 'string'],
+            'point' => ['required', 'in:use,not_use'],
+            'use_point' => ['nullable', 'integer', 'min:0'],
+        ], [
+            'zipcode.required' => '郵便番号を入力してください。',
+            'zipcode.regex' => '郵便番号は7桁の数字で入力してください。',
+            'prefectures.required' => '都道府県を選択してください。',
+            'city.required' => '市区町村を入力してください。',
+            'address.required' => '住所を入力してください。',
+            'phone.required' => '電話番号を入力してください。',
+            'phone.regex' => '電話番号は10桁または11桁の数字で入力してください。',
+            'method.required' => '支払い方法を選択してください。',
+            'point.required' => 'ポイント利用の選択をしてください。',
         ]);
 
-        // セッションに住所の情報を保管
-        $request->session()->regenerate();
-        $request->session()->put('zipcode', $request->zipcode);
-        $request->session()->put('prefectures', $request->prefectures);
-        $request->session()->put('city', $request->city);
-        $request->session()->put('address', $request->address);
-        $request->session()->put('room', $request->room);
-        $request->session()->put('phone', $request->phone);
+    
+        // セッションにデータを保存
+        session()->put('address_data', $request->only(['zipcode', 'prefectures', 'city', 'address', 'room', 'phone']));
+        session()->put('payment-method', $request->input('method'));
+        session()->put('pointUsage', $request->input('point'));
+        session()->put('usedPoints', $request->input('use_point', 0));
 
-        // 確認画面を表示
-        return view('user.address.register-confirm', [
-            'zipcode' => $request->zipcode,
-            'prefectures' => $request->prefectures,
-            'city' => $request->city,
-            'address' => $request->address,
-            'room' => $request->room,
-            'phone' => $request->phone,
-        ]);
+        // デバッグ用ログ
+        \Log::info('セッションデータ・AddressController:', session()->all());
+    
+        return redirect()->route('payment.confirm');
     }
 
     /**
@@ -55,14 +61,11 @@ class AddressController extends Controller
         DB::transaction(function () use ($request) {
             // ログインしているユーザーの住所を登録
             $user = Auth::user();
-            $user->addresses()->create([
-                'zipcode' => $request->session()->get('zipcode'),
-                'prefectures' => $request->session()->get('prefectures'),
-                'city' => $request->session()->get('city'),
-                'address' => $request->session()->get('address'),
-                'room' => $request->session()->get('room'),
-                'phone' => $request->session()->get('phone'),
-            ]);
+            $addressData = session()->get('address_data', []);
+
+            if (!empty($addressData)) {
+                $user->addresses()->create($addressData);
+            }
         });
 
         return view('user.address.register-complete');
