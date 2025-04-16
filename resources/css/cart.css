@@ -163,12 +163,32 @@
     margin: 5px;
   }
 
+  .item-actions {
+    text-align: center;
+  }
+
   .item-actions .remove-button {
-    font-size: 18px;
+    font-size: 15px;
     color: rgb(148, 112, 112);
     border: none;
     cursor: pointer;
   }
+
+  .save-button {
+    font-size: 12px;
+    border-radius: 50px;
+    background: rgb(201, 185, 185);;
+    margin: 0 auto;
+    max-width: 260px;
+    padding: 5px 10px;
+    color: #ffffff;
+    transition: 0.3s ease-in-out;
+  }
+
+  .save-button:hover {
+    background: rgb(180, 159, 159);;
+    color: #FFF;
+    }
 
   .sidebar {
     width: 25%;
@@ -251,4 +271,102 @@ button
     color: #808080;            /* グレー文字 */
     border: 2px solid #d3d3d3; /* グレー枠 */
     opacity: 0.5;              /* 半透明にする */
+}
+
+
+
+/*-------------------------------------------
+ あとで買うセクション
+-------------------------------------------*/
+
+.item-in-later {
+    background-color: #f4f4f4;
+    padding: 12px;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 50px 0 20px;
+    border-left: 6px solid #999;
+    color: #555;
+}
+
+.later-box {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    padding: 20px;
+    margin-bottom: 40px;
+}
+
+.later-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.later-item:last-child {
+    border-bottom: none;
+}
+
+.later-item .item-img {
+    width: 12%;
+    margin-right: 20px;
+}
+
+.later-item .item-img img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.later-item .item-details {
+    flex: 1;
+}
+
+.later-item .item-name a {
+    font-size: 15px;
+    color: #333;
+    text-decoration: none;
+}
+
+.later-item .item-price,
+.later-item .item-quantity {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #666;
+}
+
+.later-item .item-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.later-item .remove-button,
+.later-item .move-back-button {
+    font-size: 14px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.later-item .remove-button {
+    background-color: #eee;
+    color: #666;
+}
+
+.later-item .remove-button:hover {
+    background-color: #ccc;
+}
+
+.later-item .move-back-button {
+    background-color: #6fb1fc;
+    color: white;
+}
+
+.later-item .move-back-button:hover {
+    background-color: #559fe8;
 }

@@ -9,8 +9,8 @@ class RecipeStep extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id';  // または適切な主キー
-    public $timestamps = false;    // タイムスタンプが不要なら
+    protected $primaryKey = 'id';
+    public $timestamps = false;
 
     protected $fillable = [
         'recipe_uuid',

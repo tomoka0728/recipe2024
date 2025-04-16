@@ -45,6 +45,10 @@
                                                 <button type="submit" class="remove-button remove-cart-item"
                                                     data-uuid="{{ $ingredientUuid }}">削除</button>
                                             </form>
+                                            <form method="POST" action="{{ route('save.for.later', $ingredientUuid) }}">
+                                                @csrf
+                                                <button type="submit" class="save-button">あとで買う</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -54,6 +58,52 @@
                     @else
                         <p>カートに商品が入っていません。</p>
                     @endif
+                    @if (count($saveForLaterItems) > 0)
+    <div class="item-in-later">あとで買う</div>
+    <div class="later-box">
+        @foreach ($saveForLaterItems as $key => $item)
+            <div class="later-item">
+                <div class="item-img">
+                    <a href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid : $key]) }}">
+                        @if (Auth::check())
+                            @if ($item->ingredient && $item->ingredient->image_path)
+                                <img src="{{ Storage::disk('s3')->url($item->ingredient->image_path) }}" alt="商品画像">
+                            @else
+                                <img src="/images/no-image.png" alt="画像なし">
+                            @endif
+                        @else
+                            <img src="{{ Storage::disk('s3')->url($item['image_path']) }}" alt="商品画像">
+                        @endif
+                    </a>
+                </div>
+                <div class="item-details">
+                    <p class="item-name">
+                        <a href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid : $key]) }}">
+                            {{ Auth::check() ? $item->ingredient->name : $item['name'] }}
+                        </a>
+                    </p>
+                    <p class="item-price">
+                        価格：{{ number_format(Auth::check() ? $item->ingredient->price : $item['price']) }}円
+                    </p>
+                    <p class="item-quantity">
+                        数量：{{ Auth::check() ? $item->quantity : ($item['quantity'] ?? 1) }}
+                    </p>
+                    <div class="item-actions">
+                        <form method="POST" action="{{ route('cart.remove', Auth::check() ? $item->ingredient->uuid : $key) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="remove-button">削除</button>
+                        </form>
+                        <form method="POST" action="{{ route('move.to.cart', Auth::check() ? $item->ingredient->uuid : $key) }}">
+                            @csrf
+                            <button type="submit" class="move-back-button">カートに戻す</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+@endif
                 </section>
             </main>
 

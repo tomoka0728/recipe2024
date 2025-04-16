@@ -32,14 +32,24 @@ Route::get('/payment/confirm', [PaymentController::class, 'confirm'])->name('pay
 Route::get('/payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add'); //カートへ追加するAPI
+Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update'); //カートの数量を更新するAPI
+Route::delete('/cart/remove/{ingredientUuid}', [CartController::class, 'remove'])->name('cart.remove');
 
+//あとで買う機能
+Route::post('/save-for-later/{ingredientUuid}', [CartController::class, 'saveForLater'])->name('save.for.later');
+Route::get('/save-for-later', [CartController::class, 'showSaveForLater'])->name('save.for.later.show');
+Route::delete('/save-for-later/{uuid}', [CartController::class, 'removeSaveForLater'])->name('save.for.later.remove');
+Route::post('/move-to-cart/{uuid}', [CartController::class, 'moveToCart'])->name('move.to.cart');
+
+
+//住所登録
 Route::middleware(['web'])->group(function () {
     Route::post('/address/confirm', [AddressController::class, 'confirm'])->name('address.confirm');
 });
 
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add'); //カートへ追加するAPI
-Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update'); //カートの数量を更新するAPI
-Route::delete('/cart/remove/{ingredientUuid}', [CartController::class, 'remove'])->name('cart.remove');
+
+
 
 
 Route::get('/dashboard', function () {

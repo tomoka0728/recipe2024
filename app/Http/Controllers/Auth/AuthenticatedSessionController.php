@@ -25,9 +25,61 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
-        // セッションを再生成
         $request->session()->regenerate();
+
+        $user = Auth::user();
+        $carts = session()->get('carts', []);
+
+        foreach ($carts as $ingredientUuid => $item) {
+            $cartItem = \App\Models\CartItem::firstOrNew([
+                'user_uuid' => $user->uuid,
+                'ingredient_uuid' => $ingredientUuid,
+                'type' => 'cart',
+            ]);
+    
+            $cartItem->quantity = $item['quantity'];
+            $cartItem->price = $item['price'];
+            $cartItem->save();
+        }
+
+
+        // "後で買う" アイテムを移行
+        $savedForLater = session()->get('saveForLater', []);
+        if (!empty($savedForLater)) {
+            foreach ($savedForLater as $ingredientUuid => $item) {
+                $savedItem = \App\Models\CartItem::firstOrNew([
+                    'user_uuid' => $user->uuid,
+                    'ingredient_uuid' => $ingredientUuid,
+                    'type' => 'saveForLater',
+                ]);
+    
+                // 数量を追加（既に存在する場合）
+                $savedItem->quantity += $item['quantity'];
+                $savedItem->price = $item['price']; // 必要に応じて価格も更新
+                $savedItem->save();
+            }
+
+            // セッションから「後で買う」情報を削除
+            session()->forget('saveForLater');
+        }
+    
+        $cartItems = \App\Models\CartItem::where('user_uuid', $user->uuid)
+            ->where('type', 'cart')
+            ->with('ingredient')
+            ->get();
+    
+        $newCarts = [];
+        foreach ($cartItems as $item) {
+            $newCarts[$item->ingredient_uuid] = [
+                'name' => $item->ingredient->name,
+                'price' => $item->ingredient->price,
+                'quantity' => $item->quantity,
+                'image_path' => $item->ingredient->image_path,
+            ];
+        }
+    
+        session()->put('carts', $newCarts);
+
         $redirectTo = $request->input('redirect_to');
 
         \Log::info('リクエスト内容:', $request->all());
