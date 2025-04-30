@@ -16,14 +16,28 @@
                         </div>
                         <div class="recipe2">
                             <ul class="slider">
-                                @foreach ($popularRecipes as $recipe)
+                                {{-- @foreach ($popularRecipes as $recipe)
                                     <li>
                                         <a href="{{ route('recipes.show', $recipe->uuid) }}">
                                             <img src="{{ Storage::disk('s3')->url($recipe->image_path) }}" alt="">
                                             <p class="title">{{ $recipe->title }}</p>
                                         </a>
                                     </li>
-                                @endforeach
+                                @endforeach --}}
+                                <li><a href="{{ url('/butakoma') }}">
+                                    <img src="{{ Storage::disk('s3')->url('recipe/nkjg4.jpg') }}" alt="">
+                                    <p class="title">黄金比で簡単肉じゃが</p>
+                                </a></li>
+                                <li><a href="{{ route('ingredients.show', ['uuid' => '591af533-d3a8-4ebf-9c37-c35575b9a047']) }}">
+                                        <img src="{{ Storage::disk('s3')->url('recipe/nkjg4.jpg') }}" alt="">
+                                        <p class="title">黄金比で簡単肉じゃが</p>
+                                    </a>
+                                </li>
+                                <li><a href="{{ url('recipe_norisio') }}">
+                                        <img src="{{ Storage::disk('s3')->url('recipe/nkjg4.jpg') }}" alt="">
+                                        <p class="title">黄金比で簡単肉じゃが</p>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <hr class="cp_hr11" />

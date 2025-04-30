@@ -77,4 +77,9 @@ class Admin extends Authenticatable
             }
         });
     }
+
+    public function getAuthIdentifierName()
+    {
+        return 'admin_id';
+    }
 }

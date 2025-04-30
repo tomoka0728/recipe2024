@@ -13,8 +13,15 @@ class Ingredient extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['uuid', 'name', 'description', 'image_path'];
-
+    protected $fillable = [
+        'uuid',
+        'name',
+        'seasonality',
+        'price',
+        'unit',
+        'image_path',
+        'total_purchased',
+    ];
     // キャスト設定
     protected $casts = [
         'created_at' => 'datetime',

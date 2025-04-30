@@ -44,27 +44,23 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate(): void
-    {
-        $this->ensureIsNotRateLimited();
+     public function authenticate(): void
+     {
+         $this->ensureIsNotRateLimited();
 
-        if($this->routeIs('admin.*')){
-            $guard = 'admin';
-            $credentials = $this->only('admin_id', 'password');
-        } else {
-            $guard = 'web';
-            $credentials = $this->only('email', 'password');
-        }
-        if (! Auth::guard($guard)->attempt($credentials, $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+         $guard = $this->routeIs('admin.*') ? 'admin' : 'web';
+         $credentials = $this->only($guard === 'admin' ? 'admin_id' : 'email', 'password');
 
-            throw ValidationException::withMessages([
-                $guard === 'admin' ? 'admin_id' : 'email' => trans('auth.failed'),
-            ]);
-        }
+         if (!Auth::guard($guard)->attempt($credentials, $this->boolean('remember'))) {
+             RateLimiter::hit($this->throttleKey());
 
-        RateLimiter::clear($this->throttleKey());
-    }
+             throw ValidationException::withMessages([
+                 $guard === 'admin' ? 'admin_id' : 'email' => trans('auth.failed'),
+             ]);
+         }
+
+         RateLimiter::clear($this->throttleKey());
+     }
 
     /**
      * Ensure the login request is not rate limited.
@@ -82,7 +78,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            $this->routeIs('admin.*') ? 'admin_id' : 'email' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),

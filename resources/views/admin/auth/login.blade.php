@@ -1,69 +1,45 @@
+@extends('layouts.admin-login')
 
-<x-guest-layout>
-    <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 mt-10 mb-10">
-        <p class="text-2xl font-bold text-rose-950">管理者ログイン</p>
+@section('content')
+<div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 mt-10 mb-10">
+    <p class="text-3xl font-bold text-gray-800">管理者ログイン</p>
+    <p class="text-sm text-gray-500 mt-2">管理者専用ページにアクセスするにはログインしてください。</p>
+</div>
+
+<!-- Session Status -->
+<x-auth-session-status class="mb-4" :status="session('status')" />
+
+<!-- ログインフォーム -->
+<form method="POST" action="{{ route('admin.login') }}" novalidate class="w-full max-w-md mx-auto mb-10">
+    @csrf
+    <!-- Admin ID -->
+    <div class="mb-6">
+        <label for="admin_id" class="block text-sm font-medium text-gray-700">管理者ID</label>
+        <input id="admin_id" name="admin_id" type="text"
+            class="mt-1 block w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm {{ $errors->has('admin_id') ? 'border-red-500 bg-red-100' : '' }}"
+            value="{{ old('admin_id') }}" required autofocus autocomplete="admin_id">
+        @if ($errors->has('admin_id'))
+            <p class="text-sm text-red-500 mt-2">{{ $errors->first('admin_id') }}</p>
+        @endif
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <!-- Password -->
+    <div class="mb-6">
+        <label for="password" class="block text-sm font-medium text-gray-700">パスワード</label>
+        <input id="password" name="password" type="password"
+            class="mt-1 block w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm {{ $errors->has('password') ? 'border-red-500 bg-red-100' : '' }}"
+            required autocomplete="current-password">
+        @if ($errors->has('password'))
+            <p class="text-sm text-red-500 mt-2">{{ $errors->first('password') }}</p>
+        @endif
+    </div>
 
-    <form method="POST" action="{{ route('admin.login') }}" novalidate>
-        @csrf
-
-        <!-- Admin ID -->
-        <div>
-            <x-input-label for="admin_id" :value="__('管理者ID')" />
-            <x-text-input id="admin_id" class="block mt-1 w-full {{ $errors->has('admin_id') ? 'border-red-500 bg-red-100' : '' }} "
-                type="text" name="admin_id" :value="old('admin_id')" required autofocus autocomplete="admin_id" />
-            <x-input-error :messages="$errors->get('admin_id')" class="mt-2" id="name-error" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full {{ $errors->has('password') ? 'border-red-500 bg-red-100' : '' }} "
-                            type="password" name="password" required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" id="password-error" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <div class="flex items-center justify-end mt-4">
-                <x-primary-button class="ms-3">
-                    {{ __('Log in') }}
-                </x-primary-button>
-            </div>
-        </div>
-    </form>
-</x-guest-layout>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const adminIdInput = document.getElementById('admin_id');
-        const adminIdErrorElement = document.getElementById('admin_id-error');
-        const passwordInput = document.getElementById('password');
-        const passwordErrorElement = document.getElementById('password-error');
-
-        adminIdInput.addEventListener('input', function () {
-            if (adminIdInput.value.trim() !== '') {
-                adminIdErrorElement.style.display = 'none';
-                adminIdInput.classList.remove('border-red-500', 'bg-red-100');
-            } else {
-                adminIdErrorElement.style.display = 'block';
-                adminIdInput.classList.add('border-red-500', 'bg-red-100');
-            }
-        });
-
-        passwordInput.addEventListener('input', function () {
-            if (passwordInput.value.trim() !== '') {
-                passwordErrorElement.style.display = 'none';
-                passwordInput.classList.remove('border-red-500', 'bg-red-100');
-            } else {
-                passwordErrorElement.style.display = 'block';
-                passwordInput.classList.add('border-red-500', 'bg-red-100');
-            }
-        });
-    });
-</script>
+    <!-- Submit Button -->
+    <div class="text-right">
+        <button type="submit"
+            class="bg-blue-500 text-white py-2 px-4 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            ログイン
+        </button>
+    </div>
+</form>
+@endsection

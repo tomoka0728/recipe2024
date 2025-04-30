@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -24,11 +25,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        // 認証処理
+        if (!Auth::guard('admin')->attempt($request->only('admin_id', 'password'))) {
+            return back()->withErrors([
+                'admin_id' => 'IDまたはパスワードが正しくありません。',
+            ])->withInput();
+        }
 
-        $request->session()->regenerate();
+        $request->authenticate(); // ここで認証
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $request->session()->regenerate(); // セッション再生成
+
+        return redirect()->route('admin.dashboard');
     }
 
     /**

@@ -33,29 +33,6 @@
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
-    {{-- <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0"> --}}
-    {{-- <div class="min-h-screen bg-gray-100"> --}}
-    {{-- @include('layouts.navigation') --}}
-
-    <!-- Page Heading -->
-    {{-- @isset($header)
-        @if (request()->is('admin*'))
-            <!-- 管理者用ヘッダー -->
-            <header class="bg-gray-800 text-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    @include('layouts.owner-navigation')
-                </div>
-            </header>
-        @else
-            <!-- 一般ユーザー用ヘッダー -->
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
-    @endisset --}}
-
         <!-- Page Content -->
         <x-header />
         <div class="main">

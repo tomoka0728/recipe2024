@@ -1,0 +1,99 @@
+/* 全体のリセット */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%; /* ページ全体を1画面に収める */
+    overflow: hidden; /* 不要なスクロールを防ぐ */
+    margin: 0; /* デフォルトの余白を削除 */
+    padding: 0; /* デフォルトのパディングを削除 */
+}
+
+/* ヘッダー固定 */
+.fixed-header {
+    position: fixed !important; /* 他のスタイルを上書き */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* サイドバー固定 */
+.fixed-sidebar {
+    position: fixed !important;
+    top: 4rem; /* ヘッダーの高さ分 */
+    left: 0;
+    width: 16rem;
+    height: calc(100vh - 4rem); /* ヘッダーを除いた高さ */
+    background-color: #1f2937;
+    color: #fff;
+    overflow-y: auto;
+}
+
+body {
+    font-family: 'Figtree', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+
+/* メインコンテンツ */
+main {
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0; /* 自動マージンを削除 */
+    max-width: calc(100vw - 10rem); /* サイドバーを除いた幅 */
+    height: calc(100vh - 4rem); /* ヘッダーを除いた高さ */
+    overflow-y: auto; /* コンテンツが増えた場合にスクロール */
+}
+
+/* ボタン */
+button {
+    background-color: #3b82f6; /* ブルー */
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2563eb; /* ダークブルー */
+}
+
+/* リンク */
+a {
+    color: #3b82f6; /* ブルー */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #2563eb; /* ダークブルー */
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    main {
+        padding: 1rem;
+    }
+}
