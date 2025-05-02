@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\RecipeManageController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\IngredientManageController;
+use App\Http\Controllers\Admin\AdminRecipeController;
 
 
 
@@ -32,14 +33,17 @@ Route::prefix('admin')
 
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(function () {
     Route::get('/recipes', [RecipeManageController::class, 'index'])->name('recipes.index');
-    Route::get('/recipes/create', [RecipeManageController::class, 'create'])->name('recipes.create');
-    Route::get('/recipes/{uuid}/edit', [RecipeManageController::class, 'edit'])->name('recipes.edit');
-    Route::delete('/recipes/{uuid}', [RecipeManageController::class, 'destroy'])->name('recipes.destroy');
+    Route::get('/recipes/create', [AdminRecipeController::class, 'create'])->name('recipes.create');
+    Route::post('/recipes/store', [AdminRecipeController::class, 'store'])->name('recipes.store');
+    Route::get('/recipes/{uuid}/edit', [AdminRecipeController::class, 'edit'])->name('recipes.edit');
+    Route::put('/recipes/{uuid}', [AdminRecipeController::class, 'update'])->name('recipes.update');
+    Route::delete('/recipes/{uuid}', [AdminRecipeController::class, 'destroy'])->name('recipes.destroy');
     Route::get('/ingredients/create', [IngredientController::class, 'create'])->name('ingredients.create');
     Route::post('/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store');
     Route::get('/ingredients', [IngredientManageController::class, 'index'])->name('ingredients.index');
     Route::get('/ingredients/{uuid}/edit', [IngredientManageController::class, 'edit'])->name('ingredients.edit');
-    Route::delete('/ingredients/{uuid}', [IngredientManageControllerIngredientManageController::class, 'destroy'])->name('ingredients.destroy');
+    Route::delete('/ingredients/{uuid}', [IngredientManageController::class, 'destroy'])->name('ingredients.destroy');
+    Route::get('/admin/ingredients/search', [IngredientController::class, 'search'])->name('ingredients.search');
 });
 
 

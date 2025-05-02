@@ -16,6 +16,7 @@ export default defineConfig({
                 'resources/js/cartUpdate.js',
                 'resources/js/registerValidation.js',
                 'resources/js/addressValidation.js',
+                'resources/js/recipe_form.js',
                 // 'resources/img/user.png',
 
             ],

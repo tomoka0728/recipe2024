@@ -9,6 +9,34 @@
             </a>
         </div>
 
+        <form method="GET" class="mb-6 flex flex-wrap items-center gap-4">
+            <input type="text" name="search" placeholder="レシピ名検索" value="{{ request('search') }}"
+                   class="border rounded px-3 py-2 w-48">
+    
+            <select name="category" class="border rounded px-3 py-2">
+                <option value="">全カテゴリ</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->uuid }}" {{ request('category') == $category->uuid ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+    
+            <select name="sort" class="border rounded px-3 py-2">
+                <option value="">並び替え</option>
+                <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>名前昇順</option>
+                <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>名前降順</option>
+                <option value="created_asc" {{ request('sort') == 'created_asc' ? 'selected' : '' }}>作成日昇順</option>
+                <option value="created_desc" {{ request('sort') == 'created_desc' ? 'selected' : '' }}>作成日降順</option>
+            </select>
+    
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">検索</button>
+            <a href="{{ route('admin.recipes.index') }}"
+               class="bg-gray-300 hover:bg-gray-400 text-gray-800 hover:text-white font-semibold py-2 px-4 rounded">
+                リセット
+            </a>
+        </form>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($recipes as $recipe)
                 <div class="bg-white border rounded-lg p-4 flex flex-col">

@@ -9,7 +9,7 @@ class RecipeStep extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'uuid';
     public $timestamps = false;
 
     protected $fillable = [

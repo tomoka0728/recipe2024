@@ -58,16 +58,22 @@ class IngredientManageController extends Controller
         return view('admin.ingredients.index', compact('ingredients', 'categories'));
     }
 
-    public function edit($uuid)
+    /**
+     * 材料のオートコンプリート検索
+     */
+    public function search(Request $request)
     {
-        $ingredient = Ingredient::where('uuid', $uuid)->firstOrFail();
-        return view('admin.ingredients.edit', compact('ingredient'));
-    }
+        $query = $request->input('q');
 
-    public function destroy($uuid)
-    {
-        $ingredient = Ingredient::where('uuid', $uuid)->firstOrFail();
-        $ingredient->delete();
-        return redirect()->route('admin.ingredients.index')->with('success', '削除しました');
+        if (!$query) {
+            return response()->json([]);
+        }
+
+        // 名前が検索クエリに一致する材料を検索（大文字小文字を区別しない）
+        $ingredients = Ingredient::where('name', 'like', '%' . $query . '%')
+            ->limit(10) // 一度に返す件数を制限（必要に応じて調整）
+            ->get(['uuid', 'name']);
+
+        return response()->json($ingredients);
     }
 }

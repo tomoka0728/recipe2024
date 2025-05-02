@@ -5,30 +5,51 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use App\Models\RCategory;
+use App\Models\Ingredient;
 
 class RecipeManageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $recipes = Recipe::latest()->get(); // 新しい順に取得
-        return view('admin.recipes.index', compact('recipes'));
-    }
+        $query = Recipe::with('categories');
 
-    public function create()
-    {
-        return view('admin.recipes.create'); // 作成用ビュー（必要であれば）
-    }
+        // 検索キーワード
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
 
-    public function edit($uuid)
-    {
-        $recipe = Recipe::where('uuid', $uuid)->firstOrFail();
-        return view('admin.recipes.edit', compact('recipe'));
-    }
+        // カテゴリ絞り込み
+        if ($request->filled('category')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('r_category_uuid', $request->category);
+            });
+        }
 
-    public function destroy($uuid)
-    {
-        $recipe = Recipe::where('uuid', $uuid)->firstOrFail();
-        $recipe->delete();
-        return redirect()->route('admin.recipes.index')->with('success', 'レシピを削除しました');
+        // 並び替え
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'title_asc':
+                    $query->orderBy('title');
+                    break;
+                case 'title_desc':
+                    $query->orderByDesc('title');
+                    break;
+                case 'created_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'created_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+
+        $recipes = $query->paginate(10);
+        $categories = RCategory::orderBy('category_id')->get();
+
+        return view('admin.recipes.index', compact('recipes', 'categories'));
     }
 }

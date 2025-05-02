@@ -23,19 +23,25 @@ class Recipe extends Model
     // Ingredientとのリレーション
     public function ingredients()
     {
-        return $this->hasManyThrough(
+        return $this->belongsToMany(
             Ingredient::class,
-            RecipeIngredient::class,
-            'recipe_uuid',     // RecipeIngredientテーブルでの外部キー
-            'uuid',             // Ingredientテーブルでの主キー
-            'uuid',             // Recipeテーブルでの主キー
-            'ingredient_uuid'   // RecipeIngredientテーブルでの外部キー
-        );
+            'recipe_ingredients',      // 中間テーブル名
+            'recipe_uuid',             // 中間テーブルでのレシピ側外部キー
+            'ingredient_uuid',         // 中間テーブルでの材料側外部キー
+            'uuid',                    // Recipeモデルの主キー
+            'uuid'                     // Ingredientモデルの主キー
+        )->withPivot('uuid', 'quantity', 'unit')->withTimestamps();
     }
 
     // RecipeStepとのリレーション
     public function steps()
     {
-        return $this->hasMany(RecipeStep::class, 'recipe_uuid', 'uuid');
+        return $this->hasMany(RecipeStep::class, 'recipe_uuid', 'uuid')->orderBy('step_number');
+    }
+
+    // RecipeCategoryとのリレーション
+    public function categories()
+    {
+        return $this->belongsToMany(RCategory::class, 'recipe_categories', 'recipe_uuid', 'r_category_uuid');
     }
 }
