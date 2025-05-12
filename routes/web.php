@@ -11,19 +11,39 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\MembershipPlanController;
+use App\Http\Controllers\SpecialFeatureController;
+use App\Http\Controllers\ColumnController;
 
 
 // TOP
 Route::get('/', [HomeController::class, 'index'])->name('top');
-
+Route::get('/special-feature', [SpecialFeatureController::class, 'index'])->name('special-feature');
+Route::get('/column', [ColumnController::class, 'index'])->name('column');
+Route::get('/membership/silver', [MembershipPlanController::class, 'silver'])->name('membership.silver');
+Route::get('/membership/gold', [MembershipPlanController::class, 'gold'])->name('membership.gold');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::get('/mypage', [MypageController::class, 'show'])->name('mypage');
+
+Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
+Route::get('/recipes/category/{category}', [RecipeController::class, 'category'])->name('recipes.category');
 Route::get('/recipes/{uuid}', [RecipeController::class, 'show'])->name('recipes.show');
 Route::get('/ingredients', [IngredientsController::class, 'index'])->name('ingredients.index');
 Route::get('/ingredients/add', [IngredientsController::class, 'add'])->name('ingredients.add');
 Route::get('/ingredients/{uuid}', [IngredientsController::class, 'show'])->name('ingredients.show');
 Route::get('/ranking/{category?}', [RankingController::class, 'show'])->name('ranking.show');
 Route::get('/ranking/{category?}/add', [RankingController::class, 'add'])->name('ranking.add');
+
+Route::get('/ranking/redirect', [RankingController::class, 'redirect'])->name('ranking.redirect');
+Route::get('/ranking/more', [RankingController::class, 'more'])->name('recipes.ranking.more');
+Route::get('/membership/promotion', function () {
+    return view('membership.promotion'); // プレミアム案内ページ
+})->name('membership.promotion');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/membership/upgrade', [MembershipController::class, 'edit'])->name('membership.edit');
+    Route::post('/membership/upgrade', [MembershipController::class, 'update'])->name('membership.update');
+});
 
 //カート
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');

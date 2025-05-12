@@ -82,6 +82,11 @@ a {
 img {
   max-width: 100%;
 }
+
+.text {
+    white-space: pre-wrap; /* 改行とスペースを保持 */
+}
+
 li {
   list-style: none;
 }

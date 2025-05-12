@@ -19,3 +19,37 @@ window.onload = (event) => {
 
 const modal = new Modal();  // Modalのインスタンスを作成
 modal.open();  // モーダルを開く処理
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('#header-search-form');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const searchType = document.querySelector('input[name="search_type"]:checked').value;
+        const keyword = document.querySelector('input[name="search"]').value;
+
+        let url;
+        if (searchType === 'ingredient') {
+            url = new URL(window.appRoutes.ingredientIndex, window.location.origin);
+        } else if (searchType === 'recipe') {
+            url = new URL(window.appRoutes.recipeIndex, window.location.origin);
+        } else {
+            alert('検索タイプが不正です');
+            return;
+        }
+
+        // 検索タイプとキーワードをURLに追加
+        if (searchType) {
+            url.searchParams.set('search_type', searchType);  // search_typeの追加
+        }
+        if (keyword) {
+            url.searchParams.set('search', keyword);  // キーワードの追加
+        }
+
+        // URLに遷移
+        window.location.href = url.toString();
+    });
+});
+

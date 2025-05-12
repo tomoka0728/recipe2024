@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use App\Enums\MembershipStatus;
 
 class User extends Authenticatable
 {
@@ -65,6 +66,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'membership_status_code' => MembershipStatus::class,
     ];
 
     /**
@@ -84,5 +86,10 @@ class User extends Authenticatable
     public function addresses()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function isPremium(): bool
+    {
+        return $this->membership_status_code?->isPremium() ?? false;
     }
 }

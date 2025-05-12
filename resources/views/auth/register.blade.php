@@ -12,27 +12,6 @@
     </div>
     <form method="POST" action="{{ route('register') }}" novalidate class="custom-form">
         @csrf
-
-        {{-- <div class="op-box">
-            <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 mb-10">
-                <p class="text-base font-bold text-rose-950">選択してください</p>
-            </div>
-            <fieldset class="radio-3">
-                <label>
-                    <input type="radio" name="radio-3" checked/>
-                    radio1
-                </label>
-                <label>
-                    <input type="radio" name="radio-3"/>
-                    radio2
-                </label>
-                <label>
-                    <input type="radio" name="radio-3"/>
-                    radio3
-                </label>
-            </fieldset>
-        </div> --}}
-
         <div class="rq-box">
             <div class="rq2-box">
                 <!-- Name -->

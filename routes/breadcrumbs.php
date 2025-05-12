@@ -22,6 +22,24 @@ Breadcrumbs::for('cart', function ($trail, $page) {
     $trail->push($page, route('cart.show'));
 });
 
+// シルバー
+Breadcrumbs::for('silver', function ($trail, $page) {
+    $trail->parent('home');
+    $trail->push($page, route('membership.silver'));
+});
+
+// ゴールド
+Breadcrumbs::for('gold', function ($trail, $page) {
+    $trail->parent('home');
+    $trail->push($page, route('membership.gold'));
+});
+
+// 会員グレード変更
+Breadcrumbs::for('membership.edit', function ($trail, $page) {
+    $trail->parent('mypage', 'マイページ'); // マイページを親として追加
+    $trail->push($page, route('membership.edit'));
+});
+
 // // レシピ一覧のパンくずリスト
 // Breadcrumbs::for('recipes.index', function ($trail) {
 //     $trail->parent('home');

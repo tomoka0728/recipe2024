@@ -9,9 +9,11 @@
                 <div class="item_title">
                     <h1>
                         @if(request('search'))
-                            「{{ request('search') }}」の検索結果（全{{ $ingredients->total() }}件）
+                            「{{ request('search') }}」の検索結果（全{{ count($recipes) }}件）
+                        @elseif(isset($selectedCategory))
+                            「{{ $selectedCategory->name }}」のレシピ（全{{ count($recipes) }}件）
                         @else
-                            すべての材料（全{{ $ingredients->total() }}件）
+                            すべてのレシピ（全{{ count($recipes) }}件）
                         @endif
                     </h1>
                 </div>
@@ -20,19 +22,25 @@
                 <div class="pagination-info mt-4 mb-4 flex flex-wrap justify-between items-center gap-4">
                     {{-- ページネーション情報 --}}
                     <div class="pagination-summary text-sm text-yellow-900">
-                        <p>{{ $ingredients->firstItem() }} - {{ $ingredients->lastItem() }} 件表示（{{ $ingredients->currentPage() }}ページ目）</p>
+                        @if($recipes->count() > 0)
+                            <p>{{ $recipes->firstItem() }} - {{ $recipes->lastItem() }} 件表示（{{ $recipes->currentPage() }}ページ目）</p>
+                        @else
+                            <p>0件</p>
+                        @endif
                     </div>
                 
                     {{-- 並び替えと表示件数 --}}
                     <div class="pagination-controls">
-                        <form method="get" action="{{ route('ingredients.index') }}" class="flex items-center gap-4">
+                        <form method="get" action="{{ route('recipes.index') }}" class="flex items-center gap-4">
                             {{-- 並び替え --}}
                             <div class="flex items-center text-sm text-yellow-800">
                                 <label for="sort" class="mr-2 font-semibold">並び替え:</label>
                                 <select name="sort" id="sort" onchange="this.form.submit()"
                                     class="bg-original3 text-yellow-800 rounded-md border border-transparent py-2 px-3 pr-8 text-sm focus:ring focus:ring-original4 focus:ring-1 appearance-none bg-no-repeat bg-[right_0.75rem_center] bg-[url('data:image/svg+xml,%3Csvg fill=\'%237c5400\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath fill-rule=\'evenodd\' d=\'M10 14l-5-5h10l-5 5z\' clip-rule=\'evenodd\' /%3E%3C/svg%3E')]">
                                     <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>新着順</option>
-                                    <option value="bestselling" {{ request('sort') == 'bestselling' ? 'selected' : '' }}>売れ筋順</option>
+                                    @if (Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value)
+                                        <option value="favorites" {{ request('sort') == 'favorites' ? 'selected' : '' }}>お気に入りが多い順</option>
+                                    @endif
                                 </select>
                             </div>
                 
@@ -51,48 +59,56 @@
                 </div>
                 
                 {{-- ページネーション --}}
-                <div class="pagination">
-                    {{ $ingredients->appends(request()->input())->links() }}
-                </div>
-    
-                <div class="all-products-grid">
-                    @foreach($ingredients as $ingredient)
-                    <div class="all-products-item">
-                        <div class="all-products-item-img">
-                            <img src="{{ Storage::disk('s3')->url($ingredient->image_path) }}" alt="{{ $ingredient->name }}">
-                        </div>
-                        <div class="all-products-title">
-                            <h2>{{ $ingredient->name }}</h2>
-                        </div>
-                        <div class="all-products-info">
-                            <h3 class="price">{{ number_format($ingredient->price) }}円</h3>
-                            <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->price * 1.08) }}円</span>)</p>
-                        </div>
-                        <div class="cart-push2" style="display: none;">
-                            カートに追加しました
-                        </div>
-                        <div class="all-products-btn">
-                        <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->uuid }}"data-quantity="1">カートに入れる</a></div>
+                @if($recipes->count() > 0)
+                    <div class="pagination">
+                        {{ $recipes->appends(request()->input())->links() }}
                     </div>
+                @endif
+                
+                
+                @if($recipes->count() > 0)
+                <div class="recipe-list">
+                    @foreach($recipes as $recipe)
+                        <div class="recipe-item">
+                            <a href="{{ route('recipes.show', $recipe->uuid) }}" class="recipe-img-container">
+                                <div class="recipe-img-container">
+                                    <img src="{{ Storage::disk('s3')->url($recipe->image_path) }}" alt="{{ $recipe->title }}">
+                                    <div class="overlay">
+                                        <h3>{{ $recipe->title }}</h3>
+                                    </div>
+                                    <div class="favorite-badge">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="heart-icon" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.343 3.172 11.515a4 4 0 010-5.656z" />
+                                        </svg>
+                                        <span>{{ $recipe->favorite_count }}</span>
+                                    </div>
+                                </div>
+                                <div class="recipe-details">
+                                    <h2>{{ $recipe->title }}</h2>
+                                </div>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
+                @else
+                    <p>このカテゴリにはまだレシピがありません。</p>
+                @endif
             </article>
         </main>
 
         <aside id="sidebar">
             <section class="ranking">
-                <h3 class="side-title">ランキングカテゴリ</h3>
+                <h3 class="side-title">カテゴリ</h3>
                 <ul>
-                    <li><p class="subject"><a href="{{ route('ranking.show', ['category' => 'sougou']) }}">総合ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 4) }}">野菜ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 5) }}">果物ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 1) }}">お肉ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 2) }}">魚介ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 3) }}">乳製品ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 9) }}">調味料ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 10) }}">飲料ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 6) }}">冷凍ランキング</a></p></li>
-                    <li><p class="subject"><a href="{{ route('ranking.show', 11) }}">その他ランキング</a></p></li>
+                    @foreach($recipeCategories as $category)
+                        <li>
+                            <p class="subject">
+                                <a href="{{ route('recipes.category', ['category' => $category->uuid]) }}">
+                                    {{ $category->name }}
+                                </a>
+                            </p>
+                        </li>
+                    @endforeach
                 </ul>
             </section>
 

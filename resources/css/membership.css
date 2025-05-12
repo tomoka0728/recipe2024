@@ -1,0 +1,219 @@
+/* 全体レイアウト調整 */
+.wrapper {
+    width: 100%;
+    max-width: 1200px; /* 最大幅を指定 */
+    margin: 0 auto; /* 中央寄せ */
+    padding: 20px;
+}
+
+/* メインタイトル */
+.membership-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.marker7 {
+    color: #d4af37; /* シルバー会員の特徴的なカラー */
+}
+
+/* 会員プランのコンテンツ */
+.membership-content p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: center;
+    margin: 15px 0;
+}
+
+/* ヘッダー */
+.silver-header {
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 50px;
+}
+
+.silver-header img {
+    max-width: 100%;
+    height: 100%;
+}
+
+/* 会員特典のカード */
+.silver-section {
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.silver-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    transition: 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.silver-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.silver-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #a0a0a0;
+}
+
+.silver-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.silver-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* 比較表 */
+/* コンテナのスタイル */
+.pricing-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 50px;
+}
+
+/* カードの基本スタイル */
+.pricing-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    text-align: left; /* テキスト左寄せ */
+    transition: transform 0.3s ease;
+}
+
+/* カードのタイトル */
+.pricing-card h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: left; /* タイトルも左寄せ */
+}
+
+/* アイコンの色調整 */
+.pricing-card i {
+    font-size: 1.5rem;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+
+/* シルバープランのスタイル */
+.pricing-card:nth-child(2) {
+    background: linear-gradient(135deg, #d9d9d9, rgb(255, 255, 255)); /* グレーのグラデーション */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 影で強調 */
+}
+
+/* ゴールドプランのスタイル */
+.pricing-card:nth-child(3) {
+    background: linear-gradient(135deg, #fff7dc, rgb(255, 255, 255));
+    box-shadow: 0 4px 8px rgba(255, 223, 79, 0.3); /* ゴールド特有の影 */
+}
+
+/* カード内のリストアイテムのスタイル */
+.pricing-card ul {
+    padding: 0;
+    list-style: none;
+}
+
+.pricing-card li {
+    font-size: 1rem;
+    margin: 0.75rem 0;
+    display: flex;
+    align-items: center; /* アイコンとテキストが縦揃え */
+    color: #333;
+}
+
+/*-------------------------------------------
+gold会員用
+-------------------------------------------*/
+
+.gold-section {
+    background-color: #fffef6;
+    padding: 3rem 1rem;
+}
+
+.gold-card {
+    border: 2px solid #ffd70033;
+    background-color: #fffefc;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gold-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+.gold-icon {
+    color: #D4AF37;
+}
+
+.comparison-table th {
+    background-color: #ffd70011;
+    color: #333;
+}
+
+.comparison-table td {
+    text-align: center;
+    padding: 0.75rem;
+    border-top: 1px solid #ccc;
+}
+
+.comparison-table tr:nth-child(even) {
+    background-color: #fdf9e6;
+}
+
+/* Goldページのゴールドプランカードだけ拡大表示 */
+.gold-page .pricing-card:nth-child(3) {
+    background: linear-gradient(135deg, #fff7dc, rgb(255, 255, 255));
+    box-shadow: 0 4px 8px rgba(255, 223, 79, 0.3);
+    transform: scale(1.05); /* 拡大 */
+}
+
+/* CTAボタン */
+.gold-section a {
+    background-color: #FFD700;
+    color: white;
+    font-weight: bold;
+}
+
+.gold-section a:hover {
+    background-color: #e6c200;
+}
+
+/* FAQセクション */
+.faq-section h2 {
+    color: #D4AF37;
+}
+
+.faq-item {
+    background-color: #fffef9;
+}
+
+.faq-btn:hover {
+    color: #D4AF37;
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+}
+
+.faq-btn[aria-expanded="true"] .arrow-icon {
+    transform: rotate(180deg);
+}

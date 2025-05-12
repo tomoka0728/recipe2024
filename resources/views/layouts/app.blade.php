@@ -14,22 +14,14 @@
 
     <!-- Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- SlickのCSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 
     <!-- Css -->
     @stack('styles')
 
-    <!-- jQuery（SlickはjQueryに依存）-->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/css/style.css', 'resources/js/app.js'])
-    @stack('scripts')
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
@@ -40,6 +32,7 @@
         </div>
         <x-footer />
         {{-- </div> --}}
+        @stack('scripts')
 </body>
 
 </html>

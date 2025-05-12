@@ -223,6 +223,42 @@ recipe
     letter-spacing: 0.05em;
 }
 
+.recipe3-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 横に4列 */
+    grid-template-rows: repeat(2, auto);   /* 縦に2行 */
+    gap: 20px; /* 要素間のスペース */
+    padding: 0 20px;
+    margin-bottom: 50px;
+}
+
+.recipe-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.recipe-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-item img {
+    margin: 0 auto;
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+}
+
+.recipe-item .title {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+
 /*-------------------------------------------
 ranking
 -------------------------------------------*/
@@ -233,6 +269,11 @@ ranking
 }
 
 @media screen and (min-width: 1024px) {
+
+    .container {
+        max-width: 100% !important;
+    }
+
     .recipe3 ul {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 20px;
@@ -281,9 +322,9 @@ ranking
     content: "\f521";
     font-weight: 900;
     position: absolute;
-    top: -50px;
+    top: -52px;
     /* 王冠の位置（縦軸） */
-    left: 30px;
+    left: 33px;
     /* 王冠の位置（横軸） */
     font-size: 60px;
     /* 王冠の大きさ */
@@ -316,116 +357,194 @@ ranking
     color: #fff;
 }
 
+.more-wrapper {
+    text-align: right;
+    margin: 8px 20px;
+}
+
+.more {
+    color: rgb(95, 43, 43);
+    text-decoration: none;
+}
+
+.more:hover {
+    color: rgb(156, 125, 125);
+}
+
 /* ==================================================
 スライダーのためのcss
 ===================================*/
-.slider {
-    /*横幅94%で左右に余白を持たせて中央寄せ*/
-    width: 94%;
+.slider-wrapper {
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
     margin: 0 auto;
 }
 
-.slick-slide {
+.slider {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.slide {
+    flex: 0 0 calc(100% / 4); /* 4枚表示 */
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.slide img {
+    margin: 0 auto;
+    width: 280px;
+    height: 198px;
+}
+
+.slider-controls {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    width: 100%;
+    margin-bottom: 50px;
 }
 
-.slick-track {
-    display: flex;
-    justify-content: space-between;
-}
-
-.slider img {
-    margin: 0 auto;
-    width: 90%;
-    height: 198px;
-    object-fit: cover;
-}
-
-/*slickのJSで書かれるタグ内、スライド左右の余白調整*/
-
-.slider .slick-slide {
-    margin: 0 10px;
-}
-
-/*矢印の設定*/
-
-/*戻る、次へ矢印の位置*/
-.slick-prev,
-.slick-next {
-    position: absolute;
-    /*絶対配置にする*/
-    top: 32%;
+.nav {
+    border: none;
+    padding: 6px 10px;
+    font-size: 20px;
     cursor: pointer;
-    /*マウスカーソルを指マークに*/
-    outline: none;
-    /*クリックをしたら出てくる枠線を消す*/
-    border-top: 2px solid #666;
-    /*矢印の色*/
-    border-right: 2px solid #666;
-    /*矢印の色*/
-    height: 15px;
-    width: 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-.slick-prev {
-    /*戻る矢印の位置と形状*/
-    left: -1.5%;
-    transform: rotate(-135deg);
+.nav:hover {
+    color: #000; 
 }
 
-.slick-next {
-    /*次へ矢印の位置と形状*/
-    right: -1.5%;
-    transform: rotate(45deg);
+.nav.prev {
+    left: 10px;
+}
+.nav.next {
+    right: 10px;
 }
 
-/*ドットナビゲーションの設定*/
-
-.slick-dots {
-    text-align: center;
-    margin: 20px 0 0 0;
+.dots {
+    display: flex;
+    gap: 8px;
 }
 
-.slick-dots li {
-    display: inline-block;
-    margin: 0 5px;
-}
-
-.slick-dots button {
-    color: transparent;
-    outline: rgb(255, 255, 255);
-    width: 8px;
-    /*ドットボタンのサイズ*/
-    height: 8px;
-    /*ドットボタンのサイズ*/
-    display: block;
+.dots span {
+    width: 12px;             /* ドットのサイズ */
+    height: 12px;
+    background-color: #d19a9a;  /* 選択されていないドットは薄い色 */
     border-radius: 50%;
-    background: #974c4c;
-    /*ドットボタンの色*/
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.slick-dots .slick-active button {
-    outline: none;
-    background: rgb(132, 50, 50);
-    /*ドットボタンの現在地表示の色*/
+.dots span.active {
+    background-color: #974c4c;  /* 選択されているドットは目立つ色 */
 }
 
 
-.slick-prev:before,
-.slick-next:before {
-  color: #000 !important;
+.cm2 img {
+    width: 48%;  /* 2枚並べるための幅 */
+    height: 200px;
+    object-fit: cover;
+    display: block;
 }
 
-.multiple-items p {
-  font-size: 2rem;
-  font-weight: bold;
-  line-height: 100px;
-  color: #666;
-  margin: 10px;
-  text-align: center;
-  background-color: #e0e0e0;
+/* もし親要素のスタイルを変更する場合 */
+.cm2 {
+    display: flex;  /* 横並び */
+    justify-content: space-between;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+
+
+
+/* ==================================================
+広告スライダーのためのcss
+===================================*/
+.ad-slider-wrapper {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.ad-slider {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.ad-slide {
+    flex: 0 0 100%;
+    box-sizing: border-box;
+}
+
+.ad-slide img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
+}
+
+.ad-slider-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.ad-thumbnails {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.ad-thumbnails img {
+    width: 100px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.ad-thumbnails img.active {
+    opacity: 1;
+}
+
+/* スライダー用矢印のスタイル */
+.ad-slider-controls .nav {
+    background-color: #eee;
+    border: none;
+    padding: 6px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.ad-slider-controls .nav:hover {
+    background-color: #ccc;
+}
+
+.ad-slider-controls .nav.prev {
+    left: 10px;
+}
+
+.ad-slider-controls .nav.next {
+    right: 10px;
 }
 
 /*==================================================
@@ -479,4 +598,47 @@ main .item img {
 
 .menu p {
     color: rgb(95, 43, 43);
+}
+
+
+/*=================================
+モーダル
+===================================*/
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: #fff;
+    top: 10%;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal .btn {
+    display: inline-block;
+    margin-top: 10px;
+    background: #1e90ff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.modal .close {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
 }

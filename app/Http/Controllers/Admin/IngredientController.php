@@ -32,51 +32,6 @@ class IngredientController extends Controller
             'i_category_uuid' => 'required|exists:i_categories,uuid',
         ]);
 
-
-    // // ダミー画像生成（テスト用）
-    // $file = UploadedFile::fake()->image('test.jpg');
-
-    // $s3Path = 'test.jpg';
-
-    // try {
-    //     // ファイルの中身を取得
-    //     $fileContents = File::get($file->getRealPath());
-    
-    //     // ファイルのパスをログに出力
-    //     Log::info('File path: ' . $file->getRealPath());
-    
-    //     // ファイル内容が空かどうかを確認
-    //     if (empty($fileContents)) {
-    //         Log::error('ファイル内容が空です', ['file' => $file]);
-    //     } else {
-    //         Log::info('ファイル内容が取得できました', ['file' => $file]);
-    //     }
-
-    //     Log::info('S3へのアップロード前の準備', [
-    //         'file_path' => $file->getRealPath(),
-    //         'file_size' => $file->getSize(),
-    //     ]);
-    
-    //     // アップロード
-    //     $result = Storage::disk('s3')->put($s3Path, $fileContents, 'public');
-
-        
-    //     Log::info('アップロード結果', [
-    //         'result' => $result,
-    //         'path' => $s3Path
-    //     ]);
-    
-    //     if ($result) {
-    //         Log::info('ファイルがS3にアップロードされました', ['path' => $s3Path]);
-    //         return 'アップロード成功: ' . Storage::disk('s3')->url($s3Path);
-    //     } else {
-    //         Log::error('S3へのアップロードに失敗しました', ['path' => $s3Path]);
-    //         return 'アップロード失敗';
-    //     }
-    // } catch (\Exception $e) {
-    //     Log::error('アップロード中に例外が発生', ['message' => $e->getMessage()]);
-    //     return 'エラー: ' . $e->getMessage();
-    // }
         try {
             $imagePath = null;
             if ($request->hasFile('image')) {

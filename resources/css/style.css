@@ -27,6 +27,12 @@ html, body {
     width: 100%;
 }
 
+.rq3-box{
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
 .op-box{
     background-color:#fff1f1;
     padding: 30px;
@@ -133,7 +139,7 @@ html, body {
 
 
 
-  /* ラジオボタン - 検索フォーム */
+/* ラジオボタン - 検索フォーム */
 
 .radio-2 {
     border: none;
@@ -144,8 +150,9 @@ html, body {
 }
 
 .radio-2 label {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0 .5em;
     position: relative;
     max-width: 100%;
@@ -174,6 +181,8 @@ html, body {
     height: 14px;
     border: 1px solid #d0bdbd;
     background-color: #fff;
+    border-radius: 50%;
+    position: relative;
 }
 
 .radio-2 label:has(:checked)::after {
@@ -184,6 +193,7 @@ html, body {
     width: 7px;
     height: 7px;
     background-color: #5c3d3d;
+    border-radius: 50%;
 }
 
 .radio-2 input {
@@ -191,58 +201,65 @@ html, body {
 }
 
 
-  /* ラジオボタン - 会員ランク選択 */
-
+/* 会員ランク選択用ラジオボタン */
 .radio-3 {
     border: none;
     display: flex;
-    gap: 10px;
-    width: 80%;
+    gap: 20px; /* ボタン間隔を調整 */
+    width: auto;
     margin: 0 auto;
+    justify-content: center; /* 中央に配置 */
+    flex-wrap: wrap; /* 必要に応じてラップ */
 }
 
 .radio-3 label {
     display: inline-flex;
     align-items: center;
-    gap: 0 .5em;
+    gap: 0.5em;
     position: relative;
     max-width: 100%;
-    padding: .5em .7em;
-    border: 1px solid #e5a4a4;
+    padding: 0.5em 0.7em;
+    border: 1px solid #dab7b7; /* ラジオボタンの枠線 */
     border-radius: 3px;
-    background-color: #f5ebeb;
+    background-color: #ffffff; /* 背景色 */
     cursor: pointer;
-    color: #815b5b;
+    color: #dab7b7; /* ラベルのテキスト色 */
     flex-grow: 1;
+    text-align: center; /* テキストの中央揃え */
 }
 
+/* チェックされたときの背景色 */
 .radio-3 label:has(:checked) {
-    background-color: #e5a4a4;
-    color: #fff;
+    background-color: #e9d5d5; /* 背景色 */
+    color: #5c3d3d; /* チェックされたときの文字色 */
 }
 
-.radio-3 label::before,
-.radio-3 label:has(:checked)::after {
-    border-radius: 50%;
-    content: '';
-}
-
+/* ラジオボタンの外枠 */
 .radio-3 label::before {
+    content: '';
     width: 14px;
     height: 14px;
+    border: 1px solid #d0bdbd;
     background-color: #fff;
+    border-radius: 50%;
 }
 
+/* チェックされたときの内部丸（チェックマーク） */
 .radio-3 label:has(:checked)::after {
+    content: '';
     position: absolute;
     top: 50%;
-    left: calc(7px + .7em);
-    transform: translate(-50%, -50%);
+    left: calc(5px + .6em);
+    transform: translateY(-50%);
     width: 7px;
     height: 7px;
-    background-color: #e5a4a4;
+    background-color: #5c3d3d;
+    border-radius: 50%;
 }
 
+/* ラジオボタンのインプットは非表示にする */
 .radio-3 input {
     display: none;
 }
+
+  

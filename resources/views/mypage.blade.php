@@ -81,11 +81,10 @@
 
                     <div class="item">
                         <div class="item_s">
-                            <h3 id="title">有料会員手続き</h3>
+                            <h3 id="title">会員グレード</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">シルバー会員登録</a></p>
-                                    <li><p class="subject"><a href="#">ゴールド会員登録</a></p>
+                                    <li><p class="subject"><a href="{{ route('membership.edit') }}">会員グレードの確認・変更</a></p>
                                 </ul>
                             </div>
                         </div>

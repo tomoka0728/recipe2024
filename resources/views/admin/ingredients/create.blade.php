@@ -14,7 +14,7 @@
 
         <div>
             <label>材料名</label>
-            <input type="text" name="name" class="w-full border p-2" required>
+            <input type="text" name="name" class="w-full border p-2">
         </div>
 
         <div>
@@ -36,7 +36,7 @@
 
         <div>
             <label>カテゴリー</label>
-            <select name="i_category_uuid" class="w-full border p-2" required>
+            <select name="i_category_uuid" class="w-full border p-2">
                 <option value="">選択してください</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->uuid }}">{{ $category->name }}</option>

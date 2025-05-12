@@ -83,18 +83,22 @@
                     </ul>
                 </section>
 
+                
                 <section class="cm">
                     <a href="{{ url('/form') }}"><img src="{{ Storage::disk('s3')->url('toiawase.png') }}"
                             alt=""></a>
                 </section>
 
-                <section class="cm">
-                    <a href="#"><img src="{{ Storage::disk('s3')->url('cm.png') }}" alt=""></a>
-                </section>
+                @if (!(Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value))
+                    <section class="cm">
+                        <a href="#"><img src="{{ Storage::disk('s3')->url('cm.png') }}" alt=""></a>
+                    </section>
 
-                <section class="cm">
-                    <a href="#"><img src="{{ Storage::disk('s3')->url('cm2.png') }}" alt=""></a>
-                </section>
+                    <section class="cm">
+                        <a href="#"><img src="{{ Storage::disk('s3')->url('cm2.png') }}" alt=""></a>
+                    </section>
+                @endif
+                
             </aside>
         </div>
     </x-guest-layout>

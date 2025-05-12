@@ -334,7 +334,6 @@ p.title{
   display: block
 }
 
-
 /*-------------------------------------------
 button
 -------------------------------------------*/
@@ -541,4 +540,155 @@ a.btn--pink:hover {
 
 .all-products-cart-btn:hover {
     background: #ff1493;
+}
+
+
+/*-------------------------------------------
+レシピ一覧専用のスタイル
+-------------------------------------------*/
+.recipe-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.recipe-item {
+    position: relative;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.recipe-item:hover {
+    transform: translateY(-5px);
+}
+
+.recipe-img-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.recipe-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.recipe-img-container:hover img {
+    opacity: 0.7;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.recipe-img-container:hover .overlay {
+    opacity: 1;
+}
+
+.overlay h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.favorite-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    border-top-left-radius: 6px;
+    gap: 4px;
+}
+
+.favorite-badge .heart-icon {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+}
+
+.recipe-details {
+    padding: 15px;
+    text-align: center;
+}
+
+.recipe-details h2 {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+/* 共通：ラベルとセレクトの並び・余白 */
+.sort-select, .per-page-select {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    font-size: 0.875rem;
+    color: #5c4400; /* text-yellow-800 相当 */
+}
+
+/* ラベル */
+.sort-select label,
+.per-page-select label {
+    margin-right: 0.5rem;
+    font-weight: 600;
+}
+
+/* セレクトボックス本体 */
+.sort-select select,
+.per-page-select select {
+    appearance: none;
+    background-color: #fef6e0; /* bg-original3 相当 */
+    color: #7c5400; /* text-yellow-800 相当 */
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-image: url("data:image/svg+xml,%3Csvg fill='%237c5400' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M10 14l-5-5h10l-5 5z' clip-rule='evenodd' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+}
+
+/* ホバー・フォーカス時のリング */
+.sort-select select:hover,
+.per-page-select select:hover,
+.sort-select select:focus,
+.per-page-select select:focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #f2d389; /* ring-original4 相当 */
+}
+
+
+.cp_hr11 {
+    content: "";
+    height: 7px;
+    border-width: 0;
+    background-color: #ffffff;
+    background-image: linear-gradient(135deg, #e3e3e3 0px, #e3e3e3 2px, transparent 2px, transparent 4px, #e3e3e3 4px, #e3e3e3 6px, transparent 6px, transparent);
 }

@@ -31,7 +31,7 @@
                     @foreach ($recipe->steps as $step)
                         <div class="process">
                             <div class="balloon3-right">{{ $step->step_number }}</div>
-                            <p class="text">{!! nl2br(e($step->description)) !!}</p>
+                            <p class="text">{!! nl2br(e(str_replace('\n', "\n", $step->description))) !!}</p>
                             @if ($step->image_path)
                                 <div class="box-img">
                                     <img src="{{ Storage::disk('s3')->url($step->image_path) }}" alt="">
@@ -79,13 +79,15 @@
                             alt=""></a>
                 </section>
 
-                <section class="cm">
-                    <a href="#"><img src="{{ Storage::disk('s3')->url('cm.png') }}" alt=""></a>
-                </section>
+                @if (!(Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value))
+                    <section class="cm">
+                        <a href="#"><img src="{{ Storage::disk('s3')->url('cm.png') }}" alt=""></a>
+                    </section>
 
-                <section class="cm">
-                    <a href="#"><img src="{{ Storage::disk('s3')->url('cm2.png') }}" alt=""></a>
-                </section>
+                    <section class="cm">
+                        <a href="#"><img src="{{ Storage::disk('s3')->url('cm2.png') }}" alt=""></a>
+                    </section>
+                @endif
             </aside>
         </div>
 
