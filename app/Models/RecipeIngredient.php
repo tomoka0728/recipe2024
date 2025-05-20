@@ -4,18 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class RecipeIngredient extends Model
 {
     use HasFactory;
 
     // recipe_ingredients テーブルに対応
-    protected $table = 'recipe_ingredients'; // テーブル名が異なる場合は変更
+    protected $table = 'recipe_ingredients';
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-    // recipe_uuid, ingredient_uuid など、必要なカラムをfillableに追加
     protected $fillable = [
-        'recipe_uuid', 'ingredient_uuid', 'quantity', // 適切なカラム名を記入
+        'uuid','recipe_uuid', 'ingredient_uuid', 'quantity', 'unit',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (!$model->uuid) {
+                $model->uuid = Str::uuid(); // uuid を自動生成
+            }
+        });
+    }
 
     // Recipeとのリレーション
     public function recipe()

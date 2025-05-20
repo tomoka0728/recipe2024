@@ -22,7 +22,7 @@ class ICategory extends Model
             Ingredient::class, // `ingredients` テーブルと紐付ける
             'ingredients_categories', // 中間テーブル
             'i_category_uuid', // 自分のキー（カテゴリーID）
-            'ingredients_uuid' // 相手のキー（材料ID）
+            'ingredient_uuid' // 相手のキー（材料ID）
         );
     }
 }

@@ -433,3 +433,43 @@ btn
   border: solid 1px #161616;
   background-color: #dedede;
 }
+
+/* ページネーションの全体設定 */
+.pagination {
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* ホバー時のスタイル */
+.pagination a:hover, .pagination a:focus {
+    background-color: #3B82F6;
+    color: #FFFFFF;
+    border-color: #3B82F6;
+    transform: translateY(-2px);
+}
+
+/* アクティブなページリンク */
+.pagination .active {
+    background-color: #3B82F6;
+    color: #FFFFFF;
+    border-color: #3B82F6;
+    pointer-events: none; /* 現在のページはクリックできない */
+}
+
+/* 無効なページリンク（前のページや次のページがない場合） */
+.pagination .disabled {
+    background-color: #E5E7EB;
+    color: #9CA3AF;
+    border-color: #E5E7EB;
+    pointer-events: none; /* クリック無効 */
+}
+
+/* ページネーションの整列を整える */
+.pagination .pagination-summary {
+    font-size: 14px;
+    color: #4B5563;
+    margin-right: 20px;
+}

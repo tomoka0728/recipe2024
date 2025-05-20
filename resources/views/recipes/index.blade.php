@@ -28,10 +28,12 @@
                             <p>0件</p>
                         @endif
                     </div>
-                
+
                     {{-- 並び替えと表示件数 --}}
                     <div class="pagination-controls">
-                        <form method="get" action="{{ route('recipes.index') }}" class="flex items-center gap-4">
+                        <form method="get"
+                            action="{{ isset($selectedCategory) ? route('recipes.category', ['category' => $selectedCategory->uuid]) : route('recipes.index') }}"
+                            class="flex items-center gap-4">
                             {{-- 並び替え --}}
                             <div class="flex items-center text-sm text-yellow-800">
                                 <label for="sort" class="mr-2 font-semibold">並び替え:</label>
@@ -43,7 +45,7 @@
                                     @endif
                                 </select>
                             </div>
-                
+
                             {{-- 表示件数 --}}
                             <div class="flex items-center text-sm text-yellow-800">
                                 <label for="per_page" class="mr-2 font-semibold">表示件数:</label>
@@ -57,15 +59,7 @@
                         </form>
                     </div>
                 </div>
-                
-                {{-- ページネーション --}}
-                @if($recipes->count() > 0)
-                    <div class="pagination">
-                        {{ $recipes->appends(request()->input())->links() }}
-                    </div>
-                @endif
-                
-                
+
                 @if($recipes->count() > 0)
                 <div class="recipe-list">
                     @foreach($recipes as $recipe)
@@ -92,6 +86,12 @@
                 </div>
                 @else
                     <p>このカテゴリにはまだレシピがありません。</p>
+                @endif
+                {{-- ページネーション --}}
+                @if($recipes->count() > 0)
+                    <div class="pagination">
+                        {{ $recipes->appends(request()->input())->links() }}
+                    </div>
                 @endif
             </article>
         </main>

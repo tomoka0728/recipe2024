@@ -38,6 +38,11 @@ class Ingredient extends Model
         return $this->hasManyThrough(Recipe::class, RecipeIngredient::class, 'ingredient_uuid', 'uuid', 'uuid', 'recipe_uuid');
     }
 
+    public function ingredientCategories()
+    {
+        return $this->hasMany(IngredientCategory::class, 'ingredient_uuid', 'uuid');
+    }
+
 
     public function getExistsInDbAttribute()
     {
@@ -49,7 +54,7 @@ class Ingredient extends Model
         return $this->belongsToMany(
             ICategory::class, // `i_categories` モデル
             'ingredients_categories', // 中間テーブル
-            'ingredients_uuid', // 中間テーブルの ingredients の外部キー
+            'ingredient_uuid', // 中間テーブルの ingredients の外部キー
             'i_category_uuid' // 中間テーブルの categories の外部キー
         );
     }

@@ -371,7 +371,22 @@ class RCategoriesTableSeeder extends Seeder
                 'name' => 'お弁当',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
+            ]
         ]);
+
+        // foreach ループを追加
+        $categories = DB::table('r_categories')->get();
+        foreach ($categories as $category) {
+            DB::table('r_categories')->updateOrInsert(
+                ['category_id' => $category->category_id],
+                [
+                    'uuid' => (string) Str::uuid(),
+                    'category_id' => $category->category_id,
+                    'name' => $category->name,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+        }
     }
 }

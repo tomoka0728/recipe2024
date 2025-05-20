@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="autocomplete-url" content="{{ route('admin.ingredients.search') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>管理者ページ - {{ config('app.name', 'Laravel') }}</title>
@@ -18,6 +19,7 @@
     <!-- Css -->
     @stack('styles')
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 
     <!-- Scripts -->
     @vite(['resources/css/admin.css', 'resources/js/admin.js'])

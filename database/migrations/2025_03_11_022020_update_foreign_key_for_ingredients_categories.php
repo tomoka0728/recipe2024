@@ -22,7 +22,7 @@ return new class extends Migration
                   ->on('i_categories')  // 🔄 正しいテーブルに変更
                   ->onDelete('cascade');
 
-            $table->foreign('ingredients_uuid')
+            $table->foreign('ingredient_uuid')
                   ->references('uuid')
                   ->on('ingredients')  // 🔄 正しいテーブルに変更
                   ->onDelete('cascade');
@@ -37,7 +37,7 @@ return new class extends Migration
         Schema::table('ingredients_categories', function (Blueprint $table) {
             // 新しい外部キーを削除
             $table->dropForeign(['i_category_uuid']);
-            $table->dropForeign(['ingredients_uuid']);
+            $table->dropForeign(['ingredient_uuid']);
 
             // 元の外部キーを復元（もし必要なら）
             $table->foreign('i_category_uuid')
@@ -45,7 +45,7 @@ return new class extends Migration
                   ->on('r_categories')
                   ->onDelete('cascade');
 
-            $table->foreign('ingredients_uuid')
+            $table->foreign('ingredient_uuid')
                   ->references('uuid')
                   ->on('recipes')
                   ->onDelete('cascade')

@@ -18,42 +18,32 @@ use App\Http\Controllers\Admin\AdminRecipeController;
 
 
 
-Route::prefix('admin')
-    ->name('admin.')
-    ->middleware('web')
-    ->group(function () {
-        Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-        Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
-        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+// 認証不要
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-        Route::middleware(['auth:admin'])->group(function () {
-            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-        });
-    });
+// 認証必要
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(function () {
+    Route::get('/recipes/search', [AdminRecipeController::class, 'search'])->name('ingredients.search');
     Route::get('/recipes', [RecipeManageController::class, 'index'])->name('recipes.index');
     Route::get('/recipes/create', [AdminRecipeController::class, 'create'])->name('recipes.create');
-    Route::post('/recipes/store', [AdminRecipeController::class, 'store'])->name('recipes.store');
+    Route::post('/recipes', [AdminRecipeController::class, 'store'])->name('recipes.store');
+    Route::get('/recipes/{uuid}', [AdminRecipeController::class, 'show'])->name('recipes.show');
     Route::get('/recipes/{uuid}/edit', [AdminRecipeController::class, 'edit'])->name('recipes.edit');
     Route::put('/recipes/{uuid}', [AdminRecipeController::class, 'update'])->name('recipes.update');
     Route::delete('/recipes/{uuid}', [AdminRecipeController::class, 'destroy'])->name('recipes.destroy');
+
     Route::get('/ingredients/create', [IngredientController::class, 'create'])->name('ingredients.create');
     Route::post('/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store');
     Route::get('/ingredients', [IngredientManageController::class, 'index'])->name('ingredients.index');
-    Route::get('/ingredients/{uuid}/edit', [IngredientManageController::class, 'edit'])->name('ingredients.edit');
+    Route::get('/ingredients/{uuid}/edit', [IngredientController::class, 'edit'])->name('ingredients.edit');
+    Route::put('/ingredients/{uuid}', [IngredientController::class, 'update'])->name('ingredients.update');
     Route::delete('/ingredients/{uuid}', [IngredientManageController::class, 'destroy'])->name('ingredients.destroy');
-    Route::get('/admin/ingredients/search', [IngredientController::class, 'search'])->name('ingredients.search');
 });
 
-
-
-
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-Route::get('/mypage', [MypageController::class, 'show'])->name('mypage');
-Route::get('/recipes/{uuid}', [RecipeController::class, 'show'])->name('recipes.show');
-Route::get('/ingredients/{uuid}', [IngredientsController::class, 'show'])->name('ingredients.show');
-Route::get('/ranking/{category?}', [RankingController::class, 'show'])->name('ranking.show');
 
 Route::middleware('auth:admin')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

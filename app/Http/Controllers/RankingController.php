@@ -15,7 +15,7 @@ class RankingController extends Controller
         if ($categoryId === null || $categoryId === 'sougou') {
             $ingredients = Ingredient::whereNotNull('image_path')
                 ->orderByDesc('total_purchased')
-                ->get();
+                ->paginate(15);
 
             return view('ranking', [
                 'title' => '総合ランキング',
@@ -33,7 +33,7 @@ class RankingController extends Controller
                     $q->where('i_categories.uuid', $category->uuid); // 明示的にテーブル名を指定
                 })
                 ->orderByDesc('total_purchased')
-                ->get();
+                ->paginate(15);
 
             return view('ranking', [
                 'title' => $category->name . 'ランキング',

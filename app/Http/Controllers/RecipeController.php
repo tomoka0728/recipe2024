@@ -36,38 +36,40 @@ class RecipeController extends Controller
         // 並び替えのデフォルトは新着順
         $sort = $request->input('sort', 'newest');
         // 検索キーワード
-        $search = $request->input('search'); 
+        $search = $request->input('search');
         // 検索タイプ
         $searchType = $request->input('search_type', 'recipe');
-        // ベースクエリ作成
+        // カテゴリUUID
+        $categoryUuid = $request->input('category');
+        // カテゴリUUIDが指定されている場合、カテゴリで絞り込み
+        $recipesQuery = Recipe::query();
+        // ベースクエリ作成（レシピのみ対応例）
         if ($searchType === 'recipe') {
             $recipesQuery = Recipe::query();
         } else {
             $recipesQuery = Ingredient::query();
         }
 
-        // ユーザーがシルバー会員以上の場合、"お気に入りが多い順" を選べる
-        if (Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value) {
-            $recipesQuery = Recipe::query();
-            // 並び替え条件
-            if ($sort === 'favorites') {
-                $recipesQuery->orderBy('favorite_count', 'desc');
-            } else {
-                $recipesQuery->orderBy('created_at', 'desc'); // 新着順
-            }
-        } else {
-            $recipesQuery = Recipe::orderBy('created_at', 'desc'); // 新着順
+        // カテゴリ絞り込み
+        if ($categoryUuid) {
+            $recipesQuery->whereHas('categories', function ($query) use ($categoryUuid) {
+                $query->where('r_category_uuid', $categoryUuid);
+            });
         }
 
-        // 検索キーワードがある場合
+        // 検索キーワード絞り込み
         if (!empty($search)) {
-            $normalized = mb_convert_kana($search, 'c', 'UTF-8'); // カタカナ→ひらがな
-            if ($searchType === 'recipe') {
-                $recipesQuery->where('title', 'like', '%' . $normalized . '%');
-            } else {
-                $recipesQuery->where('name', 'like', '%' . $normalized . '%');
-            }
+            $normalized = mb_convert_kana($search, 'c', 'UTF-8');
+            $recipesQuery->where('title', 'like', '%' . $normalized . '%');
         }
+
+        // 並び替え
+        if (Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value && $sort === 'favorites') {
+            $recipesQuery->orderBy('favorite_count', 'desc');
+        } else {
+            $recipesQuery->orderBy('created_at', 'desc');
+        }
+
 
         // レシピを取得
         $recipes = $recipesQuery->paginate($perPage);
@@ -77,27 +79,32 @@ class RecipeController extends Controller
                                   ->orderBy('category_id', 'asc')
                                   ->get();
 
-        return view('recipes.index', compact('recipes', 'recipeCategories', 'sort', 'perPage'));
+        return view('recipes.index', compact('recipes', 'recipeCategories', 'sort', 'perPage',  'categoryUuid'));
     }
 
     public function category(Request $request, $categoryUuid)
     {
         $perPage = $request->input('per_page', 20);
+        $sort = $request->input('sort', 'newest');
         // カテゴリを取得
         $selectedCategory = RCategory::findOrFail($categoryUuid);
 
-        // カテゴリに関連するレシピを取得
-        $recipes = Recipe::whereHas('categories', function ($query) use ($categoryUuid) {
-            $query->where('r_category_uuid', $categoryUuid);  // カテゴリUUIDで絞り込み
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate($perPage);
+        $recipesQuery = Recipe::whereHas('categories', function ($query) use ($categoryUuid) {
+            $query->where('r_category_uuid', $categoryUuid);
+        });
 
-        // 他のカテゴリー一覧
+        if (Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value && $sort === 'favorites') {
+            $recipesQuery->orderBy('favorite_count', 'desc');
+        } else {
+            $recipesQuery->orderBy('created_at', 'desc');
+        }
+
+        $recipes = $recipesQuery->paginate($perPage);
+
         $recipeCategories = RCategory::where('category_id', '<=', 12)
                                     ->orderBy('category_id', 'asc')
                                     ->get();
 
-        return view('recipes.index', compact('recipes', 'recipeCategories', 'selectedCategory'));
+        return view('recipes.index', compact('recipes', 'recipeCategories', 'selectedCategory', 'sort', 'perPage'));
     }
 }

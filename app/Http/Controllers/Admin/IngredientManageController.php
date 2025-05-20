@@ -76,4 +76,19 @@ class IngredientManageController extends Controller
 
         return response()->json($ingredients);
     }
+
+    public function destroy($uuid)
+{
+    $ingredient = Ingredient::where('uuid', $uuid)->firstOrFail();
+    $ingredient->categories()->detach();
+    $ingredient->delete();
+
+    return redirect()->route('admin.ingredients.index')->with('success', '商品を削除しました');
+}
+
+
+
+
+
+
 }

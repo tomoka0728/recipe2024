@@ -4,9 +4,25 @@
 <div class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
     <h1 class="text-2xl font-bold mb-6 text-gray-800">レシピ編集</h1>
 
-    <form action="{{ route('admin.recipes.update', $recipe->uuid) }}" method="POST" enctype="multipart/form-data">
+    @if (session('success'))
+        <div class="p-4 mb-4 bg-green-100 text-green-800 rounded">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <form action="{{ route('admin.recipes.update', ['uuid' => $recipe->uuid]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
+        @if ($errors->any())
+            <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                <ul class="list-disc pl-5 space-y-1 text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         {{-- タイトル --}}
         <div class="mb-6">
@@ -23,21 +39,21 @@
                 required>{{ old('description', $recipe->description) }}</textarea>
         </div>
 
-        {{-- カテゴリの選択 --}}
+        {{-- カテゴリ --}}
         <div class="mb-6">
             <label for="categories" class="px-4 py-2 block text-sm font-medium text-gray-700 bg-red-100">カテゴリ</label>
-            <select name="categories[]" id="categories" multiple
-                class="mt-6 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" 
-                style="height: 150px;">
+            <div class="mt-6 flex flex-wrap gap-4"> <!-- 横並びにするために flex と gap を使用 -->
                 @foreach ($categories as $category)
-                    <option value="{{ $category->uuid }}" 
-                        {{ in_array($category->uuid, old('categories', $recipe->categories->pluck('uuid')->toArray())) ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
+                    <div class="flex items-center mb-2 w-auto">
+                        <input type="checkbox" name="categories[]" value="{{ $category->uuid }}"
+                            id="category_{{ $category->uuid }}"
+                            {{ in_array($category->uuid, old('categories', $recipe->categories->pluck('uuid')->toArray())) ? 'checked' : '' }}
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="category_{{ $category->uuid }}" class="ml-2 text-sm font-medium text-gray-700">{{ $category->name }}</label>
+                    </div>
                 @endforeach
-            </select>
+            </div>
         </div>
-
 
         {{-- 選択したカテゴリを表示 --}}
         <div id="category-list"></div>
@@ -67,10 +83,13 @@
                     {{-- 材料uuid --}}
                     <input type="hidden" name="ingredient_uuids[]" value="{{ $ingredient->uuid }}">
 
-                    {{-- 材料名 --}}
+                    {{-- 材料名（オートコンプリート） --}}
                     <input type="text" name="ingredient_names[]" value="{{ $ingredient->name }}"
-                        class="mr-2 flex-1 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
-                        placeholder="材料名" required>
+                    class="ingredient-name mr-2 flex-1 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
+                    placeholder="材料名" required>
+                    <div class="relative">
+                        <ul class="autocomplete-list z-10 bg-white border border-gray-300 rounded-md shadow-md max-h-50 overflow-y-auto hidden"></ul>
+                    </div>
 
                     {{-- 分量 --}}
                     <input type="text" name="quantities[]" value="{{ $ingredient->pivot->quantity }}"
@@ -83,7 +102,7 @@
                         placeholder="単位">
 
                     {{-- 削除ボタン --}}
-                    <button type="button" class="text-red-600 text-sm hover:underline hover:bg-transparent focus:outline-none bg-transparent border-none">削除</button>
+                    <button type="button" class="remove-ingredient text-red-600 text-sm hover:underline hover:bg-transparent focus:outline-none bg-transparent border-none">削除</button>
                 </div>
                 @endforeach
             </div>
@@ -163,5 +182,10 @@
 @endsection
 
 @push('scripts')
+    <script>
+        const ingredientSearchUrl = "{{ route('admin.ingredients.search') }}";
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     @vite('resources/js/recipe_form.js')
 @endpush

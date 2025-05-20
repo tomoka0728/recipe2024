@@ -26,7 +26,7 @@
                                             <h1 class="price">{{ number_format($ingredient->price) }}円</h1>
                                             </p>
                                             <p class="total-price">(税込み <span
-                                                class="total-price-display">{{ number_format($ingredient->price * 1.08) }}円</span>)
+                                                    class="total-price-display">{{ number_format($ingredient->price * 1.08) }}円</span>)
                                             </p>
                                         </div>
                                         <div class="kart">
@@ -34,7 +34,8 @@
                                                 カートに追加しました
                                             </div>
                                             <div class="btn">
-                                                <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->uuid }}"data-quantity="1">カートに入れる</a>
+                                                <a class="into-cart btn btn--pink btn--radius"
+                                                    data-ingredient-id="{{ $ingredient->uuid }}"data-quantity="1">カートに入れる</a>
                                             </div>
                                         </div>
                                     </div>
@@ -43,6 +44,11 @@
                         </div>
                         <hr>
                     @endforeach
+                    {{-- ページネーション --}}
+                    <div class="pagination">
+                        {{ $ingredients->links() }}
+                    </div>
+                </ul>
             </main>
 
             <aside id="sidebar">
@@ -83,7 +89,7 @@
                     </ul>
                 </section>
 
-                
+
                 <section class="cm">
                     <a href="{{ url('/form') }}"><img src="{{ Storage::disk('s3')->url('toiawase.png') }}"
                             alt=""></a>
@@ -98,7 +104,7 @@
                         <a href="#"><img src="{{ Storage::disk('s3')->url('cm2.png') }}" alt=""></a>
                     </section>
                 @endif
-                
+
             </aside>
         </div>
     </x-guest-layout>

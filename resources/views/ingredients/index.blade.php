@@ -49,17 +49,14 @@
                         </form>
                     </div>
                 </div>
-                
-                {{-- ページネーション --}}
-                <div class="pagination">
-                    {{ $ingredients->appends(request()->input())->links() }}
-                </div>
     
                 <div class="all-products-grid">
                     @foreach($ingredients as $ingredient)
                     <div class="all-products-item">
                         <div class="all-products-item-img">
-                            <img src="{{ Storage::disk('s3')->url($ingredient->image_path) }}" alt="{{ $ingredient->name }}">
+                            <a href="{{ route('ingredients.show', $ingredient->uuid) }}">
+                                <img src="{{ Storage::disk('s3')->url($ingredient->image_path) }}" alt="{{ $ingredient->name }}">
+                            </a>
                         </div>
                         <div class="all-products-title">
                             <h2>{{ $ingredient->name }}</h2>
@@ -76,6 +73,12 @@
                     </div>
                     @endforeach
                 </div>
+
+                {{-- ページネーション --}}
+                <div class="pagination">
+                    {{ $ingredients->appends(request()->input())->links() }}
+                </div>
+                
             </article>
         </main>
 

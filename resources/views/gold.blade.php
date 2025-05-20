@@ -103,7 +103,7 @@
 
         {{-- CTAセクション --}}
         <div class="gold-section mt-16 text-center">
-            <h2 class="text-2xl font-bold mb-4">月額 <span class="text-yellow-600 text-3xl">¥980</span></h2>
+            <h2 class="text-2xl font-bold mb-4">月額 <span class="text-yellow-600 text-3xl">¥600</span></h2>
             <p class="mb-6 text-gray-600">最上級のレシピ体験を、今すぐはじめよう！</p>
 
             <a href="{{ route('membership.edit') }}"

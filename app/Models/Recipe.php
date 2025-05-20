@@ -44,4 +44,10 @@ class Recipe extends Model
     {
         return $this->belongsToMany(RCategory::class, 'recipe_categories', 'recipe_uuid', 'r_category_uuid');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
 }
