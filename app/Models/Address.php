@@ -9,8 +9,12 @@ class Address extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
-        'user_uuid', 'postal_code', 'prefecture', 'city', 'address', 'building','phone'
+        'uuid', 'user_uuid', 'name', 'zipcode', 'prefectures', 'city', 'address', 'room', 'phone'
     ];
 
     // ユーザーとのリレーション

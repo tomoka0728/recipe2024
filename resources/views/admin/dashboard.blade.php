@@ -59,7 +59,7 @@
         </ul>
     </div>
 
-    <!-- 売り上げグラフ -->
+    <!-- 売り上げグラフ Chart.js -->
     <div class="bg-white rounded-lg shadow p-4">
         <h2 class="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">売り上げグラフ</h2>
         <canvas id="salesChart" class="w-full h-64"></canvas>
@@ -67,3 +67,11 @@
     </section>
 </div>
 @endsection
+
+@push('scripts')
+    <script>
+        window.salesChartLabels = @json($labels);
+        window.salesChartData = @json($data);
+    </script>
+    @vite('resources/js/sales-chart.js')
+@endpush

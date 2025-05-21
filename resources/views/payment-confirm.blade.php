@@ -45,15 +45,26 @@
                     <div class="item-in-cart">お届け先</div>
                     <ul class="cart-items">
                         <li class="cart-item">
-                            <div class="block mt-1 w-full">{{ Auth::user()->name }}　様</div>
+                            <div class="block mt-1 w-full">
+                                {{ is_array($address) ? $address['name'] : $address->name }}　様
+                            </div>
                         </li>
                         <li class="cart-item">
-                            <div class="block mt-1 w-full">〒{{ session('address_data.zipcode') }}</div>
+                            <div class="block mt-1 w-full">
+                                〒{{ is_array($address) ? $address['zipcode'] : $address->zipcode }}
+                            </div>
                         </li>
                         <li class="cart-item">
-                            <div class="block mt-1 w-full">{{ session('address_data.prefectures') }}{{ session('address_data.city') }}{{ session('address_data.address') }}{{ session('address_data.room') }}</div>                        </li>
+                            <div class="block mt-1 w-full">
+                                {{ is_array($address) ? $address['prefectures'] : $address->prefectures }}
+                                {{ is_array($address) ? $address['city'] : $address->city }}
+                                {{ is_array($address) ? $address['address'] : $address->address }}
+                                {{ is_array($address) ? $address['room'] : $address->room }}
+                            </div>
                         <li class="cart-item">
-                            <div class="block mt-1 w-full">電話番号: {{ session('address_data.phone') }}</div>
+                            <div class="block mt-1 w-full">
+                                電話番号: {{ is_array($address) ? $address['phone'] : $address->phone }}
+                            </div>
                         </li>
                     </ul>
                     <div class="item-in-cart">お支払い方法</div>

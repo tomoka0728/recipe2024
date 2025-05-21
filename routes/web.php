@@ -66,6 +66,7 @@ Route::post('/move-to-cart/{uuid}', [CartController::class, 'moveToCart'])->name
 //住所登録
 Route::middleware(['web'])->group(function () {
     Route::post('/address/confirm', [AddressController::class, 'confirm'])->name('address.confirm');
+    Route::post('/address/complete', [AddressController::class, 'complete'])->name('address.complete');
 });
 
 

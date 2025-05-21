@@ -25,7 +25,7 @@
                             <div class="menu-s">
                                 <ul>
                                     <li><p class="subject"><a href="#">配送状況の確認</a></p>
-                                    <li><p class="subject"><a href="#">過去の購入履歴一覧</a></p>
+                                    <li><p class="subject"><a href="#">過去の購入履歴</a></p>
                                 </ul>
                             </div>
                         </div>
@@ -47,7 +47,8 @@
                             <h3 id="title">登録情報</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">登録情報の閲覧・変更</a></p>
+                                    <li><p class="subject"><a href="#">アカウント情報の変更</a></p>
+                                    <li><p class="subject"><a href="#">お届け先の追加・変更</a></p>
                                     <li><p class="subject"><a href="#">SNS連携</a></p>
                                     <li><p class="subject"><a href="{{ url('/del_acc_check') }}">退会手続き</a></p>
                                 </ul>
@@ -60,7 +61,7 @@
                             <h3 id="title">お支払い方法</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">お支払い方法の確認・変更</a></p>
+                                    <li><p class="subject"><a href="#">クレジットカード</a></p>
                                 </ul>
                             </div>
                         </div>

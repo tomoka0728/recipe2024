@@ -128,11 +128,24 @@
 
   .cart-item {
     display: flex;
-    margin: 30px 0;
-  }
+    align-items: center;
+    min-height: 140px;
+    margin: 24px 0;
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px 0;
+}
 
   .item-img {
-    width: 25%;
+    width: 120px;
+    min-width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .item-img2 {
@@ -141,31 +154,55 @@
 
   .item-img img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
   }
 
   .item-details {
-    width: 100%;
+    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 120px;
+    padding-left: 16px;
   }
 
   .item-name {
     font-size: 18px;
-    margin: 5px;
+    margin: 5px 0;
+    min-height: 48px;
+    max-height: 48px;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
-  .item-price,
-  .item-quantity {
-    font-size: 18px;
-    margin: 5px;
-  }
+    .item-info-row {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-top: 8px;
+    }
 
-  .item-actions {
-    text-align: center;
-  }
+    .item-price, .item-quantity {
+        font-size: 16px;
+        min-width: 120px;
+        text-align: left;
+    }
+
+    .item-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        min-width: 100px;
+    }
 
   .item-actions .remove-button {
     font-size: 15px;
@@ -304,6 +341,28 @@ button
     padding: 20px 0;
     border-bottom: 1px solid #ddd;
 }
+.later-item .item-info-row {
+    display: flex !important;
+    align-items: center;
+    gap: 24px;
+    margin-top: 8px;
+}
+.later-item .item-price,
+.later-item .item-quantity {
+    font-size: 16px;
+    min-width: 120px;
+    text-align: left;
+    margin: 0; /* ← ここで余計なmarginをリセット */
+    color: #666;
+}
+.later-item .item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    min-width: 100px;
+    margin-top: 0;
+}
 
 .later-item:last-child {
     border-bottom: none;
@@ -324,23 +383,47 @@ button
     flex: 1;
 }
 
+.item-details .item-info-row,
+.later-item .item-info-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 0;
+}
+
+.item-details .item-name,
+.later-item .item-name {
+    min-width: 280px;
+    max-width: 240px;
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-details .item-price,
+.later-item .item-price,
+.item-details .item-quantity,
+.later-item .item-quantity {
+    min-width: 110px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.item-details .item-actions,
+.later-item .item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    min-width: 100px;
+    margin-left: auto; 
+}
+
 .later-item .item-name a {
     font-size: 15px;
     color: #333;
     text-decoration: none;
-}
-
-.later-item .item-price,
-.later-item .item-quantity {
-    font-size: 16px;
-    margin: 10px 0;
-    color: #666;
-}
-
-.later-item .item-actions {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
 }
 
 .later-item .remove-button,

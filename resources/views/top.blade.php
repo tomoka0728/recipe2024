@@ -8,7 +8,7 @@
                     <div class="ad-slider-wrapper">
                         <div class="ad-slider" id="ad-slider">
                             <div class="ad-slide">
-                                <a href="{{ url('item_ranking') }}">
+                                {{-- <a href="{{ url('item_ranking') }}"> --}}
                                     <img src="{{ Storage::disk('s3')->url('summersail.jpg') }}" alt="">
                                 </a>
                             </div>

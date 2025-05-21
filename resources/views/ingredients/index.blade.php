@@ -65,10 +65,10 @@
                             <h3 class="price">{{ number_format($ingredient->price) }}円</h3>
                             <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->price * 1.08) }}円</span>)</p>
                         </div>
+                        <div class="all-products-btn">
                         <div class="cart-push2" style="display: none;">
                             カートに追加しました
                         </div>
-                        <div class="all-products-btn">
                         <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->uuid }}"data-quantity="1">カートに入れる</a></div>
                     </div>
                     @endforeach
