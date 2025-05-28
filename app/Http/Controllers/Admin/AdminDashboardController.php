@@ -17,9 +17,17 @@ class AdminDashboardController extends Controller
     {
         $logs = AdminLog::with('admin')->latest()->limit(20)->get();
 
-        $dailySales = DailySale::orderBy('date')->get();
-        $labels = $dailySales->pluck('date')->map(fn($d) => Carbon::parse($d)->format('m/d'));
-        $data = $dailySales->pluck('total_sales');
+        $dailySales = \App\Models\DailySale::selectRaw('date, SUM(total_sales) as total_sales')
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
+        $labels = [];
+        $data = [];
+        foreach ($dailySales as $sale) {
+            $labels[] = Carbon::parse($sale->date)->format('Y/m/d');
+            $data[] = $sale->total_sales;
+        }
 
         return view('admin.dashboard', compact('logs', 'labels', 'data'));
     }
