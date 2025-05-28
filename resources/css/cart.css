@@ -453,3 +453,7 @@ button
 .later-item .move-back-button:hover {
     background-color: #559fe8;
 }
+
+.grant-point{
+    color: #666;
+}

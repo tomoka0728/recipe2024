@@ -16,13 +16,23 @@
             </div>
         </div>
 
+        @if ($errors->any())
+    <div class="text-red-500">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
         <div id="container" class="wrapper">
                 <main class="cart">
                     <section class="content">
                         <div class="item-in-cart">お届け先</div>
                         <div class="mb-10">
                             <div class="w-2/3">
-                            <form method="POST" action="{{ route('address.confirm') }}">
+                            <form method="POST" action="{{ route('payment.confirm') }}">
                                 @csrf
                                 {{-- 既存住所がある場合は選択肢を表示 --}}
                                 @php
@@ -204,20 +214,19 @@
                             <div class="mt-4 space-y-2">
                                 <!-- ポイントを利用する -->
                                 <label class="w-2/3 flex items-center mx-4 space-x-2 cursor-pointer transition duration-200">
-                                    <input type="radio" name="point" value="use" id="use-point"
-                                        {{ old('point') == 'use' ? 'checked' : '' }}>
+                                    <input type="radio" name="point" value="use" id="use_point" {{ old('point') == 'use' ? 'checked' : '' }}>
                                     <span>利用する</span>
-                                    <input type="number" pattern="^[0-9]+$" min="0" name="use_point"
-                                        id="point-input" placeholder="使用するポイントを入力"
-                                        class="w-50 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 ml-2">
+                                    <input type="number" min="0" max="{{ Auth::user()->points }}" name="use_point"
+                                        id="point-input"
+                                        class="w-50 p-2 border border-gray-300 rounded-md ml-2"
+                                        value="{{ old('use_point') }}">
                                     pt
                                 </label>
 
                                 <div class="mt-4">
                                     <!-- 利用しない -->
-                                    <label class="w-2/3 flex items-center mx-4 space-x-2 cursor-pointer transition duration-200">
-                                        <input type="radio" name="point" value="not_use" id="not-use-point"
-                                            {{ old('point') == 'not_use' ? 'checked' : '' }}>
+                                    <label class="w-2/3 flex items-center mx-4 space-x-2 cursor-pointer">
+                                        <input type="radio" name="point" value="not_use" id="not_use" {{ old('point') == 'not_use' ? 'checked' : '' }}>
                                         <span>利用しない</span>
                                     </label>
                                 </div>
@@ -258,13 +267,19 @@
                                 <div class="val" id="total-price">{{ number_format($sum) }}円</div>
                             </li>
                             <li>
+                                <div class="key">消費税</div>
+                                <div class="val" id="tax-price">
+                                    {{ count($carts) > 0 ? number_format(floor($sum * 0.1)) . '円' : '0円' }}
+                                </div>
+                            </li>
+                            <li>
                                 <div class="key">送料</div>
                                 <div class="val" id="shipping-price" data-send-price="{{ $sendPrice }}">
                                     {{ number_format($sendPrice) }}円</div>
                             </li>
                             <li class="total-sum">
                                 <div class="key">合計</div>
-                                <div class="val" id="total-sum">{{ number_format($sendPrice + $sum) }}円</div>
+                                <div class="val" id="total-sum">{{ number_format($sum + floor($sum * 0.1) + $sendPrice) }}円</div>
                             </li>
                         </ul>
                         <div class="action-buttons">

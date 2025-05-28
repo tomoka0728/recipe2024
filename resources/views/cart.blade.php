@@ -14,9 +14,9 @@
                 <section class="cart-content">
                     <div class="item-in-cart">カートに入っている商品</div>
                     @if (count($carts) > 0)
-                        <li class="cart-items">
+                        <div class="cart-items">
                             @foreach ($carts as $ingredientUuid => $item)
-                                <div class="cart-item">
+                                <div class="cart-item" data-ingredient-uuid="{{ $ingredientUuid }}">
                                     <div class="item-img">
                                         <a href="{{ route('ingredients.show', ['uuid' => $ingredientUuid]) }}">
                                             <img src="{{ Storage::disk('s3')->url($item['image_path']) }}" alt="商品画像">
@@ -26,7 +26,7 @@
                                         <div class="item-info-row">
                                             <span class="item-name">
                                                 <a
-                                                    href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid ?? $ingredientUuid : $key]) }}">
+                                                    href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid ?? $ingredientUuid : $ingredientUuid]) }}">
                                                     {{ Auth::check() ? $item->ingredient->name ?? $item['name'] : $item['name'] }}
                                                 </a>
                                             </span>
@@ -35,88 +35,90 @@
                                             </span>
                                             <span class="item-quantity">
                                                 数量
-                                                <input type="number" name="quantity[{{ $ingredientUuid ?? $key }}]"
+                                                <input type="number" name="quantity[{{ $ingredientUuid }}]"
                                                     value="{{ Auth::check() ? $item->quantity ?? $item['quantity'] : $item['quantity'] ?? 1 }}"
                                                     min="1" class="quantity-input"
                                                     data-price="{{ Auth::check() ? $item->ingredient->price ?? $item['price'] : $item['price'] }}"
-                                                    data-ingredient-uuid="{{ $ingredientUuid ?? $key }}" />
+                                                    data-ingredient-uuid="{{ $ingredientUuid }}" />
                                             </span>
                                             <div class="item-actions">
-                                                <form method="POST" class="delete-form"
-                                                    data-ingredient-uuid="{{ $ingredientUuid ?? $key }}"
-                                                    action="{{ route('cart.remove', $ingredientUuid ?? $key) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="remove-button remove-cart-item"
-                                                        data-uuid="{{ $ingredientUuid ?? $key }}">削除</button>
-                                                </form>
-                                                <form method="POST"
-                                                    action="{{ route('save.for.later', $ingredientUuid ?? $key) }}">
-                                                    @csrf
-                                                    <button type="submit" class="save-button">あとで買う</button>
-                                                </form>
+                                                <button type="button"
+                                                    class="remove-button remove-cart-item"
+                                                    data-ingredient-uuid="{{ $ingredientUuid }}">
+                                                    削除
+                                                </button>
+                                                <button type="button"
+                                                    class="save-for-later-ajax save-button"
+                                                    data-ingredient-uuid="{{ $ingredientUuid }}">
+                                                    あとで買う
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <hr>
+                                @if (!$loop->last)
+                                    <hr>
+                                @endif
                             @endforeach
-                        </li>
+                        </div>
                     @else
-                        <p>カートに商品が入っていません。</p>
+                        <p class="cart-empty-message">カートに商品が入っていません。</p>
                     @endif
                     @if (count($saveForLaterItems) > 0)
                         <div class="item-in-later">あとで買う</div>
                         <div class="later-box">
-                            @foreach ($saveForLaterItems as $key => $item)
-                                <div class="later-item">
-                                    <div class="item-img">
-                                        <a
-                                            href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid : $key]) }}">
-                                            @if (Auth::check())
-                                                @if ($item->ingredient && $item->ingredient->image_path)
-                                                    <img src="{{ Storage::disk('s3')->url($item->ingredient->image_path) }}"
-                                                        alt="商品画像">
+                            @if (count($saveForLaterItems) > 0)
+                                @foreach ($saveForLaterItems as $key => $item)
+                                    <div class="later-item" data-ingredient-uuid="{{ Auth::check() ? $item->ingredient->uuid : $key }}">
+                                        <div class="item-img">
+                                            <a
+                                                href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid : $key]) }}">
+                                                @if (Auth::check())
+                                                    @if ($item->ingredient && $item->ingredient->image_path)
+                                                        <img src="{{ Storage::disk('s3')->url($item->ingredient->image_path) }}"
+                                                            alt="商品画像">
+                                                    @else
+                                                        <img src="/images/no-image.png" alt="画像なし">
+                                                    @endif
                                                 @else
-                                                    <img src="/images/no-image.png" alt="画像なし">
+                                                    <img src="{{ Storage::disk('s3')->url($item['image_path']) }}"
+                                                        alt="商品画像">
                                                 @endif
-                                            @else
-                                                <img src="{{ Storage::disk('s3')->url($item['image_path']) }}"
-                                                    alt="商品画像">
-                                            @endif
-                                        </a>
-                                    </div>
-                                    <div class="item-details">
-                                        <div class="item-info-row">
-                                            <span class="item-name">
-                                                <a
-                                                    href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid : $key]) }}">
-                                                    {{ Auth::check() ? $item->ingredient->name ?? $item['name'] : $item['name'] }}
-                                                </a>
-                                            </span>
-                                            <span class="item-price">
-                                                価格：{{ number_format(Auth::check() ? $item->ingredient->price ?? $item['price'] : $item['price']) }}円
-                                            </span>
-                                            <span class="item-quantity">
-                                                数量：{{ Auth::check() ? $item->quantity ?? ($item['quantity'] ?? 1) : $item['quantity'] ?? 1 }}
-                                            </span>
-                                            <div class="item-actions">
-                                                <form method="POST"
-                                                    action="{{ route('cart.remove', Auth::check() ? $item->ingredient->uuid : $key) }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="remove-button">削除</button>
-                                                </form>
-                                                <form method="POST"
-                                                    action="{{ route('move.to.cart', Auth::check() ? $item->ingredient->uuid : $key) }}">
-                                                    @csrf
-                                                    <button type="submit" class="move-back-button">カートに戻す</button>
-                                                </form>
+                                            </a>
+                                        </div>
+                                        <div class="item-details">
+                                            <div class="item-info-row">
+                                                <span class="item-name">
+                                                    <a
+                                                        href="{{ route('ingredients.show', ['uuid' => Auth::check() ? $item->ingredient->uuid : $key]) }}">
+                                                        {{ Auth::check() ? $item->ingredient->name ?? $item['name'] : $item['name'] }}
+                                                    </a>
+                                                </span>
+                                                <span class="item-price">
+                                                    価格：{{ number_format(Auth::check() ? $item->ingredient->price ?? $item['price'] : $item['price']) }}円
+                                                </span>
+                                                <span class="item-quantity">
+                                                    数量：{{ Auth::check() ? $item->quantity ?? ($item['quantity'] ?? 1) : $item['quantity'] ?? 1 }}
+                                                </span>
+                                                <div class="item-actions">
+                                                    <div class="save-for-later-item">
+                                                        <button type="button"
+                                                            class="save-for-later-delete"
+                                                            data-ingredient-uuid="{{ Auth::check() ? $item->ingredient->uuid : $key }}">
+                                                            削除
+                                                        </button>
+                                                    </div>
+                                                    <button type="button"
+                                                        class="move-to-cart-ajax move-back-button"
+                                                        data-ingredient-uuid="{{ Auth::check() ? $item->ingredient->uuid : $key }}">
+                                                        カートに戻す
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div>
                     @endif
                 </section>
@@ -143,32 +145,37 @@
                             <div class="val" id="total-price">{{ number_format($sum) }}円</div>
                         </li>
                         <li>
+                            <div class="key">消費税</div>
+                            <div class="val" id="tax-price">
+                                {{ count($carts) > 0 ? number_format(floor($sum * 0.1)) . '円' : '0円' }}
+                            </div>
+                        </li>
+                        <li>
                             <div class="key">送料</div>
-                            <div class="val"
-                                {{ count($carts) > 0 ? 'id=shipping-price data-send-price=' . $sendPrice : '' }}>
-                                {{ count($carts) > 0 ? number_format($sendPrice) . '円' : '0円' }}
+                            <div class="val" id="shipping-price" data-send-price="{{ $sendPrice ?? 0 }}">
+                                {{ number_format($sendPrice ?? 0) }}円
                             </div>
                         </li>
                         <li class="total-sum">
                             <div class="key">合計</div>
                             <div class="val" {{ count($carts) > 0 ? 'id=total-sum' : '' }}>
-                                {{ count($carts) > 0 ? number_format($sendPrice + $sum) . '円' : '0円' }}
+                                 {{ count($carts) > 0 ? number_format($sum + $sendPrice + floor($sum * 0.1)) . '円' : '0円' }}
                             </div>
                         </li>
                     </ul>
                     <div class="action-buttons">
                         @auth
                             @if ($sum > 0)
-                                <button onclick="location.href='/payment'" class="next-button">ご注文手続きに進む</button>
+                                <button id="checkout-button" onclick="location.href='/payment'" class="next-button">ご注文手続きに進む</button>
                             @else
-                                <button class="next-button" disabled>ご注文手続きに進む</button>
+                                <button id="checkout-button" class="next-button" disabled>ご注文手続きに進む</button>
                             @endif
                         @else
                             @if ($sum > 0)
-                                <a href="{{ route('login') }}?redirect_to={{ urlencode(url('/payment')) }}"
+                                <a id="checkout-button"  href="{{ route('login') }}?redirect_to={{ urlencode(url('/payment')) }}"
                                     class="next-button">ログインしてご注文手続きに進む</a>
                             @else
-                                <button class="next-button" disabled>ログインしてご注文手続きに進む</button>
+                                <button  id="checkout-button" class="next-button" disabled>ログインしてご注文手続きに進む</button>
                             @endif
                         @endauth
                         <button type="button" onClick="history.back();" class="back-button">お買い物を続ける</button>
@@ -184,10 +191,9 @@
 @endpush
 
 @push('scripts')
-    @vite(['resources/js/cartUpdate.js', 'resources/js/cartDelete.js'])
+    @vite(['resources/js/cartUpdate.js', 'resources/js/cartMove.js', 'resources/js/cartDelete.js', 'resources/js/saveForLaterDelete.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 @endpush

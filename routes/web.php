@@ -15,6 +15,7 @@ use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipPlanController;
 use App\Http\Controllers\SpecialFeatureController;
 use App\Http\Controllers\ColumnController;
+use App\Http\Controllers\PointHistoryController;
 
 
 // TOP
@@ -43,12 +44,14 @@ Route::get('/membership/promotion', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/membership/upgrade', [MembershipController::class, 'edit'])->name('membership.edit');
     Route::post('/membership/upgrade', [MembershipController::class, 'update'])->name('membership.update');
+    Route::get('/points', [PointHistoryController::class, 'index'])->name('points.history');
 });
 
 //カート
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::get('/payment', [PaymentController::class, 'show'])->name('payment.show');
 Route::get('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');
+Route::post('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');
 Route::get('/payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
@@ -59,8 +62,8 @@ Route::delete('/cart/remove/{ingredientUuid}', [CartController::class, 'remove']
 //あとで買う機能
 Route::post('/save-for-later/{ingredientUuid}', [CartController::class, 'saveForLater'])->name('save.for.later');
 Route::get('/save-for-later', [CartController::class, 'showSaveForLater'])->name('save.for.later.show');
-Route::delete('/save-for-later/{uuid}', [CartController::class, 'removeSaveForLater'])->name('save.for.later.remove');
-Route::post('/move-to-cart/{uuid}', [CartController::class, 'moveToCart'])->name('move.to.cart');
+Route::delete('/save-for-later/{ingredientUuid}', [CartController::class, 'removeSaveForLater'])->name('save.for.later.remove');
+Route::post('/move-to-cart/{ingredientUuid}', [CartController::class, 'moveToCart'])->name('move.to.cart');
 
 
 //住所登録

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
 {
@@ -27,9 +28,8 @@ class CartController extends Controller
         }
 
         // 送料（例として仮に500円）
-        $sendPrice = 500;
-        session()->put('sum', $sum);
-        session()->put('sendPrice', $sendPrice);
+        $sendPrice = count($carts) === 0 ? 0 : 500;
+        session()->put('sum', $sum);        
 
         $saveForLaterItems = [];
 
@@ -114,13 +114,6 @@ class CartController extends Controller
             $sum += $item['price'] * $item['quantity'];
         }
 
-        // 送料を設定（例: 500円）
-        $sendPrice = session()->get('sendPrice', 500);
-
-        // セッションを更新
-        session()->put('sum', $sum);
-        session()->put('sendPrice', $sendPrice);
-
         return response()->json(['success' => true, 'sum' => $sum, 'sendPrice' => $sendPrice, 'total' => $sum + $sendPrice]);
     }
 
@@ -153,13 +146,15 @@ class CartController extends Controller
         }
 
         // 送料を設定（例: 500円）
-        $sendPrice = session()->get('sendPrice', 500);
+        $sendPrice = (count($carts) === 0) ? 0 : 500;
+        $tax = floor($sum * 0.1);
+        $total = $sum + $sendPrice + $tax;
 
         // セッションを更新
         session()->put('sum', $sum);
 
         // リダイレクトまたはJSONレスポンスを返す
-        return response()->json(['success' => true, 'sum' => $sum, 'sendPrice' => $sendPrice, 'total' => $sum + $sendPrice]);
+        return response()->json(['success' => true, 'sum' => $sum, 'tax' => $tax, 'sendPrice' => $sendPrice, 'total' => $sum + $sendPrice]);
     }
 
     private function saveCartToDatabase($user)
@@ -201,11 +196,17 @@ class CartController extends Controller
         if (isset($carts[$ingredientUuid])) {
             $quantity = $carts[$ingredientUuid]['quantity'];
 
-            // ログインしている場合
+            // ここで必ず取得
+            $ingredient = Ingredient::where('uuid', $ingredientUuid)->first();
+            if (!$ingredient) {
+                if (request()->ajax()) {
+                    return response()->json(['success' => false, 'message' => '商品が見つかりませんでした'], 404);
+                }
+                return back()->with('error', '商品が見つかりませんでした');
+            }
+
             if (auth()->check()) {
                 $user = auth()->user();
-
-                // 「後で買う」アイテムがすでに存在するか確認
                 $exists = SavedItem::where('user_uuid', $user->uuid)
                     ->where('ingredient_uuid', $ingredientUuid)
                     ->first();
@@ -219,22 +220,14 @@ class CartController extends Controller
                     ]);
                 }
             } else {
-                // ログインしていない場合はセッションに保存
                 $saveForLaterItems = session()->get('saveForLater', []);
-
                 if (!isset($saveForLaterItems[$ingredientUuid])) {
-                    $ingredient = Ingredient::where('uuid', $ingredientUuid)->first();
-                    if (!$ingredient) {
-                        return back()->with('error', '商品が見つかりませんでした');
-                    }
-
                     $saveForLaterItems[$ingredientUuid] = [
                         'name' => $ingredient->name,
                         'price' => $ingredient->price,
                         'image_path' => $ingredient->image_path,
                         'quantity' => $quantity,
                     ];
-
                     session()->put('saveForLater', $saveForLaterItems);
                 }
             }
@@ -243,7 +236,44 @@ class CartController extends Controller
             unset($carts[$ingredientUuid]);
             session()->put('carts', $carts);
 
+            $sum = 0;
+            foreach ($carts as $item) {
+                $sum += $item['price'] * $item['quantity'];
+            }
+            if (count($carts) === 0) {
+                $sendPrice = 0;
+                $tax = 0;
+                $total = 0;
+            } else {
+                $sendPrice = (count($carts) === 0) ? 0 : 500;
+                $tax = floor($sum * 0.1);
+                $total = $sum + $sendPrice + $tax;
+            }
+            $sendPrice = (count($carts) === 0) ? 0 : 500;
+            $tax = floor($sum * 0.1);
+            $total = $sum + $sendPrice + $tax;
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'item' => [
+                        'uuid' => $ingredientUuid,
+                        'name' => $ingredient->name,
+                        'price' => $ingredient->price,
+                        'image_path' => Storage::disk('s3')->url($ingredient->image_path),
+                        'quantity' => $quantity,
+                    ],
+                        'sum' => $sum,
+                        'tax' => $tax,
+                        'sendPrice' => $sendPrice,
+                        'total' => $total,
+                ]);
+            }
             return back()->with('message', '「後で買う」に保存しました');
+        }
+
+         if (request()->ajax()) {
+            return response()->json(['success' => false, 'message' => '商品がカートに存在しません'], 404);
         }
 
         return back()->with('error', '商品がカートに存在しません');
@@ -312,79 +342,148 @@ class CartController extends Controller
     }
 
 
-    public function moveToCart($uuid)
+    public function moveToCart($ingredientUuid)
     {
-        \Log::debug('moveToCart called', ['uuid' => $uuid]);
-
         $carts = session()->get('carts', []);
         
         if (auth()->check()) {
-            \Log::debug('User logged in', ['user_uuid' => auth()->user()->uuid]);
-
             $user = auth()->user();
-
-            // saved_items テーブルから該当商品を取得
             $savedItem = SavedItem::where('user_uuid', $user->uuid)
-                ->where('ingredient_uuid', $uuid)
+                ->where('ingredient_uuid', $ingredientUuid)
                 ->first();
 
             if (!$savedItem) {
+                if (request()->ajax()) {
+                    return response()->json(['success' => false, 'message' => '商品が見つかりませんでした'], 404);
+                }
                 return back()->with('error', '商品が見つかりませんでした');
             }
 
             $ingredient = $savedItem->ingredient;
-
-            // カートにアイテムを追加または数量を加算
-            if (isset($carts[$uuid])) {
-                // すでにカートにある場合は数量を加算
-                $carts[$uuid]['quantity'] += $savedItem->quantity;
+            if (isset($carts[$ingredientUuid])) {
+                $carts[$ingredientUuid]['quantity'] += $savedItem->quantity;
             } else {
-                // カートにアイテムを追加
-                $carts[$uuid] = [
+                $carts[$ingredientUuid] = [
                     'name' => $ingredient->name,
                     'price' => $ingredient->price,
                     'quantity' => $savedItem->quantity,
                     'image_path' => $ingredient->image_path,
                 ];
             }
-
-            // カートをセッションに保存
             session()->put('carts', $carts);
-
-            // saved_items テーブルから削除
             $savedItem->delete();
 
-            return redirect()->route('cart.show')->with('message', 'カートに移動しました');
-        } else {
-            // ログインしていない場合はセッションから処理
-            $saveForLaterItems = session()->get('saveForLater', []);
-
-            if (!isset($saveForLaterItems[$uuid])) {
-                return back()->with('error', '商品が見つかりませんでした');
+            $sum = 0;
+            foreach ($carts as $item) {
+                $sum += $item['price'] * $item['quantity'];
+            }
+            if (count($carts) === 0) {
+                $sendPrice = 0;
+                $tax = 0;
+                $total = 0;
+            } else {
+                $sendPrice = 500;
+                $tax = floor($sum * 0.1);
+                $total = $sum + $sendPrice + $tax;
             }
 
-            $item = $saveForLaterItems[$uuid];
-
-            // カートにアイテムを追加または数量を加算
-            if (isset($carts[$uuid])) {
-                $carts[$uuid]['quantity'] += $item['quantity'];
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'item' => [
+                        'uuid' => $ingredientUuid,
+                        'name' => $ingredient->name,
+                        'price' => $ingredient->price,
+                        'image_path' => Storage::disk('s3')->url($ingredient->image_path),
+                        'quantity' => $carts[$ingredientUuid]['quantity'],
+                    ],
+                    'sum' => $sum,
+                    'tax' => $tax,
+                    'sendPrice' => $sendPrice,
+                    'total' => $total,
+                ]);
+            }
+            return redirect()->route('cart.show')->with('message', 'カートに移動しました');
+        } else {
+            $saveForLaterItems = session()->get('saveForLater', []);
+            if (!isset($saveForLaterItems[$ingredientUuid])) {
+                if (request()->ajax()) {
+                    return response()->json(['success' => false, 'message' => '商品が見つかりませんでした'], 404);
+                }
+                return back()->with('error', '商品が見つかりませんでした');
+            }
+            $item = $saveForLaterItems[$ingredientUuid];
+            if (isset($carts[$ingredientUuid])) {
+                $carts[$ingredientUuid]['quantity'] += $item['quantity'];
             } else {
-                $carts[$uuid] = [
+                $carts[$ingredientUuid] = [
                     'name' => $item['name'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
                     'image_path' => $item['image_path'],
                 ];
             }
-
-            // カートをセッションに保存
             session()->put('carts', $carts);
-
-            // 「後で買う」リストから削除
-            unset($saveForLaterItems[$uuid]);
+            unset($saveForLaterItems[$ingredientUuid]);
             session()->put('saveForLater', $saveForLaterItems);
 
+            $sum = 0;
+            foreach ($carts as $item) {
+                $sum += $item['price'] * $item['quantity'];
+            }
+            if (count($carts) === 0) {
+                $sendPrice = 0;
+                $tax = 0;
+                $total = 0;
+            } else {
+                $sendPrice = 500;
+                $tax = floor($sum * 0.1);
+                $total = $sum + $sendPrice + $tax;
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'item' => [
+                        'uuid' => $ingredientUuid,
+                        'name' => $item['name'],
+                        'price' => $item['price'],
+                        'image_path' => Storage::disk('s3')->url($item['image_path']),
+                        'quantity' => $carts[$ingredientUuid]['quantity'],
+                    ],
+                    'sum' => $sum,
+                    'tax' => $tax,
+                    'sendPrice' => $sendPrice,
+                    'total' => $total,
+                ]);
+            }
             return redirect()->route('cart.show')->with('message', 'カートに移動しました');
+        }
+    }
+
+    public function removeSaveForLater($ingredientUuid)
+    {
+        if (auth()->check()) {
+            $user = auth()->user();
+            $savedItem = \App\Models\SavedItem::where('user_uuid', $user->uuid)
+                ->where('ingredient_uuid', $ingredientUuid)
+                ->first();
+
+            if ($savedItem) {
+                $savedItem->delete();
+                return response()->json(['success' => true, 'message' => '「後で買う」から削除しました']);
+            } else {
+                return response()->json(['success' => false, 'message' => '商品が見つかりませんでした'], 404);
+            }
+        } else {
+            $saveForLaterItems = session()->get('saveForLater', []);
+            if (isset($saveForLaterItems[$ingredientUuid])) {
+                unset($saveForLaterItems[$ingredientUuid]);
+                session()->put('saveForLater', $saveForLaterItems);
+                return response()->json(['success' => true, 'message' => '「後で買う」から削除しました']);
+            } else {
+                return response()->json(['success' => false, 'message' => '商品が見つかりませんでした'], 404);
+            }
         }
     }
 }

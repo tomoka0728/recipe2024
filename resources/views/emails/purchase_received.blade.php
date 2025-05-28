@@ -169,17 +169,37 @@
             <div class="divider"></div>
         @endforeach
 
-        <div class="total">
-            商品合計：¥{{ number_format($total) }}
+        <div class="total" style="display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; padding: 20px 20px 0 20px;">
+            <span>商品合計</span>
+            <span>¥{{ number_format($sum) }}</span>
         </div>
-
+        <div class="divider"></div>
+        <div class="section-title" style="text-align:left; margin: 20px 20px 0 20px; font-size: 15px; font-weight: bold;">内訳</div>
+        <div class="product" style="display: flex; justify-content: space-between; padding: 10px 20px;">
+            <span>消費税</span>
+            <span>¥{{ number_format($tax) }}</span>
+        </div>
+        <div class="product" style="display: flex; justify-content: space-between; padding: 10px 20px;">
+            <span>送料</span>
+            <span>¥{{ number_format($sendPrice) }}</span>
+        </div>
+        <div class="product" style="display: flex; justify-content: space-between; padding: 10px 20px;">
+            <span>使用ポイント</span>
+            <span>
+                @if ($pointUsage === 'use' && $usedPoints > 0)
+                    -¥{{ number_format($usedPoints) }}
+                @else
+                    0円
+                @endif
+            </span>
+        </div>
         <div class="dotted-line"></div>
-
-        <div class="info2">
-            <p>送料：¥{{ number_format($sendPrice) }}</p>
-            @if ($pointUsage === 'use')
-                <p>使用ポイント：-¥{{ number_format($usedPoints) }}</p>
-            @endif
+        <div class="total" style="display: flex; justify-content: space-between; font-size: 17px; font-weight: bold; padding: 20px;">
+            <span>合計</span>
+            <span>¥{{ number_format($total) }}</span>
+        </div>
+        <div class="grant-point" style="font-size: 12px; color: #888; text-align: right;">
+            付与予定ポイント：{{ number_format($grantPoint) }}pt
         </div>
 
         <div class="divider"></div>

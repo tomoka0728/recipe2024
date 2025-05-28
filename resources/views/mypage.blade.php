@@ -14,7 +14,7 @@
                     </div>
                     <div class="point">
                         <div class="pt"><h1><p class="num">{{ Auth::user()->points }}</p> pt</h1></div>
-                        <div class="pt_s">ポイント明細</div>
+                        <div class="pt_s"><a href="{{ route('points.history') }}">ポイント明細</a></div>
                     </div>
                 </div>
 

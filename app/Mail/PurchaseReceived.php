@@ -22,6 +22,9 @@ class PurchaseReceived extends Mailable
     public $total;
     public $paymentMethod;
     public $purchaseCreatedAt;
+    public $sum;
+    public $tax;
+    public $grantPoint;
 
     /**
      * Create a new message instance.
@@ -35,17 +38,20 @@ class PurchaseReceived extends Mailable
      * @param  int     $total
      * @return void
      */
-    public function __construct($user, $carts, $address, $sendPrice, $usedPoints, $pointUsage, $total, $paymentMethod, $purchaseCreatedAt)
+    public function __construct($user, $carts, $address, $sendPrice, $usedPoints, $pointUsage, $total, $sum, $tax, $paymentMethod, $purchaseCreatedAt, $grantPoint)
     {
         $this->user = $user;
         $this->carts = $carts;
         $this->address = $address;
-        $this->sendPrice = $sendPrice;
-        $this->usedPoints = $usedPoints;
+        $this->sendPrice = (int)$sendPrice;
+        $this->usedPoints = (int)$usedPoints;
         $this->pointUsage = $pointUsage;
-        $this->total = $total;
+        $this->total = (int)$total;
+        $this->sum = (int)$sum;
+        $this->tax = (int)$tax;
         $this->paymentMethod = $paymentMethod;
         $this->purchaseCreatedAt = $purchaseCreatedAt;
+        $this->grantPoint = (int)$grantPoint;
     }
 
     /**

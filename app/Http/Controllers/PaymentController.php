@@ -31,24 +31,76 @@ class PaymentController extends Controller
         // 送料を取得（デフォルト値を設定）
         $sendPrice = session()->get('sendPrice', 500);
 
+        // 消費税（10%）
+        $tax = floor(($sum + $sendPrice) * 0.1);
+
+        // 合計
+        $total = $sum + $sendPrice + $tax;
+
         // セッションを更新
         session()->put('sum', $sum);
 
     // ビューに変数を渡す
-    return view('payment', ['carts' => $carts, 'sum' => $sum, 'sendPrice' => $sendPrice]);
+    return view('payment', ['carts' => $carts, 'sum' => $sum, 'tax' => $tax, 'sendPrice' => $sendPrice]);
     }
 
 
     // 購入確認画面を表示
     public function confirm(Request $request)
     {
+        // バリデーション
+        $validated = $request->validate([
+            'address_type' => 'required|in:existing,new',
+            'existing_address_id' => 'required_if:address_type,existing|exists:addresses,uuid',
+            'name' => 'required_if:address_type,new|string|max:255',
+            'zipcode' => ['required_if:address_type,new', 'regex:/^\d{7}$/'],
+            'prefectures' => 'required_if:address_type,new|string|max:255',
+            'city' => 'required_if:address_type,new|string|max:255',
+            'address' => 'required_if:address_type,new|string|max:255',
+            'room' => 'nullable|string|max:255',
+            'phone' => ['required_if:address_type,new', 'regex:/^\d{10,11}$/'],
+            'method' => 'required|string',
+            'point' => 'required|in:use,not_use',
+            'use_point' => 'nullable|integer|min:0',
+        ]);
+
+        // 住所情報のセッション保存
+        if ($request->input('address_type') === 'existing') {
+            session()->put('selected_address_id', $request->input('existing_address_id'));
+            session()->forget('address_data');
+        } else {
+            session()->put('address_data', $request->only(['name','zipcode', 'prefectures', 'city', 'address', 'room', 'phone']));
+            session()->forget('selected_address_id');
+        }
+
+        // 支払い方法・ポイント利用のセッション保存
+        session()->put('payment-method', $request->input('method'));
+        session()->put('pointUsage', $request->input('point'));
+        session()->put('usedPoints', $request->input('use_point', 0));
+
         // カート情報
         $carts = session()->get('carts', []);
         $sum = array_reduce($carts, fn($carry, $item) => $carry + ($item['price'] * $item['quantity']), 0);
         $sendPrice = session()->get('sendPrice', 500);
+        $tax = floor($sum * 0.1);
 
         $user = Auth::user();
         $userPoints = $user->points;
+
+        // ポイント利用
+        $pointUsage = session()->get('pointUsage', 'not_use');
+        $usedPoints = session()->get('usedPoints', 0);
+        if ($pointUsage === 'use') {
+            $usedPoints = min($usedPoints, $userPoints, $sum + $tax + $sendPrice);
+        } else {
+            $usedPoints = 0;
+        }
+
+        // 合計
+        $total = max(0, $sum + $tax + $sendPrice - $usedPoints);
+
+        session()->put('pointUsage', $pointUsage);
+        session()->put('usedPoints', $usedPoints);
 
         // 住所の取得
         $sessionAddress = session()->get('address_data');
@@ -68,20 +120,6 @@ class PaymentController extends Controller
         //支払い方法を取得
         $paymentMethod = session()->get('payment-method', 'クレジットカード');
 
-        // ユーザーのポイント使用処理
-        $pointUsage = session()->get('pointUsage', 'not_use');
-        $usedPoints = session()->get('usedPoints', 0);
-
-        if ($pointUsage === 'use') {
-            // 使用可能なポイントの範囲内で使用
-            $usedPoints = min($usedPoints, $userPoints, $sum + $sendPrice);
-        } else {
-            $usedPoints = 0;
-        }
-
-        \Log::info('セッションから取得した住所データ:', session()->get('address_data') ?? []);
-        \Log::info('デフォルトの住所データ:', $defaultAddress ? $defaultAddress->toArray() : []);
-
         if (!$address) {
             \Log::warning('住所情報が取得できませんでした。');
             return back()->withErrors(['address' => '住所情報が見つかりません。登録してください。']);
@@ -89,51 +127,75 @@ class PaymentController extends Controller
 
         $total = max(0, $sum + $sendPrice - $usedPoints);
 
+        // 付与予定ポイント計算（送料を除いた商品合計＋消費税が対象）
+        $baseForPoint = $sum + $tax;
+        switch ($user->rank) {
+            case 'gold':
+                $pointRate = 0.05;
+                break;
+            case 'silver':
+                $pointRate = 0.03;
+                break;
+            default:
+                $pointRate = 0.01;
+                break;
+        }
+        $grantPoint = floor($baseForPoint * $pointRate);
+
         // デバッグ用ログ
         \Log::info('セッションに保存する住所データ:', $request->only(['name', 'zipcode', 'prefectures', 'city', 'address', 'room', 'phone']));
         \Log::info('セッションデータ:', session()->all());
         \Log::info('取得した住所情報:', $address ? (is_object($address) ? $address->toArray() : $address) : []);
         \Log::info('取得したポイント情報:', ['pointUsage' => $pointUsage, 'usedPoints' => $usedPoints, 'userPoints' => $userPoints]);
+        \Log::info('ポイント利用:', ['pointUsage' => $pointUsage, 'usedPoints' => $usedPoints]);
 
         return view('payment-confirm', compact(
-            'carts', 'sum', 'sendPrice', 'total', 'usedPoints', 'pointUsage', 'address', 'paymentMethod', 'userPoints'
+            'carts', 'sum', 'sendPrice', 'tax', 'total', 'usedPoints', 'pointUsage', 'address', 'paymentMethod', 'userPoints', 'grantPoint'
         ));
     }
 
         public function checkout()
         {
+            // カート情報
             $carts = session()->get('carts', []);
             $sum = array_reduce($carts, fn($carry, $item) => $carry + ($item['price'] * $item['quantity']), 0);
             $sendPrice = session()->get('sendPrice', 500);
+            $tax = floor($sum * 0.1);
 
             $user = Auth::user();
             $userPoints = $user->points;
-            $usedPoints = session()->get('usedPoints', 0);
-            $pointUsage = session()->get('pointUsage', 'not_use');
 
+            // ポイント利用
+            $pointUsage = session()->get('pointUsage', 'not_use');
+            $usedPoints = session()->get('usedPoints', 0);
             if ($pointUsage === 'use') {
-                $usedPoints = min($usedPoints, $userPoints, $sum + $sendPrice);
+                $usedPoints = min($usedPoints, $userPoints, $sum + $tax + $sendPrice);
             } else {
                 $usedPoints = 0;
             }
 
-            $total = max(0, $sum + $sendPrice - $usedPoints);
+            // 合計
+            $total = max(0, $sum + $tax + $sendPrice - $usedPoints);
 
             if ($total <= 0) {
                 return back()->withErrors(['error' => '決済金額が無効です。']);
             }
 
+            $total = max(0, $sum + $tax + $sendPrice - $usedPoints);
+
             Stripe::setApiKey(config('services.stripe.secret'));
 
             $lineItems = [];
             foreach ($carts as $item) {
+                $itemTax = floor($item['price'] * 0.1); // 商品ごとの消費税
+                $itemTotal = $item['price'] + $itemTax; // 商品ごとの税込価格
                 $lineItems[] = [
                     'price_data' => [
                         'currency' => 'jpy',
                         'product_data' => [
                             'name' => $item['name'],
                         ],
-                        'unit_amount' => round($item['price'] * 100), // Stripeは最小単位で扱う（例: 100円 -> 10000）
+                        'unit_amount' => (int)$itemTotal,
                     ],
                     'quantity' => $item['quantity'],
                 ];
@@ -147,7 +209,7 @@ class PaymentController extends Controller
                         'product_data' => [
                             'name' => '送料',
                         ],
-                        'unit_amount' => $sendPrice * 100,
+                        'unit_amount' => $sendPrice,
                     ],
                     'quantity' => 1,
                 ];
@@ -165,6 +227,21 @@ class PaymentController extends Controller
                     'mode' => 'payment',
                     'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}',
                     'cancel_url' => route('payment.cancel'),
+                ]);
+
+                // 決済成功後にポイント減算
+                if ($usedPoints > 0) {
+                    $user->points -= $usedPoints;
+                    $user->save();
+                }
+
+                // ポイント利用明細を登録
+                \App\Models\PointHistory::create([
+                    'uuid' => \Illuminate\Support\Str::uuid()->toString(),
+                    'user_uuid' => $user->uuid,
+                    'points' => $usedPoints, // 使用ポイント数
+                    'type' => 'used',        // 使用
+                    'description' => 'ポイント利用',
                 ]);
 
                 return redirect($checkoutSession->url);
@@ -187,22 +264,30 @@ class PaymentController extends Controller
         {
             // Stripe セッション ID を取得
             $sessionId = $request->query('session_id');
-
-            // 必要に応じてセッション ID を使った処理を追加
             \Log::info('決済成功: セッションID ' . $sessionId);
 
-            // カート情報を取得
+            // カート情報
             $carts = session()->get('carts', []);
-            $sendPrice = session()->get('sendPrice', 0);
-            $usedPoints = session()->get('usedPoints', 0);
-            $pointUsage = session()->get('pointUsage', 'not_use');
+            $sum = array_reduce($carts, fn($carry, $item) => $carry + ($item['price'] * $item['quantity']), 0);
+            $sendPrice = session()->get('sendPrice', 500);
+            $tax = floor($sum * 0.1);
+
             $user = Auth::user();
+            $userPoints = $user->points;
+
+            // ポイント利用
+            $pointUsage = session()->get('pointUsage', 'not_use');
+            $usedPoints = session()->get('usedPoints', 0);
+            if ($pointUsage === 'use') {
+                $usedPoints = min($usedPoints, $userPoints, $sum + $tax + $sendPrice);
+            } else {
+                $usedPoints = 0;
+            }
+
+            // 合計
+            $total = max(0, $sum + $tax + $sendPrice - $usedPoints);
 
             $paymentMethod = session()->get('payment-method', 'クレジットカード');
-
-            // 合計金額を計算
-            $sum = array_reduce($carts, fn($carry, $item) => $carry + ($item['price'] * $item['quantity']), 0);
-            $total = max(0, $sum + $sendPrice - $usedPoints);
 
             // 住所情報の取得
             $addressId = session()->get('selected_address_id');
@@ -268,17 +353,57 @@ class PaymentController extends Controller
 
                 DB::commit();
 
+                // 付与ポイント計算
+                $baseForPoint = $sum + $tax;
+                switch ($user->rank) {
+                    case 'gold':
+                        $pointRate = 0.05;
+                        break;
+                    case 'silver':
+                        $pointRate = 0.03;
+                        break;
+                    default:
+                        $pointRate = 0.01;
+                        break;
+                }
+                $grantPoint = floor($baseForPoint * $pointRate);
+
+                // ユーザーにポイント付与
+                if ($grantPoint > 0) {
+                    $user->points += $grantPoint;
+                    $user->save();
+                }
+
+                \App\Models\PointHistory::create([
+                    'uuid' => \Illuminate\Support\Str::uuid()->toString(),
+                    'user_uuid' => $user->uuid,
+                    'points' => $grantPoint, // 付与ポイント数（正の値）
+                    'type' => 'earned',      // 獲得
+                    'description' => '商品購入時のポイント還元',
+                ]);
+
+                // メール送信前にキャスト
+                $sum = (int)$sum;
+                $tax = (int)$tax;
+                $sendPrice = (int)$sendPrice;
+                $usedPoints = (int)$usedPoints;
+                $total = (int)$total;
+                $grantPoint = (int)$grantPoint;
+
                 // メール送信
                 Mail::to($user->email)->send(new PurchaseReceived(
-                    $user,
-                    $carts,
-                    $address,
-                    $sendPrice,
-                    $usedPoints,
-                    $pointUsage,
-                    $total,
-                    $paymentMethod,
-                    $purchaseCreatedAt
+                        $user,
+                        $carts,
+                        $address,
+                        $sendPrice,      // int
+                        $usedPoints,     // int
+                        $pointUsage,     // string
+                        $total,          // int
+                        $sum,            // int
+                        $tax,            // int
+                        $paymentMethod,  // string
+                        $purchaseCreatedAt,
+                        $grantPoint
                 ));
 
                 // カート関連のセッションデータを削除

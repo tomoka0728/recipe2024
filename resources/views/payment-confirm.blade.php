@@ -80,7 +80,7 @@
                                 @if ($pointUsage === 'not_use')
                                     利用しない
                                 @elseif ($pointUsage === 'use')
-                                    {{ number_format(session('usedPoints')) }}ポイント
+                                    {{ number_format($usedPoints) }}ポイント
                                 @else
                                     利用ポイント: 未選択
                                 @endif
@@ -109,6 +109,10 @@
                             <div class="val" id="total-price">{{ number_format($sum) }}円</div>
                         </li>
                         <li>
+                            <div class="key">消費税</div>
+                            <div class="val">{{ number_format($tax) }}円</div>
+                        </li>
+                        <li>
                             <div class="key">送料</div>
                             <div class="val" {{ count($carts) > 0 ? 'id=shipping-price data-send-price=' . $sendPrice : '' }}>
                                 {{ count($carts) > 0 ? number_format($sendPrice) . '円' : '0円' }}
@@ -116,8 +120,8 @@
                         </li>
                         <li>
                             <div class="key">使用ポイント</div>
-                            <div class="val" id="used-points">
-                                @if ($pointUsage === 'use')
+                            <div class="val">
+                                @if ($pointUsage === 'use' && $usedPoints > 0)
                                     -{{ number_format($usedPoints) }}円
                                 @else
                                     0円
@@ -126,9 +130,11 @@
                         </li>
                         <li class="total-sum">
                             <div class="key">合計</div>
-                            <div class="val" {{ count($carts) > 0 ? 'id=total-sum' : '' }}>
-                                {{ count($carts) > 0 ? number_format($sendPrice + $sum) . '円' : '0円' }}
-                            </div>
+                            <div class="val">{{ number_format($sum + $tax + $sendPrice - $usedPoints) }}円</div>
+                        </li>
+                        <li class="grant-point">
+                            <div class="key">付与予定ポイント</div>
+                            <div class="val">{{ number_format($grantPoint) }}pt</div>
                         </li>
                     </ul>
                     <div class="action-buttons">
