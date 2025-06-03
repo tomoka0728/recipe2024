@@ -73,7 +73,7 @@
 <br>
 <br>
 
-## <a name="admin"></a>📩 管理者ページイメージ
+## <a name="admin"></a>🔒 管理者ページイメージ
 <img src="https://github.com/user-attachments/assets/c971e22c-937e-4880-9262-6bfac6cd34c3" alt="recipe">
 
 
