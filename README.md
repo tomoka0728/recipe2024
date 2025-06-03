@@ -8,60 +8,30 @@
 <img src="https://img.shields.io/badge/-Linux-e6e6e6.svg?logo=linux&style=popout-square"> <img src="https://img.shields.io/badge/-Ubuntu-e8a48b.svg?logo=ubuntu&style=popout-square"> <img src="https://img.shields.io/badge/-Docker-1488C6.svg?logo=docker&style=popout-square"> <img src="https://img.shields.io/badge/-Nginx-269539.svg?logo=nginx&style=popout-square"> <img src="https://img.shields.io/badge/-Amazon%20aws-232F3E.svg?logo=amazon-aws&style=popout-square"> <img src="https://img.shields.io/badge/-VScode-007ACC.svg?logo=visualstudiocode&style=popout-square"> <img src="https://img.shields.io/badge/-Canva-ccf7ff.svg?logo=canva&style=popout-square">
 </p>
 
-## About Laravel
+## 📖 概要
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+このアプリは、レシピの閲覧から材料の購入までをシームレスに行える「レシピ共有型ECサイト」です。  
+毎日の料理で感じる面倒や不安を、ワンストップで解消することを目的に開発しました。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+### 🍳 こんな悩み、ありませんか？
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- レシピと冷蔵庫を何度も確認しながら、買い物リストを考える日々…
+- 近所のスーパーにあるかわからない調味料の扱いに困る
+- レシピ検索でヒットする大量の情報、どれが本当に美味しいのかわからない…
+- 買い物の時間が取れず、料理自体が億劫に感じる…
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+### 🛒 このアプリなら全部解決！
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- レシピページから材料名をクリックして、カートに入れるだけ
+- 必要な材料が最短翌日に自宅に届くから、買い物不要
+- 珍しい調味料も、他に使えるレシピが自動で表示されるからムダにならない
+- 投稿できるのは**有料会員のみ**。信頼できる、実際に作ってほしいレシピだけが並びます
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+手間を省き、レシピの魅力を広げる。  
+「作ってみたい」を「すぐ作れる」に変える、そんなアプリです。
