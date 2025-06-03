@@ -12,6 +12,7 @@ class PointHistoryController extends Controller
     {
         $user = Auth::user();
         $histories = PointHistory::where('user_uuid', $user->uuid)
+            ->where('points', '!=', 0)
             ->orderByDesc('created_at')
             ->paginate(10);
 

@@ -19,14 +19,13 @@ document.addEventListener("DOMContentLoaded", function () {
     togglePointInput();
 });
 
-
 $(function () {
     function toggleAddressFields() {
         const selectedType = $('input[name="address_type"]:checked').val();
         if (selectedType === 'new') {
-            $('#new-address-fields').find('input,select').prop('disabled', false);
+            $('#new-address-fields').show().find('input,select').prop('disabled', false);
         } else {
-            $('#new-address-fields').find('input,select').prop('disabled', true);
+            $('#new-address-fields').hide().find('input,select').prop('disabled', true);
         }
     }
 

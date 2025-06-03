@@ -19,6 +19,9 @@
             </thead>
             <tbody>
                 @forelse ($histories as $history)
+                @if ($history->points == 0)
+                    @continue
+                @endif
                     <tr class="border-t">
                         <td class="px-4 py-2">{{ $history->created_at->format('Y/m/d H:i') }}</td>
                         <td class="px-4 py-2">{{ $history->description }}</td>

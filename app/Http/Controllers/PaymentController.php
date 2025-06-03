@@ -141,6 +141,7 @@ class PaymentController extends Controller
                 break;
         }
         $grantPoint = floor($baseForPoint * $pointRate);
+        session()->put('userPoints_before_payment', $userPoints);
 
         // デバッグ用ログ
         \Log::info('セッションに保存する住所データ:', $request->only(['name', 'zipcode', 'prefectures', 'city', 'address', 'room', 'phone']));
@@ -276,10 +277,11 @@ class PaymentController extends Controller
             $userPoints = $user->points;
 
             // ポイント利用
+            $userPoints_before = session()->get('userPoints_before_payment', $user->points);
             $pointUsage = session()->get('pointUsage', 'not_use');
             $usedPoints = session()->get('usedPoints', 0);
             if ($pointUsage === 'use') {
-                $usedPoints = min($usedPoints, $userPoints, $sum + $tax + $sendPrice);
+                $usedPoints = min($usedPoints, $userPoints_before, $sum + $tax + $sendPrice);
             } else {
                 $usedPoints = 0;
             }

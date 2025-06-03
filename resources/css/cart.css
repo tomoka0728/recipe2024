@@ -417,7 +417,7 @@ button
     gap: 8px;
     align-items: center;
     min-width: 100px;
-    margin-left: auto; 
+    margin-left: auto;
 }
 
 .later-item .item-name a {
@@ -456,4 +456,18 @@ button
 
 .grant-point{
     color: #666;
+}
+
+.order-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+}
+.order-summary-item {
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    color: #222;
+    line-height: 1.7;
 }

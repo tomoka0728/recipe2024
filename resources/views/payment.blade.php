@@ -16,16 +16,6 @@
             </div>
         </div>
 
-        @if ($errors->any())
-    <div class="text-red-500">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
         <div id="container" class="wrapper">
                 <main class="cart">
                     <section class="content">
@@ -40,12 +30,12 @@
                                     $oldAddressType = old('address_type', 'existing');
                                     $selectedAddressId = old('existing_address_id', $addresses->first()?->id);
                                 @endphp
-                                
+
                                 {{-- バリデーションエラー表示 --}}
                                 @error('existing_address_id')
                                     <div class="text-red-500 mt-1">{{ $message }}</div>
                                 @enderror
-                                
+
                                 @if ($addresses->count())
                                     {{-- 既存住所あり --}}
                                     <div id="existing-address-wrapper" class="mb-4">

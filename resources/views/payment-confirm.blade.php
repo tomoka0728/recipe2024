@@ -43,48 +43,41 @@
                         @endforeach
                     </ul>
                     <div class="item-in-cart">お届け先</div>
-                    <ul class="cart-items">
-                        <li class="cart-item">
-                            <div class="block mt-1 w-full">
-                                {{ is_array($address) ? $address['name'] : $address->name }}　様
-                            </div>
+                    <ul class="order-summary-list">
+                        <li class="order-summary-item">
+                            {{ is_array($address) ? $address['name'] : $address->name }} 様
                         </li>
-                        <li class="cart-item">
-                            <div class="block mt-1 w-full">
-                                〒{{ is_array($address) ? $address['zipcode'] : $address->zipcode }}
-                            </div>
+                        <li class="order-summary-item">
+                            〒{{ is_array($address) ? $address['zipcode'] : $address->zipcode }}
                         </li>
-                        <li class="cart-item">
-                            <div class="block mt-1 w-full">
-                                {{ is_array($address) ? $address['prefectures'] : $address->prefectures }}
-                                {{ is_array($address) ? $address['city'] : $address->city }}
-                                {{ is_array($address) ? $address['address'] : $address->address }}
-                                {{ is_array($address) ? $address['room'] : $address->room }}
-                            </div>
-                        <li class="cart-item">
-                            <div class="block mt-1 w-full">
-                                電話番号: {{ is_array($address) ? $address['phone'] : $address->phone }}
-                            </div>
+                        <li class="order-summary-item">
+                            {{ is_array($address) ? $address['prefectures'] : $address->prefectures }}
+                            {{ is_array($address) ? $address['city'] : $address->city }}
+                            {{ is_array($address) ? $address['address'] : $address->address }}
+                            {{ is_array($address) ? $address['room'] : $address->room }}
+                        </li>
+                        <li class="order-summary-item">
+                            電話番号: {{ is_array($address) ? $address['phone'] : $address->phone }}
                         </li>
                     </ul>
+
                     <div class="item-in-cart">お支払い方法</div>
-                    <ul class="cart-items">
-                        <li class="cart-item">
-                            <div class="block mt-1 w-full">{{ $paymentMethod }}</div>
+                    <ul class="order-summary-list">
+                        <li class="order-summary-item">
+                            {{ $paymentMethod }}
                         </li>
                     </ul>
+
                     <div class="item-in-cart">ポイント利用</div>
-                    <ul class="cart-items">
-                        <li class="cart-item">
-                            <div class="block mt-1 w-full">
-                                @if ($pointUsage === 'not_use')
-                                    利用しない
-                                @elseif ($pointUsage === 'use')
-                                    {{ number_format($usedPoints) }}ポイント
-                                @else
-                                    利用ポイント: 未選択
-                                @endif
-                            </div>
+                    <ul class="order-summary-list">
+                        <li class="order-summary-item">
+                            @if ($pointUsage === 'not_use')
+                                利用しない
+                            @elseif ($pointUsage === 'use')
+                                {{ number_format($usedPoints) }}ポイント
+                            @else
+                                利用ポイント: 未選択
+                            @endif
                         </li>
                     </ul>
                 </section>

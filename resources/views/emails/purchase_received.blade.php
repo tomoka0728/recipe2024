@@ -198,7 +198,7 @@
             <span>合計</span>
             <span>¥{{ number_format($total) }}</span>
         </div>
-        <div class="grant-point" style="font-size: 12px; color: #888; text-align: right;">
+        <div class="grant-point" style="font-size: 12px; color: #888; text-align: right; padding: 20px;">
             付与予定ポイント：{{ number_format($grantPoint) }}pt
         </div>
 
