@@ -11,17 +11,17 @@
 ## 📑 目次
 
 - [概要](#概要)
-- [各種画面イメージ](#TOPイメージ)
-  - [TOP](#TOPイメージ)
-  - [レシピ](#レシピイメージ)
-  - [カート](#カート～お買い物完了イメージ)
-  - [メール](#メールイメージ)
-  - [管理者ページ](#管理者ページイメージ)
+- [各種画面イメージ]
+  - [TOP](#top)
+  - [レシピ](#recipe)
+  - [カート](#cart)
+  - [メール](#mail)
+  - [管理者ページ](#admin)
 
 
 <br><br><br>
 
-## 📖 概要
+## <a name="概要"></a>📖 概要
 
 このアプリは、レシピの閲覧から材料の購入までをシームレスに行える「レシピ共有型ECサイト」です。  
 毎日の料理で感じる面倒や不安を、ワンストップで解消することを目的に開発しました。
@@ -47,19 +47,19 @@
 <br><br><br>
 
 
-## 📌 TOPイメージ
+##  <a name="top"></a>📌 TOPイメージ
 
 <img src="https://github.com/user-attachments/assets/1bc6b37e-b1d8-48b7-af1f-e6fc7ca9eca5" alt="top">
 <br>
 <br>
 
-## 🥘 レシピイメージ
+## <a name="recipe"></a>🥘 レシピイメージ
 <img src="https://github.com/user-attachments/assets/6206e7fe-9e3c-432c-9406-490360707e86" alt="recipe">
 作りたいレシピを一覧から選びます。迷ったらカテゴリ検索や人気順(有料会員のみ)も可能。
 <br>
 <br>
 
-## 🛒 カート～お買い物完了イメージ
+## <a name="cart"></a>🛒 カート～お買い物完了イメージ
 <img src="https://github.com/user-attachments/assets/024b3789-324b-4703-aca5-08c7abf0b07c" alt="recipe">
 <br>
 <img src="https://github.com/user-attachments/assets/e107c024-8b76-4896-95b2-9e16e16b6434" alt="recipe">
@@ -68,12 +68,12 @@
 <br>
 <br>
 
-## 📩 メールイメージ
+## <a name="mail"></a>📩 メールイメージ
 <img src="https://github.com/user-attachments/assets/53f782b4-d942-478a-b56a-49ef054c5760" alt="recipe">
 <br>
 <br>
 
-## 📩 管理者ページイメージ
+## <a name="admin"></a>📩 管理者ページイメージ
 <img src="https://github.com/user-attachments/assets/c971e22c-937e-4880-9262-6bfac6cd34c3" alt="recipe">
 
 
