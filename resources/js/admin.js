@@ -1,5 +1,3 @@
-import { showAlert, toggleLoading } from './common';
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Admin dashboard scripts loaded.');
 
