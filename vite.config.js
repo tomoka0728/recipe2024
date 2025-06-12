@@ -33,6 +33,7 @@ export default defineConfig({
                 'resources/js/ingredients.js',
                 'resources/js/membership.js',
                 'resources/js/pointToggle.js',
+                'resources/js/recipe_form.js',
                 'resources/js/recipetop.js',
                 'resources/js/registerValidation.js',
                 'resources/js/sales-chart.js',
