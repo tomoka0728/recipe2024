@@ -11,6 +11,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
             }]
         },
-        options: {}
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 500,
+                        callback: function(value) {
+                            return '¥' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
     });
 });

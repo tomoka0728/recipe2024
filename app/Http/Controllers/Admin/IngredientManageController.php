@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ingredient;
 use App\Models\ICategory;
+use App\Models\AdminLog;
+use App\Enums\AdminLogAction;
+use App\Enums\AdminLogTargetType;
 
 class IngredientManageController extends Controller
 {
@@ -80,8 +83,18 @@ class IngredientManageController extends Controller
     public function destroy($uuid)
 {
     $ingredient = Ingredient::where('uuid', $uuid)->firstOrFail();
+    $name = $ingredient->name;
+
     $ingredient->categories()->detach();
     $ingredient->delete();
+
+    AdminLog::record(
+        auth('admin')->user()->uuid,
+        AdminLogAction::DELETE,
+        AdminLogTargetType::INGREDIENT,
+        $uuid,
+        $name
+    );
 
     return redirect()->route('admin.ingredients.index')->with('success', '商品を削除しました');
 }

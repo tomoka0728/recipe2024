@@ -47,7 +47,7 @@ class RecipeManageController extends Controller
         }
 
 
-        $recipes = $query->paginate(10);
+        $recipes = $query->paginate(15);
         $categories = RCategory::orderBy('category_id')->get();
 
         return view('admin.recipes.index', compact('recipes', 'categories'));

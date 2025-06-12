@@ -6,7 +6,7 @@
     <!-- 管理者ログ -->
     <section class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">管理者ログ</h2>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto max-h-32">
             <table class="w-full text-sm text-left">
                 <thead class="bg-gray-100 text-gray-700">
                     <tr>
@@ -20,7 +20,7 @@
                     @forelse ($logs as $log)
                         <tr class="border-t">
                             <td class="px-4 py-2">{{ $log->created_at->format('Y/m/d H:i') }}</td>
-                            <td class="px-4 py-2">{{ $log->admin->admin_name ?? '不明' }}</td>
+                            <td class="px-4 py-2">{{ $log->admin->admin_id ?? '不明' }}</td>
                             <td class="px-4 py-2">
                                 @if ($log->action === 'create')
                                     <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">登録</span>

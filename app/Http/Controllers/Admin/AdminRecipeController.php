@@ -19,6 +19,10 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\AdminLog;
+use App\Enums\AdminLogAction;
+use App\Enums\AdminLogTargetType;
+use App\Http\Requests\RecipeRequest;
 
 class AdminRecipeController extends Controller
 {
@@ -29,25 +33,10 @@ class AdminRecipeController extends Controller
         return view('admin.recipes.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(RecipeRequest $request)
     {
-        // バリデーション
-        $validated = $request->validate([
-            'title' => 'required|string|max:50',
-            'description' => 'nullable|string',
-            'ingredient_names.*' => 'required|string',
-            'quantities.*' => 'nullable|string',
-            'units.*' => 'nullable|string',
-            'step_descriptions.*' => 'required|string|max:255',
-            'step_images.*' => 'nullable|image',
-            'categories'  => 'required|array',
-            'categories.*' => 'exists:r_categories,uuid', // カテゴリのUUIDが存在するか確認
-            'cooking_time' => 'required|integer|min:1',
-            'servings' => 'required|integer|min:1',
-            'image' => 'required|image|max:2048', // 2MBまでの画像
-        ]);
+        $validated = $request->validated();
 
-        // トランザクション開始
         DB::beginTransaction();
 
         try {
@@ -132,6 +121,14 @@ class AdminRecipeController extends Controller
 
             DB::table('recipe_categories')->insert($categoryData);
 
+            AdminLog::record(
+                auth('admin')->user()->uuid,
+                AdminLogAction::CREATE,
+                AdminLogTargetType::RECIPE,
+                $recipe->uuid,
+                $recipe->title
+            );
+
             DB::commit();
             return redirect()->route('admin.recipes.index')->with('success', 'レシピを登録しました。');
 
@@ -163,7 +160,7 @@ class AdminRecipeController extends Controller
     }
 
 
-    public function update(Request $request, string $uuid)
+    public function update(RecipeRequest $request, string $uuid)
     {
         \Log::info("Update method called for recipe UUID: {$uuid}");
         $ingredients = Ingredient::all();
@@ -188,20 +185,7 @@ class AdminRecipeController extends Controller
             }
         }
 
-        // バリデーション
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:r_categories,uuid',
-            'servings' => 'required|integer|min:1',
-            'cooking_time' => 'required|integer|min:1',
-            'ingredient_uuids' => 'required|array',  // 材料のUUIDは配列として必須
-            'ingredient_uuids.*' => 'exists:ingredients,uuid', // UUIDがingredientsテーブルに存在するか確認
-            'step_descriptions' => 'required|array',  // 手順の説明を配列としてバリデーション
-            'step_descriptions.*' => 'required|string',
-            'step_images.*' => 'nullable|image', // 画像があれば画像ファイル
-        ]);
+        $validated = $request->validated();
 
         \Log::info('Validated data:', $validated);
 
@@ -317,6 +301,14 @@ class AdminRecipeController extends Controller
 
             DB::commit();
 
+            AdminLog::record(
+                auth('admin')->user()->uuid,
+                AdminLogAction::EDIT,
+                AdminLogTargetType::RECIPE,
+                $recipe->uuid,
+                $recipe->title
+            );
+
             return redirect()->route('admin.recipes.edit',  ['uuid' => $recipe->uuid])
                 ->with('success', 'レシピを更新しました。');
 
@@ -332,7 +324,17 @@ class AdminRecipeController extends Controller
     public function destroy($uuid)
     {
         $recipe = Recipe::where('uuid', $uuid)->firstOrFail();
+        $title = $recipe->title;
+
         $recipe->delete();
+
+        AdminLog::record(
+        auth('admin')->user()->uuid,
+        AdminLogAction::DELETE,
+        AdminLogTargetType::RECIPE,
+        $uuid,
+        $title
+    );
         return redirect()->route('admin.recipes.index')->with('success', 'レシピを削除しました');
     }
 }

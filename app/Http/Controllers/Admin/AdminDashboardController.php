@@ -17,16 +17,25 @@ class AdminDashboardController extends Controller
     {
         $logs = AdminLog::with('admin')->latest()->limit(20)->get();
 
-        $dailySales = \App\Models\DailySale::selectRaw('date, SUM(total_sales) as total_sales')
+        // 昨日までの7日分をグラフに表示
+        $startDate = Carbon::now()->subDays(7)->startOfDay();
+        $endDate = Carbon::now()->subDay()->toDateString();
+
+        $dailySales = \App\Models\DailySale::whereBetween('date', [$startDate, $endDate])
+            ->selectRaw('date, SUM(total_sales) as total_sales')
             ->groupBy('date')
             ->orderBy('date', 'asc')
-            ->get();
+            ->get()
+            ->keyBy('date');
 
         $labels = [];
         $data = [];
-        foreach ($dailySales as $sale) {
-            $labels[] = Carbon::parse($sale->date)->format('Y/m/d');
-            $data[] = $sale->total_sales;
+
+        // 日付を補完：売上が0の日も表示されるようにする
+        for ($i = 7; $i >= 1; $i--) {
+            $date = Carbon::now()->subDays($i)->toDateString();
+            $labels[] = Carbon::parse($date)->format('Y/m/d');
+            $data[] = isset($dailySales[$date]) ? $dailySales[$date]->total_sales : 0;
         }
 
         return view('admin.dashboard', compact('logs', 'labels', 'data'));
