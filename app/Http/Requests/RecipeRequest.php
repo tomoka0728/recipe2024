@@ -38,4 +38,16 @@ class RecipeRequest extends FormRequest
                 : 'nullable|image|max:2048',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'categories.required' => 'カテゴリは必ず指定してください。',
+            'cooking_time.required' => '調理時間は必ず指定してください。',
+            'servings.required' => '人数は必ず指定してください。',
+            'image.required' => '画像は必ず指定してください。',
+            'ingredient_names.0.required' => '1つ目の材料名は必ず指定してください。',
+            'step_descriptions.0.required' => '1つ目の手順説明は必ず指定してください。',
+        ];
+    }
 }

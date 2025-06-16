@@ -58,4 +58,19 @@ class Ingredient extends Model
             'i_category_uuid' // 中間テーブルの categories の外部キー
         );
     }
+
+    public function sale()
+    {
+        return $this->hasOne(Sale::class, 'ingredient_uuid', 'uuid')
+            ->where('start_at', '<=', now())
+            ->where('end_at', '>=', now());
+    }
+
+    public function getSalePriceAttribute()
+    {
+        if ($this->sale) {
+            return floor($this->price * (1 - $this->sale->discount_percent / 100));
+        }
+        return $this->price;
+    }
 }

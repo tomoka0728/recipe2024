@@ -1,76 +1,104 @@
 @extends('layouts.admin')
 @section('content')
 
-<h2 class="text-2xl font-bold mb-4">材料編集</h2>
 
-@if (session('success'))
-    <div class="p-4 mb-4 bg-green-100 text-green-800 rounded">
-        {{ session('success') }}
-    </div>
-@endif
+<div class="mx-auto max-w-4xl bg-white p-8 rounded shadow">
+    <h2 class="text-2xl font-bold mb-6">材料編集</h2>
 
-<form action="{{ route('admin.ingredients.update', $ingredient->uuid) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-    @csrf
-    @method('PUT')
+    <x-validation-errors />
 
-    <div>
-        <label>材料名</label>
-        <input type="text" name="name" value="{{ old('name', $ingredient->name) }}" class="w-full border p-2">
-    </div>
+    <form action="{{ route('admin.ingredients.update', $ingredient->uuid) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-    <div>
-        <label>季節（該当月を選択）</label><br>
-        @php
-            $selectedMonths = json_decode($ingredient->seasonality, true) ?? [];
-        @endphp
-        @for ($i = 1; $i <= 12; $i++)
-            <label class="mr-2">
-                <input type="checkbox" name="seasonality[]" value="{{ $i }}"
-                    {{ in_array($i, $selectedMonths) ? 'checked' : '' }}> {{ $i }}月
-            </label>
-        @endfor
-    </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {{-- 左カラム：材料情報 --}}
+            <div class="space-y-4">
+                <div>
+                    <label>材料名</label>
+                    <input type="text" name="name" value="{{ old('name', $ingredient->name) }}" class="w-full border p-2">
+                </div>
 
-    <div>
-        <label>価格</label>
-        <input type="number" name="price" step="0.01" value="{{ old('price', $ingredient->price) }}" class="w-full border p-2">
-    </div>
+                <div>
+                    <label>季節</label>
+                    @php
+                        $selectedMonths = json_decode($ingredient->seasonality, true) ?? [];
+                    @endphp
+                    <div class="flex flex-wrap gap-x-2 mt-2">
+                        @for ($i = 1; $i <= 12; $i++)
+                            <label class="flex items-center mr-2">
+                                <input type="checkbox" name="seasonality[]" value="{{ $i }}"
+                                    {{ in_array($i, $selectedMonths) ? 'checked' : '' }} class="mr-1">
+                                {{ $i }}月
+                            </label>
+                        @endfor
+                    </div>
+                </div>
 
-    <div>
-        <label>単位</label>
-        <input type="text" name="unit" value="{{ old('unit', $ingredient->unit) }}" class="w-full border p-2">
-    </div>
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                        <label>価格</label>
+                        <input type="number" name="price" step="0.01" value="{{ old('price', $ingredient->price) }}" class="w-full border p-2">
+                    </div>
+                    <div class="flex-1">
+                        <label>単位</label>
+                        <input type="text" name="unit" value="{{ old('unit', $ingredient->unit) }}" class="w-full border p-2">
+                    </div>
+                </div>
 
-    <div>
-        <label>カテゴリー</label>
-        <select name="i_category_uuid" class="w-full border p-2">
-            <option value="">選択してください</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->uuid }}"
-                    {{ (old('i_category_uuid', $ingredientCategory->i_category_uuid ?? '') == $category->uuid) ? 'selected' : '' }}>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+                <div>
+                    <label>カテゴリー</label>
+                    <select name="i_category_uuid" class="w-full border p-2">
+                        <option value="">選択してください</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->uuid }}"
+                                {{ (old('i_category_uuid', $ingredientCategory->i_category_uuid ?? '') == $category->uuid) ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-    <div>
-        <label>画像（変更が必要な場合のみ選択）</label><br>
-        @if ($ingredient->image_path)
-            <img src="{{ Storage::disk('s3')->url($ingredient->image_path) }}" alt="現在の画像" class="w-32 mb-2">
-        @endif
-        <input type="file" name="image" class="w-full border p-2">
-    </div>
-    @if ($errors->any())
-    <div class="p-4 mb-4 bg-red-100 text-red-800 rounded">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">更新</button>
-</form>
+                <div>
+                    <label>画像（変更が必要な場合のみ選択）</label><br>
+                    @if ($ingredient->image_path)
+                        <img src="{{ Storage::disk('s3')->url($ingredient->image_path) }}" alt="現在の画像" class="w-32 mb-2">
+                    @endif
+                    <input type="file" name="image" class="w-full border p-2">
+                </div>
+            </div>
+
+            <div class="space-y-4 bg-gray-50 rounded p-4 border">
+                <h3 class="text-lg font-semibold mb-2">セール情報</h3>
+                <div>
+                    <label>セール割引率（%）</label>
+                    <input type="number" name="discount_percent" min="0" max="100"
+                        value="{{ old('discount_percent', $ingredient->sale->discount_percent ?? '') }}"
+                        class="w-full border p-2">
+                </div>
+                <div>
+                    <label>セール開始日時</label>
+                    <input type="datetime-local" name="start_at"
+                        value="{{ old('start_at', isset($ingredient->sale) ? \Carbon\Carbon::parse($ingredient->sale->start_at)->format('Y-m-d\TH:i') : '') }}"
+                        class="w-full border p-2">
+                </div>
+                <div>
+                    <label>セール終了日時</label>
+                    <input type="datetime-local" name="end_at"
+                        value="{{ old('end_at', isset($ingredient->sale) ? \Carbon\Carbon::parse($ingredient->sale->end_at)->format('Y-m-d\TH:i') : '') }}"
+                        class="w-full border p-2">
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-4 mt-8">
+            <a href="{{ route('admin.ingredients.index') }}"
+               class="bg-gray-300 text-gray-700 px-4 py-2 rounded w-full text-center hover:bg-gray-400 transition">
+                キャンセル
+            </a>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded w-full">更新</button>
+        </div>
+    </form>
+</div>
 
 @endsection

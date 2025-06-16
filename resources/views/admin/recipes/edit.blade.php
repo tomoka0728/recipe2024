@@ -14,29 +14,20 @@
         @csrf
         @method('PUT')
 
-        @if ($errors->any())
-            <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                <ul class="list-disc pl-5 space-y-1 text-sm">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <x-validation-errors />
 
         {{-- タイトル --}}
         <div class="mb-6">
             <label for="title" class="px-4 py-2 block text-sm font-medium text-gray-700 bg-red-100">タイトル</label>
             <input type="text" name="title" id="title" value="{{ old('title', $recipe->title) }}"
-                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm" required>
+                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm" >
         </div>
 
         {{-- 説明 --}}
         <div class="mb-6">
             <label for="description" class="px-4 py-2 block text-sm font-medium text-gray-700 bg-red-100">説明</label>
             <textarea name="description" id="description" rows="10"
-                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
-                required>{{ old('description', $recipe->description) }}</textarea>
+                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm">{{ old('description', $recipe->description) }}</textarea>
         </div>
 
         {{-- カテゴリ --}}
@@ -86,7 +77,7 @@
                     {{-- 材料名（オートコンプリート） --}}
                     <input type="text" name="ingredient_names[]" value="{{ $ingredient->name }}"
                     class="ingredient-name mr-2 flex-1 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
-                    placeholder="材料名" required>
+                    placeholder="材料名" >
                     <div class="relative">
                         <ul class="autocomplete-list z-10 bg-white border border-gray-300 rounded-md shadow-md max-h-50 overflow-y-auto hidden"></ul>
                     </div>
@@ -94,7 +85,7 @@
                     {{-- 分量 --}}
                     <input type="text" name="quantities[]" value="{{ $ingredient->pivot->quantity }}"
                         class="mr-2 w-32 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
-                        placeholder="分量" required>
+                        placeholder="分量" >
 
                     {{-- 単位 --}}
                     <input type="text" name="units[]" value="{{ $ingredient->pivot->unit }}"

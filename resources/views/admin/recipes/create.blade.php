@@ -13,35 +13,21 @@
     <form action="{{ route('admin.recipes.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        @if (session('error'))
-            <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                <p class="text-sm">{{ session('error') }}</p>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-                <ul class="list-disc pl-5 space-y-1 text-sm">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <x-validation-errors />
 
         {{-- タイトル --}}
         <div class="mb-6">
             <label for="title" class="px-4 py-2 block text-sm font-medium text-gray-700 bg-red-100">タイトル</label>
             <input type="text" name="title" id="title" value="{{ old('title') }}"
-                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm" required>
+                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm">
         </div>
 
         {{-- 説明 --}}
         <div class="mb-6">
             <label for="description" class="px-4 py-2 block text-sm font-medium text-gray-700 bg-red-100">説明</label>
             <textarea name="description" id="description" rows="10"
-                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
-                required>{{ old('description') }}</textarea>
+                class="mt-6 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm">
+                {{ old('description') }}</textarea>
         </div>
 
         {{-- カテゴリ --}}

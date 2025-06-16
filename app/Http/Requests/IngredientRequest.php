@@ -36,7 +36,8 @@ class IngredientRequest extends FormRequest
     public function messages()
     {
         return [
-            'i_category_uuid.required' => 'カテゴリーを選択してください。',
+            'unit.required' => '単位は必ず指定してください。',
+            'i_category_uuid.required' => 'カテゴリーは必ず選択してください。',
         ];
     }
 }
