@@ -274,7 +274,7 @@
                         </ul>
                         <div class="action-buttons">
                             <button type="submit" class="next-button">確認画面に進む</button>
-                            <button type="button" onClick="history.back();" class="back-button">戻る</button>
+                            <button type="button" onclick="location.href='/cart'" class="back-button">カートに戻る</button>
                         </div>
                     </section>
                 </aside>

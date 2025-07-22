@@ -24,8 +24,8 @@
                             <h3 id="title">購入履歴</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">配送状況の確認</a></p>
-                                    <li><p class="subject"><a href="#">過去の購入履歴</a></p>
+                                    <li><p class="subject"><span class="disabled-link">配送状況の確認</span></p>
+                                    <li><p class="subject"><span class="disabled-link">過去の購入履歴</span></p>
                                 </ul>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                             <h3 id="title">お気に入りレシピ</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">お気に入りレシピ閲覧・削除</a></p>
+                                    <li><p class="subject"><span class="disabled-link">お気に入りレシピ閲覧・削除</span></p>
                                 </ul>
                             </div>
                         </div>
@@ -47,10 +47,10 @@
                             <h3 id="title">登録情報</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">アカウント情報の変更</a></p>
-                                    <li><p class="subject"><a href="#">お届け先の追加・変更</a></p>
-                                    <li><p class="subject"><a href="#">SNS連携</a></p>
-                                    <li><p class="subject"><a href="{{ url('/del_acc_check') }}">退会手続き</a></p>
+                                    <li><p class="subject"><a href="{{ route('profile.edit') }}">アカウント情報の変更</a></p>
+                                    <li><p class="subject"><a href="{{ route('address.index') }}">お届け先の追加・変更</a></p>
+                                    <li><p class="subject"><span class="disabled-link">SNS連携</span></p>
+                                    <li><p class="subject"><a href="{{ route('profile.delete.confirm') }}">退会手続き</a></p>
                                 </ul>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                             <h3 id="title">お支払い方法</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">クレジットカード</a></p>
+                                    <li><p class="subject"><span class="disabled-link">クレジットカード</span></p>
                                 </ul>
                             </div>
                         </div>
@@ -72,9 +72,9 @@
                             <h3 id="title">お問い合わせ</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><a href="#">よくある質問</a></p>
+                                    <li><p class="subject"><span class="disabled-link">よくある質問</span></p>
                                     <li><p class="subject"><a href="{{ url('/form') }}">お問い合わせフォーム</a></p>
-                                    <li><p class="subject"><a href="{{ url('/form') }}">お問い合わせ履歴</a></p>
+                                    <li><p class="subject"><span class="disabled-link">お問い合わせ履歴</span></p>
                                 </ul>
                             </div>
                         </div>

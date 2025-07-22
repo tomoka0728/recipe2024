@@ -274,6 +274,13 @@ return [
         'updated_at' => '更新日',
         'username' => 'ユーザー名',
         'year' => '年',
+        'zipcode' => '郵便番号',
+        'prefectures' => '都道府県',
+        'city' => '市区町村',
+        'address' => '番地・建物名',
+        'room' => '部屋番号等',
+        'phone' => '電話番号',
+        'name' => 'お名前',
     ],
 
 ];

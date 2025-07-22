@@ -117,8 +117,12 @@ class PaymentController extends Controller
             $address = $defaultAddress;
         }
 
-        //支払い方法を取得
-        $paymentMethod = session()->get('payment-method', 'クレジットカード');
+        //支払い方法を取得して日本語に変換
+        $paymentMethodRaw = session()->get('payment-method', 'credit');
+        $paymentMethod = match($paymentMethodRaw) {
+            'credit' => 'クレジットカード',
+            default => $paymentMethodRaw
+        };
 
         if (!$address) {
             \Log::warning('住所情報が取得できませんでした。');
@@ -289,7 +293,12 @@ class PaymentController extends Controller
             // 合計
             $total = max(0, $sum + $tax + $sendPrice - $usedPoints);
 
-            $paymentMethod = session()->get('payment-method', 'クレジットカード');
+            // 支払い方法を取得して日本語に変換
+            $paymentMethodRaw = session()->get('payment-method', 'credit');
+            $paymentMethod = match($paymentMethodRaw) {
+                'credit' => 'クレジットカード',
+                default => $paymentMethodRaw
+            };
 
             // 住所情報の取得
             $addressId = session()->get('selected_address_id');

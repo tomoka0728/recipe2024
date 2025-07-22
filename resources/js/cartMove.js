@@ -48,13 +48,15 @@ document.addEventListener("DOMContentLoaded", function () {
                             // 注文ボタンを非活性化
                             const checkoutBtn = document.getElementById('checkout-button');
                             if (checkoutBtn) {
-                                if (checkoutBtn.tagName === 'A') {
+                                if (checkoutBtn.tagName === 'BUTTON') {
+                                    checkoutBtn.disabled = true;
+                                    checkoutBtn.textContent = 'ご注文手続きに進む';
+                                    checkoutBtn.removeAttribute('onclick');
+                                } else if (checkoutBtn.tagName === 'A') {
                                     checkoutBtn.classList.add('disabled');
-                                    checkoutBtn.setAttribute('aria-disabled', 'true');
                                     checkoutBtn.style.pointerEvents = 'none';
                                     checkoutBtn.style.opacity = '0.5';
-                                } else {
-                                    checkoutBtn.disabled = true;
+                                    checkoutBtn.removeAttribute('href');
                                 }
                             }
                         }
@@ -243,6 +245,14 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         }
                         updateSummary(data);
+
+                        // ボタンのテキストと状態も更新
+                        const checkoutBtn = document.getElementById('checkout-button');
+                        if (checkoutBtn && data.sum > 0) {
+                            if (checkoutBtn.tagName === 'BUTTON') {
+                                checkoutBtn.textContent = 'ご注文手続きに進む';
+                            }
+                        }
                     } else {
                         alert(data.message || "移動に失敗しました");
                     }
@@ -287,14 +297,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     checkoutBtn.setAttribute('aria-disabled', 'true');
                     checkoutBtn.style.pointerEvents = 'none';
                     checkoutBtn.style.opacity = '0.5';
+                    checkoutBtn.removeAttribute('href');
                 } else {
                     checkoutBtn.classList.remove('disabled');
                     checkoutBtn.removeAttribute('aria-disabled');
                     checkoutBtn.style.pointerEvents = '';
                     checkoutBtn.style.opacity = '';
+                    if (!checkoutBtn.getAttribute('href')) {
+                        checkoutBtn.setAttribute('href', '/payment');
+                    }
                 }
             } else {
-                checkoutBtn.disabled = (sum === 0);
+                if (sum === 0) {
+                    checkoutBtn.disabled = true;
+                    checkoutBtn.removeAttribute('onclick');
+                } else {
+                    checkoutBtn.disabled = false;
+                    if (!checkoutBtn.getAttribute('onclick')) {
+                        checkoutBtn.setAttribute('onclick', "location.href='/payment'");
+                    }
+                }
             }
         }
     }

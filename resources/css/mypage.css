@@ -232,3 +232,15 @@ main img {
   margin-right: auto;
   margin-bottom: 30px;
 }
+
+/* 無効化されたリンクのスタイル */
+.disabled-link {
+  color: #999 !important;
+  cursor: not-allowed;
+  text-decoration: none;
+  pointer-events: none;
+}
+
+.disabled-link:hover {
+  color: #bbb !important;
+}

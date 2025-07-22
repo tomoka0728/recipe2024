@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Address;
 
@@ -75,7 +76,13 @@ class AddressController extends Controller
             session()->forget('selected_address_id');
         }
 
-        session()->put('payment-method', $request->input('method'));
+        // 支払い方法を日本語に変換してセッションに保存
+        $paymentMethod = $request->input('method');
+        $paymentMethodJapanese = match($paymentMethod) {
+            'credit' => 'クレジットカード',
+            default => $paymentMethod
+        };
+        session()->put('payment-method', $paymentMethodJapanese);
         session()->put('pointUsage', $request->input('point'));
         session()->put('usedPoints', $request->input('use_point', 0));
 
@@ -83,5 +90,101 @@ class AddressController extends Controller
         \Log::info('セッションデータ・AddressController:', session()->all());
 
         return redirect()->route('payment.confirm');
+    }
+
+    /**
+     * 住所一覧を表示
+     */
+    public function index()
+    {
+        $addresses = Address::where('user_uuid', Auth::user()->uuid)->get();
+        return view('address.index', compact('addresses'));
+    }
+
+    /**
+     * 新規住所作成フォームを表示
+     */
+    public function create()
+    {
+        return view('address.create');
+    }
+
+    /**
+     * 新規住所を保存
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'zipcode' => 'required|digits:7',
+            'prefectures' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'room' => 'nullable|string|max:255',
+            'phone' => 'required|digits_between:10,11',
+        ]);
+
+        Address::create([
+            'uuid' => Str::uuid(),
+            'user_uuid' => Auth::user()->uuid,
+            'name' => $validated['name'],
+            'zipcode' => $validated['zipcode'],
+            'prefectures' => $validated['prefectures'],
+            'city' => $validated['city'],
+            'address' => $validated['address'],
+            'room' => $validated['room'],
+            'phone' => $validated['phone'],
+        ]);
+
+        return redirect()->route('address.index')->with('status', 'お届け先が追加されました。');
+    }
+
+    /**
+     * 住所編集フォームを表示
+     */
+    public function edit($uuid)
+    {
+        $address = Address::where('uuid', $uuid)
+                         ->where('user_uuid', Auth::user()->uuid)
+                         ->firstOrFail();
+        return view('address.edit', compact('address'));
+    }
+
+    /**
+     * 住所を更新
+     */
+    public function update(Request $request, $uuid)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'zipcode' => 'required|digits:7',
+            'prefectures' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'room' => 'nullable|string|max:255',
+            'phone' => 'required|digits_between:10,11',
+        ]);
+
+        $address = Address::where('uuid', $uuid)
+                         ->where('user_uuid', Auth::user()->uuid)
+                         ->firstOrFail();
+
+        $address->update($validated);
+
+        return redirect()->route('address.index')->with('status', 'お届け先が更新されました。');
+    }
+
+    /**
+     * 住所を削除
+     */
+    public function destroy($uuid)
+    {
+        $address = Address::where('uuid', $uuid)
+                         ->where('user_uuid', Auth::user()->uuid)
+                         ->firstOrFail();
+
+        $address->delete();
+
+        return redirect()->route('address.index')->with('status', 'お届け先が削除されました。');
     }
 }

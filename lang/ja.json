@@ -138,5 +138,15 @@
     "results": "件",
     "to": "から",
     "Showing": "表示中：",
-    "Whoops! Something went wrong." : "問題が発生しました。"
+    "Whoops! Something went wrong." : "問題が発生しました。",
+    "zipcode": "郵便番号",
+    "prefectures": "都道府県",
+    "city": "市区町村",
+    "address": "番地・建物名",
+    "room": "部屋番号等",
+    "phone": "電話番号",
+    "name": "お名前",
+    "credit": "クレジットカード",
+    "Cash on delivery": "代金引換",
+    "Bank transfer": "銀行振込"
 }

@@ -15,17 +15,32 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'birth' => ['nullable', 'date', 'before:本日'],
-            'email' => [
+        $rules = [];
+
+        // 送信されたフィールドのみバリデーションルールを適用
+        if ($this->has('name')) {
+            $rules['name'] = ['required', 'string', 'max:255'];
+        }
+
+        if ($this->has('nickname')) {
+            $rules['nickname'] = ['required', 'string', 'max:255'];
+        }
+
+        if ($this->has('birth')) {
+            $rules['birth'] = ['nullable', 'date', 'before:today'];
+        }
+
+        if ($this->has('email')) {
+            $rules['email'] = [
                 'required',
                 'string',
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
-            ],
-        ];
+                Rule::unique(User::class)->ignore($this->user()->uuid, 'uuid'),
+            ];
+        }
+
+        return $rules;
     }
 }

@@ -76,8 +76,23 @@ Route::middleware(['web'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/edit/basic', [ProfileController::class, 'editBasic'])->name('profile.edit.basic');
+    Route::get('/profile/edit/name', [ProfileController::class, 'editName'])->name('profile.edit.name');
+    Route::get('/profile/edit/email', [ProfileController::class, 'editEmail'])->name('profile.edit.email');
+    Route::get('/profile/edit/birthday', [ProfileController::class, 'editBirthday'])->name('profile.edit.birthday');
+    Route::get('/profile/edit/nickname', [ProfileController::class, 'editNickname'])->name('profile.edit.nickname');
+    Route::get('/profile/edit/password', [ProfileController::class, 'editPassword'])->name('profile.edit.password');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/del_acc_check', [ProfileController::class, 'deleteConfirm'])->name('profile.delete.confirm');
+
+    // 住所管理
+    Route::get('/address', [AddressController::class, 'index'])->name('address.index');
+    Route::get('/address/create', [AddressController::class, 'create'])->name('address.create');
+    Route::post('/address', [AddressController::class, 'store'])->name('address.store');
+    Route::get('/address/{uuid}/edit', [AddressController::class, 'edit'])->name('address.edit');
+    Route::patch('/address/{uuid}', [AddressController::class, 'update'])->name('address.update');
+    Route::delete('/address/{uuid}', [AddressController::class, 'destroy'])->name('address.destroy');
 });
 
 require __DIR__.'/auth.php';
