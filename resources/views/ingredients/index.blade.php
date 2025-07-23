@@ -22,7 +22,7 @@
                     <div class="pagination-summary text-sm text-yellow-900">
                         <p>{{ $ingredients->firstItem() }} - {{ $ingredients->lastItem() }} 件表示（{{ $ingredients->currentPage() }}ページ目）</p>
                     </div>
-                
+
                     {{-- 並び替えと表示件数 --}}
                     <div class="pagination-controls">
                         <form method="get" action="{{ route('ingredients.index') }}" class="flex items-center gap-4">
@@ -35,7 +35,7 @@
                                     <option value="bestselling" {{ request('sort') == 'bestselling' ? 'selected' : '' }}>売れ筋順</option>
                                 </select>
                             </div>
-                
+
                             {{-- 表示件数 --}}
                             <div class="flex items-center text-sm text-yellow-800">
                                 <label for="per_page" class="mr-2 font-semibold">表示件数:</label>
@@ -49,7 +49,7 @@
                         </form>
                     </div>
                 </div>
-    
+
                 <div class="all-products-grid">
                     @foreach($ingredients as $ingredient)
                     <div class="all-products-item">
@@ -63,7 +63,7 @@
                         </div>
                         <div class="all-products-info">
                             <h3 class="price">{{ number_format($ingredient->price) }}円</h3>
-                            <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->price * 1.08) }}円</span>)</p>
+                            <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->price + floor($ingredient->price * 0.1)) }}円</span>)</p>
                         </div>
                         <div class="all-products-btn">
                         <div class="cart-push2" style="display: none;">
@@ -78,7 +78,7 @@
                 <div class="pagination">
                     {{ $ingredients->appends(request()->input())->links() }}
                 </div>
-                
+
             </article>
         </main>
 

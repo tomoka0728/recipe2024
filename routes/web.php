@@ -25,7 +25,6 @@ Route::get('/column', [ColumnController::class, 'index'])->name('column');
 Route::get('/membership/silver', [MembershipPlanController::class, 'silver'])->name('membership.silver');
 Route::get('/membership/gold', [MembershipPlanController::class, 'gold'])->name('membership.gold');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
-Route::get('/mypage', [MypageController::class, 'show'])->name('mypage');
 
 Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
 Route::get('/recipes/category/{category}', [RecipeController::class, 'category'])->name('recipes.category');
@@ -42,9 +41,14 @@ Route::get('/membership/promotion', function () {
     return view('membership.promotion'); // プレミアム案内ページ
 })->name('membership.promotion');
 Route::middleware(['auth'])->group(function () {
+    Route::get('/mypage', [MypageController::class, 'show'])->name('mypage');
     Route::get('/membership/upgrade', [MembershipController::class, 'edit'])->name('membership.edit');
     Route::post('/membership/upgrade', [MembershipController::class, 'update'])->name('membership.update');
     Route::get('/points', [PointHistoryController::class, 'index'])->name('points.history');
+
+    // 購入履歴
+    Route::get('/purchase-history', [App\Http\Controllers\PurchaseHistoryController::class, 'index'])->name('purchase.history.index');
+    Route::get('/purchase-history/{uuid}', [App\Http\Controllers\PurchaseHistoryController::class, 'show'])->name('purchase.history.show');
 });
 
 //カート

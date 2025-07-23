@@ -10,10 +10,10 @@
                 </div>
                 <div class="top">
                     <div class="a">
-                        <div class="myname">{{ Auth::user()->nickname }}様</div>
+                        <div class="myname">{{ Auth::check() ? Auth::user()->nickname : 'ゲスト' }}様</div>
                     </div>
                     <div class="point">
-                        <div class="pt"><h1><p class="num">{{ Auth::user()->points }}</p> pt</h1></div>
+                        <div class="pt"><h1><p class="num">{{ Auth::check() ? Auth::user()->points : 0 }}</p> pt</h1></div>
                         <div class="pt_s"><a href="{{ route('points.history') }}">ポイント明細</a></div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                             <div class="menu-s">
                                 <ul>
                                     <li><p class="subject"><span class="disabled-link">配送状況の確認</span></p>
-                                    <li><p class="subject"><span class="disabled-link">過去の購入履歴</span></p>
+                                    <li><p class="subject"><a href="{{ route('purchase.history.index') }}">過去の購入履歴</a></p>
                                 </ul>
                             </div>
                         </div>

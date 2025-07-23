@@ -17,21 +17,21 @@
                     <!-- 名前 -->
                     <div class="mb-4">
                         <x-input-label for="name" :value="__('お名前')" />
-                        <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                        <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autofocus autocomplete="name" />
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
                     <!-- 郵便番号 -->
                     <div class="mb-4">
                         <x-input-label for="zipcode" :value="__('郵便番号（ハイフンなし7桁）')" />
-                        <x-text-input id="zipcode" class="block mt-1 w-full" type="text" name="zipcode" :value="old('zipcode')" required placeholder="1234567" maxlength="7" />
+                        <x-text-input id="zipcode" class="block mt-1 w-full" type="text" name="zipcode" :value="old('zipcode')" placeholder="1234567" maxlength="7" />
                         <x-input-error :messages="$errors->get('zipcode')" class="mt-2" />
                     </div>
 
                     <!-- 都道府県 -->
                     <div class="mb-4">
                         <x-input-label for="prefectures" :value="__('都道府県')" />
-                        <select id="prefectures" name="prefectures" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                        <select id="prefectures" name="prefectures" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" >
                             <option value="">選択してください</option>
                             <option value="北海道" {{ old('prefectures') == '北海道' ? 'selected' : '' }}>北海道</option>
                             <option value="青森県" {{ old('prefectures') == '青森県' ? 'selected' : '' }}>青森県</option>
@@ -87,14 +87,14 @@
                     <!-- 市区町村 -->
                     <div class="mb-4">
                         <x-input-label for="city" :value="__('市区町村')" />
-                        <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city')" required />
+                        <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city')" />
                         <x-input-error :messages="$errors->get('city')" class="mt-2" />
                     </div>
 
                     <!-- 番地・建物名 -->
                     <div class="mb-4">
                         <x-input-label for="address" :value="__('番地・建物名')" />
-                        <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required />
+                        <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" />
                         <x-input-error :messages="$errors->get('address')" class="mt-2" />
                     </div>
 
@@ -108,7 +108,7 @@
                     <!-- 電話番号 -->
                     <div class="mb-6">
                         <x-input-label for="phone" :value="__('電話番号（ハイフンなし）')" />
-                        <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required placeholder="09012345678" />
+                        <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" placeholder="09012345678" />
                         <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                     </div>
 

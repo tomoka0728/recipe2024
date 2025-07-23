@@ -26,7 +26,7 @@
                                             <h1 class="price">{{ number_format($ingredient->price) }}円</h1>
                                             </p>
                                             <p class="total-price">(税込み <span
-                                                    class="total-price-display">{{ number_format($ingredient->price * 1.08) }}円</span>)
+                                                    class="total-price-display">{{ number_format($ingredient->price + floor($ingredient->price * 0.1)) }}円</span>)
                                             </p>
                                         </div>
                                         <div class="kart">

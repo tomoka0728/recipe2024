@@ -100,6 +100,18 @@ Breadcrumbs::for('address.edit', function ($trail, $address) {
     $trail->push('お届け先を編集', route('address.edit', $address->uuid));
 });
 
+// 購入履歴一覧
+Breadcrumbs::for('purchase.history.index', function ($trail) {
+    $trail->parent('mypage', 'マイページ');
+    $trail->push('購入履歴', route('purchase.history.index'));
+});
+
+// 購入履歴詳細
+Breadcrumbs::for('purchase.history.show', function ($trail, $purchaseHistory) {
+    $trail->parent('purchase.history.index');
+    $trail->push('注文詳細', route('purchase.history.show', $purchaseHistory->uuid));
+});
+
 // // レシピ一覧のパンくずリスト
 // Breadcrumbs::for('recipes.index', function ($trail) {
 //     $trail->parent('home');

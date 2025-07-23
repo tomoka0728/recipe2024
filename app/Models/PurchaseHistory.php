@@ -19,6 +19,10 @@ class PurchaseHistory extends Model
 
     protected $keyType = 'string';
 
+    protected $casts = [
+        'purchased_at' => 'datetime',
+    ];
+
     public function details()
     {
         return $this->hasMany(PurchaseDetail::class, 'purchase_uuid', 'uuid');

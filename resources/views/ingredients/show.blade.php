@@ -18,7 +18,7 @@
                             @csrf
                         <div>
                             <label for="quantity">数量:</label>
-                            <select name="num" class="quantity-select" data-price="{{ $ingredient->price }}" data-tax-price="{{ $ingredient->price * 1.08 }}">
+                            <select name="num" class="quantity-select" data-price="{{ $ingredient->price }}" data-tax-price="{{ $ingredient->price + floor($ingredient->price * 0.1) }}">
                                 @for ($i = 1; $i <= 10; $i++)
                                     <option value="{{ $i }}" >{{ $i }}</option>
                                 @endfor
@@ -26,7 +26,7 @@
                         </div>
                         <div class="item_info">
                             <p><h1 class="price">{{ number_format($ingredient->price) }}円</h1></p>
-                            <p class="total-price">(税込み <span class="total-price-display">{{  number_format($ingredient->price * 1.08)  }}円</span>)</p>
+                            <p class="total-price">(税込み <span class="total-price-display">{{  number_format($ingredient->price + floor($ingredient->price * 0.1))  }}円</span>)</p>
                         </div>
                         <div class="kart mt-6">
                             <div class="cart-push" style="display: none;">
