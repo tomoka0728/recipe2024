@@ -67,6 +67,11 @@ export function addToCart() {
                 // 他のメッセージを非表示にする
                 $('.cart-push, .cart-push2').fadeOut();
 
+                // カートバッジを更新
+                if (response.cartCount !== undefined && window.updateCartBadge) {
+                    window.updateCartBadge(response.cartCount);
+                }
+
                 // メッセージを表示
                 cartPush.fadeIn("slow", function () {
                     $(this).delay(1500).fadeOut("slow");

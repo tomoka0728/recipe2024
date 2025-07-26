@@ -143,7 +143,7 @@
             </strong><br>
             <p>以下のご注文を承りました。</p>
             <div class="notice">
-                本メールはrecipeAppでご購入いただいたお客様宛の自動配信メールです。<br>
+                本メールはRecipeMartでご購入いただいたお客様宛の自動配信メールです。<br>
                 このアドレスへの返信はできません。
             </div>
         </div>
@@ -226,14 +226,14 @@
         </div>
 
         <div class="button-container">
-            <a href="{{ url('/') }}" class="button">recipeAppはこちら</a>
+            <a href="{{ url('/') }}" class="button">RecipeMartはこちら</a>
         </div>
 
         <div class="footer-line"></div>
 
         <div class="footer">
             <img src="{{ Storage::disk('s3')->url('logo.png') }}" alt="Logo" width="40px">
-            <div>© 2024 RecipeApp Co., Ltd.</div>
+            <div>© 2024 RecipeMart Co., Ltd.</div>
         </div>
     </div>
 </body>

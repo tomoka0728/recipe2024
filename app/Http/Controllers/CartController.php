@@ -17,6 +17,16 @@ use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
 {
+    // カート数を取得するAPI
+    public function getCartCount()
+    {
+        $carts = session()->get('carts', []);
+        return response()->json([
+            'success' => true,
+            'count' => count($carts)
+        ]);
+    }
+
     // カートの内容を表示
     public function show()
     {
@@ -29,7 +39,7 @@ class CartController extends Controller
 
         // 送料（例として仮に500円）
         $sendPrice = count($carts) === 0 ? 0 : 500;
-        session()->put('sum', $sum);        
+        session()->put('sum', $sum);
 
         $saveForLaterItems = [];
 
@@ -84,7 +94,12 @@ class CartController extends Controller
 
         Log::info('カートの中身:', session('carts'));
 
-        return response()->json(['carts'=> $carts]);
+        return response()->json([
+            'success' => true,
+            'message' => 'カートに追加しました',
+            'carts' => $carts,
+            'cartCount' => count($carts)
+        ]);
     }
 
 
@@ -114,7 +129,18 @@ class CartController extends Controller
             $sum += $item['price'] * $item['quantity'];
         }
 
-        return response()->json(['success' => true, 'sum' => $sum, 'sendPrice' => $sendPrice, 'total' => $sum + $sendPrice]);
+        // 送料を設定
+        $sendPrice = (count($carts) === 0) ? 0 : 500;
+        $tax = floor($sum * 0.1);
+
+        return response()->json([
+            'success' => true,
+            'sum' => $sum,
+            'sendPrice' => $sendPrice,
+            'tax' => $tax,
+            'total' => $sum + $sendPrice + $tax,
+            'cartCount' => count($carts)
+        ]);
     }
 
 
@@ -154,7 +180,14 @@ class CartController extends Controller
         session()->put('sum', $sum);
 
         // リダイレクトまたはJSONレスポンスを返す
-        return response()->json(['success' => true, 'sum' => $sum, 'tax' => $tax, 'sendPrice' => $sendPrice, 'total' => $sum + $sendPrice]);
+        return response()->json([
+            'success' => true,
+            'sum' => $sum,
+            'tax' => $tax,
+            'sendPrice' => $sendPrice,
+            'total' => $sum + $sendPrice,
+            'cartCount' => count($carts)
+        ]);
     }
 
     private function saveCartToDatabase($user)
@@ -267,6 +300,7 @@ class CartController extends Controller
                         'tax' => $tax,
                         'sendPrice' => $sendPrice,
                         'total' => $total,
+                        'cartCount' => count($carts),
                 ]);
             }
             return back()->with('message', '「後で買う」に保存しました');
@@ -345,7 +379,7 @@ class CartController extends Controller
     public function moveToCart($ingredientUuid)
     {
         $carts = session()->get('carts', []);
-        
+
         if (auth()->check()) {
             $user = auth()->user();
             $savedItem = SavedItem::where('user_uuid', $user->uuid)
@@ -401,6 +435,7 @@ class CartController extends Controller
                     'tax' => $tax,
                     'sendPrice' => $sendPrice,
                     'total' => $total,
+                    'cartCount' => count($carts),
                 ]);
             }
             return redirect()->route('cart.show')->with('message', 'カートに移動しました');
@@ -455,6 +490,7 @@ class CartController extends Controller
                     'tax' => $tax,
                     'sendPrice' => $sendPrice,
                     'total' => $total,
+                    'cartCount' => count($carts),
                 ]);
             }
             return redirect()->route('cart.show')->with('message', 'カートに移動しました');

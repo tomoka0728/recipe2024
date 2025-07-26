@@ -3,7 +3,7 @@
     {{-- タイトル --}}
     <a href="/" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
         <img src="{{ Storage::disk('s3')->url('logo.png') }}" alt="Logo" width="50px">
-        <span class="text-xl">RecipeApp</span>
+        <span class="text-xl">RecipeMart</span>
     </a>
     </div>
 </nav>

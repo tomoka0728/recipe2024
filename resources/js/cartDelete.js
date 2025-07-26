@@ -67,6 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("tax-price").textContent = data.tax.toLocaleString() + "円";
                     document.getElementById("shipping-price").textContent = data.sendPrice.toLocaleString() + "円";
                     document.getElementById("total-sum").textContent = data.total.toLocaleString() + "円";
+
+                    // カートバッジを更新
+                    if (data.cartCount !== undefined && window.updateCartBadge) {
+                        window.updateCartBadge(data.cartCount);
+                    }
                 } else {
                     alert("削除に失敗しました。");
                 }

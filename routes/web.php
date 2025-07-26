@@ -53,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
 //カート
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::get('/cart/count', [CartController::class, 'getCartCount'])->name('cart.count');
 Route::get('/payment', [PaymentController::class, 'show'])->name('payment.show');
 Route::get('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');
 Route::post('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');

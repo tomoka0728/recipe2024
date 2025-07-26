@@ -135,6 +135,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                     updateSummary(data);
+
+                    // カートバッジを更新
+                    if (data.cartCount !== undefined && window.updateCartBadge) {
+                        window.updateCartBadge(data.cartCount);
+                    }
                 })
                 .catch(error => {
                     console.error('fetch error:', error);
@@ -245,6 +250,11 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         }
                         updateSummary(data);
+
+                        // カートバッジを更新
+                        if (data.cartCount !== undefined && window.updateCartBadge) {
+                            window.updateCartBadge(data.cartCount);
+                        }
 
                         // ボタンのテキストと状態も更新
                         const checkoutBtn = document.getElementById('checkout-button');

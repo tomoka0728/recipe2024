@@ -115,7 +115,7 @@
                         {{ $errors->has('terms') ? 'border-red-500 bg-red-100' : '' }}">
 
                     <label for="link-checkbox" class="ms-2 text-sm text-gray-900 dark:text-gray-300">
-                        RecipeApp
+                        RecipeMart
                         <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">利用規約</a> 並びに
                         <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">個人情報保護方針</a>に同意します
                     </label>

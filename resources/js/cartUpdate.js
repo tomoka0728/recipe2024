@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!btn) return;
         btn.disabled = !(sum > 0);
     };
-    
+
     const quantityInputs = document.querySelectorAll(".quantity-input");
 
     quantityInputs.forEach(input => {
@@ -81,6 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("tax-price").textContent = data.tax.toLocaleString() + "円";
                 document.getElementById("total-sum").textContent = data.total.toLocaleString() + "円";
                 updateCheckoutButton(data.sum);
+
+                // カートバッジを更新
+                if (data.cartCount !== undefined && window.updateCartBadge) {
+                    window.updateCartBadge(data.cartCount);
+                }
             } else {
                 console.error('Failed to update cart');
             }

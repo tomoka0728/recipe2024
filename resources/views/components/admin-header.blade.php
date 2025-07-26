@@ -3,7 +3,7 @@
         {{-- タイトル（ロゴ＋アプリ名） --}}
         <a href="{{ route('admin.dashboard') }}"
             class="flex title-font font-medium items-center text-white hover:text-gray-300 mb-4 md:mb-0">
-            <span class="text-xl">Admin RecipeApp</span>
+            <span class="text-xl">Admin RecipeMart</span>
         </a>
 
         {{-- 管理者名とログアウト --}}

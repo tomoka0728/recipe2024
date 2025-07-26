@@ -100,7 +100,7 @@
                                         </div>
                                     @endforeach
                                     @if($history->details->count() > 3)
-                                        <div class="flex items-center justify-center text-gray-500 text-sm">
+                                        <div class="flex text-gray-500 text-sm">
                                             他{{ $history->details->count() - 3 }}点
                                         </div>
                                     @endif

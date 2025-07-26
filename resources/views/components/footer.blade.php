@@ -5,13 +5,13 @@
     {{-- タイトル --}}
         <a href="/" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
             <img src="{{ Storage::disk('s3')->url('logo.png') }}" alt="Logo" width="40px">
-            <span class="text-xl">RecipeApp</span>
+            <span class="text-xl">RecipeMart</span>
         </a>
       </a>
     </div>
     <div class="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 mb-5 md:text-left text-center">
       <div class="lg:w-1/3 md:w-1/2 w-full px-4">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">RecipeAppについて</h2>
+        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">RecipeMartについて</h2>
         <nav class="list-none mb-10">
           <li>
             <a class="text-gray-600 hover:text-gray-800">会社概要</a>
@@ -25,13 +25,13 @@
         </nav>
       </div>
       <div class="lg:w-1/3 md:w-1/2 w-full px-4">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">RecipeAppでのお支払い</h2>
+        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">RecipeMartでのお支払い</h2>
         <nav class="list-none mb-10">
           <li>
-            <a class="text-gray-600 hover:text-gray-800">RecipeAppポイント</a>
+            <a class="text-gray-600 hover:text-gray-800">RecipeMartポイント</a>
           </li>
           <li>
-            <a class="text-gray-600 hover:text-gray-800">RecipeAppギフトカード</a>
+            <a class="text-gray-600 hover:text-gray-800">RecipeMartギフトカード</a>
           </li>
           <li>
             <a class="text-gray-600 hover:text-gray-800">ポイントプログラム</a>
@@ -59,7 +59,7 @@
   </div>
   <div class="bg-original">
     <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col items-center sm:flex-row">
-      <p class="text-gray-500 text-sm text-center sm:text-left">© 2024 RecipeApp Co., Ltd.</p>
+      <p class="text-gray-500 text-sm text-center sm:text-left">© 2024 RecipeMart Co., Ltd.</p>
 
       <nav class="text-gray-500 text-sm text-center sm:mx-auto my-2">
         <ul class="inline-flex list-none items-center">

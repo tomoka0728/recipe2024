@@ -39,6 +39,7 @@ export default defineConfig({
                 'resources/js/sales-chart.js',
                 'resources/js/saveForLaterDelete.js',
                 'resources/js/addressValidation.js',
+                'resources/js/cart-badge.js',
             ],
             refresh: true,
         }),
