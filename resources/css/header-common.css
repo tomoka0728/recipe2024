@@ -1,0 +1,185 @@
+/* ヘッダー共通CSS - TOPページのヘッダーを基準に作成 */
+
+/* 最優先：他のCSSファイルの影響を完全に無効化 */
+/* すべてのページの専用CSSがヘッダーに影響しないよう強制リセット */
+html body header.text-gray-600.body-font {
+    margin: 0 !important;
+    padding: 0.5rem 0 !important; /* py-2 */
+    background-color: #ffffff !important;
+    width: 100% !important;
+    min-height: 70px !important;
+    height: auto !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+/* ヘッダー内のcontainer要素を強制リセット */
+html body header.text-gray-600 .container {
+    margin: 0 auto !important;
+    padding: 0 1rem !important; /* px-4 */
+    width: 100% !important;
+    max-width: none !important; /* ヘッダーは画面幅いっぱいに */
+}
+
+/* ヘッダー内のflexコンテナをリセット */
+html body header.text-gray-600 .container > div {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ヘッダー内のすべての子要素をリセット */
+html body header.text-gray-600 * {
+    box-sizing: border-box !important;
+}
+
+/* ヘッダー下部のナビゲーションセクションもリセット */
+html body section.bg-original {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ヘッダー下部のナビゲーションコンテンツもヘッダーと同様に画面幅いっぱい */
+html body section.bg-original > div {
+    max-width: none !important; /* ヘッダーと同様に制限なし */
+    margin: 0 auto !important;
+}
+
+/* 以下は後方互換性のため残す（上記の強制リセットが優先される） */
+/* ヘッダー本体のスタイル */
+header {
+    background-color: #ffffff;
+    width: 100%;
+    height: 70px;
+}
+
+/* ヘッダー内のナビゲーション */
+header nav {
+    float: right;
+    right: 10px;
+    top: 0px;
+    line-height: 50px;
+}
+
+/* ナビメニューのスタイル */
+.nav_menu {
+    margin: 10px;
+}
+
+/* メニューのスタイル */
+.menu {
+    padding: 10px;
+}
+
+/* 検索フォーム関連 */
+#form2 {
+    position: relative;
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+#sbox2 {
+    height: 30px;
+    padding: 0 10px;
+    position: absolute;
+    top: 20px;
+    border: none;
+    right: -500px;
+    border-radius: 2px;
+    background: #ffecec;
+}
+
+#sbtn2 {
+    height: 40px;
+    position: absolute;
+    left: 330px;
+    top: 17px;
+    right: -944px;
+    background: none;
+    color: #eababa;
+    border: none;
+    font-size: 15px;
+}
+
+#sbtn5:hover {
+    color: #7fbfff;
+}
+
+/* ヘッダーコンポーネント（Tailwind CSS）のカスタマイズ */
+/* ヘッダーの高さとスタイルを統一 */
+header.text-gray-600 {
+    background-color: #ffffff;
+    min-height: 70px;
+}
+
+/* ヘッダー内のcontainerクラスのmarginを統一（TOPページに合わせる） */
+header .container {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    /* TOPページと同じようにmarginを0にリセット */
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* ヘッダー内のコンテナの追加調整 */
+header .container.mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* ナビゲーションメニューの統一 */
+header nav a {
+    color: #333;
+    text-decoration: none;
+}
+
+header nav a:hover {
+    color: #7fbfff;
+}
+
+/* ヘッダー全体のmarginとpaddingをリセット（他のCSSの影響を防ぐ） */
+header.text-gray-600.body-font {
+    margin: 0 !important;
+    padding-top: 0.5rem !important; /* py-2 = 0.5rem */
+    padding-bottom: 0.5rem !important;
+}
+
+/* ヘッダー内の全要素でmarginを厳密に制御 */
+header .flex.flex-col.lg\\:flex-row {
+    margin: 0 !important;
+}
+
+/* 特に読み物ページなどで影響を受けやすい部分を強制リセット */
+body header,
+main header,
+article header {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    header {
+        height: auto;
+        min-height: 70px;
+    }
+
+    header nav {
+        float: none;
+        position: relative;
+        right: auto;
+        top: auto;
+        line-height: normal;
+    }
+
+    .nav_menu {
+        margin: 5px;
+    }
+
+    /* モバイルでは最大幅制限を緩和 */
+    html body header.text-gray-600 .container {
+        max-width: none !important;
+        padding: 0 1rem !important;
+    }
+}

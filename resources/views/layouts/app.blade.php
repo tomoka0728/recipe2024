@@ -22,6 +22,9 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/css/style.css', 'resources/js/app.js'])
+
+    <!-- ヘッダー共通CSS - 最後に読み込んで他のCSSを上書き -->
+    @vite(['resources/css/header-common.css'])
 </head>
 
 <body class="font-sans text-gray-900 antialiased">

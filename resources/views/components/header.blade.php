@@ -87,10 +87,10 @@
                                 </li>
                             @endauth
                             <li class="flex flex-col items-center">
-                                <a href="#"
+                                <a href="{{ route('contact.create') }}"
                                     class="flex flex-col items-center py-1 px-1 lg:py-2 lg:px-2 text-gray-900 text-xs rounded hover:bg-gray-100">
                                     <img src="{{ Storage::disk('s3')->url('support.png') }}" width="24" class="mb-1">
-                                    <span class="hidden md:block">ガイド</span>
+                                    <span class="hidden md:block">お問い合わせ</span>
                                 </a>
                             </li>
                         </ul>
@@ -116,7 +116,7 @@
     </div>
 </header>
 
-<section class="w-full bg-original mt-2">
+<section class="w-full bg-original">
     <div class="flex justify-center">
         <div class="flex items-center p-2 md:p-3 w-full">
             <ul class="inline-flex list-none items-center w-full justify-center flex-wrap gap-2 md:gap-0">

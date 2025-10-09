@@ -123,3 +123,15 @@ Breadcrumbs::for('purchase.history.show', function ($trail, $purchaseHistory) {
 //     $trail->parent('recipes.index');
 //     $trail->push($recipe->title, route('recipes.show', ['uuid' => $recipe->uuid]));
 // });
+
+// お問い合わせ履歴
+Breadcrumbs::for('contact.history', function ($trail) {
+    $trail->parent('mypage', 'マイページ');
+    $trail->push('お問い合わせ履歴', route('contact.history'));
+});
+
+// お問い合わせ詳細
+Breadcrumbs::for('contact.show', function ($trail, $contact) {
+    $trail->parent('contact.history');
+    $trail->push('お問い合わせ詳細', route('contact.show', $contact->uuid));
+});

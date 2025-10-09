@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/css/cart.css',
                 'resources/css/column.css',
                 'resources/css/common.css',
+                'resources/css/contact-form.css',
                 'resources/css/item.css',
                 'resources/css/membership.css',
                 'resources/css/mypage.css',

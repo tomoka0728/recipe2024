@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\RecipeManageController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\IngredientManageController;
 use App\Http\Controllers\Admin\AdminRecipeController;
+use App\Http\Controllers\Admin\ContactController;
 
 
 
@@ -42,6 +43,14 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/ingredients/{uuid}/edit', [IngredientController::class, 'edit'])->name('ingredients.edit');
     Route::put('/ingredients/{uuid}', [IngredientController::class, 'update'])->name('ingredients.update');
     Route::delete('/ingredients/{uuid}', [IngredientManageController::class, 'destroy'])->name('ingredients.destroy');
+
+    // お問い合わせ管理
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::get('/contacts/{uuid}', [ContactController::class, 'show'])->name('contacts.show');
+    Route::get('/contacts/{uuid}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
+    Route::post('/contacts/{uuid}/reply', [ContactController::class, 'sendReply'])->name('contacts.sendReply');
+    Route::patch('/contacts/{uuid}/status', [ContactController::class, 'updateStatus'])->name('contacts.updateStatus');
+    Route::delete('/contacts/{uuid}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 });
 
 

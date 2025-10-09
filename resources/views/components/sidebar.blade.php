@@ -23,11 +23,11 @@
             <i class="fas fa-shopping-cart text-2xl mb-2"></i>
             <span>商品管理</span>
         </a>
-        {{-- セール品 --}}
-        <a href="#"
-            class="flex flex-col items-center px-4 py-2 hover:bg-blue-600 hover:text-white {{ str_starts_with($currentRoute, 'admin.sales') ? 'bg-blue-600 text-white' : 'text-gray-200' }}">
-            <i class="fas fa-clock text-2xl mb-2"></i>
-            <span>セール品</span>
+        {{-- お問い合わせ履歴 --}}
+        <a href="{{ route('admin.contacts.index') }}"
+            class="flex flex-col items-center px-4 py-2 hover:bg-blue-600 hover:text-white {{ str_starts_with($currentRoute, 'admin.contacts') ? 'bg-blue-600 text-white' : 'text-gray-200' }}">
+            <i class="fas fa-comments text-2xl mb-2"></i>
+            <span>お問い合わせ</span>
         </a>
         {{-- 売上 --}}
         <a href="#"

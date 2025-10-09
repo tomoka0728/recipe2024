@@ -4,4 +4,20 @@
 
 html, body {
     @apply font-sans;
-  }
+}
+
+/* 超大画面（1800px以上）でのみ制限して左右に余白を作る */
+@media (min-width: 1800px) {
+    /* メインコンテンツエリアのみに制限を適用 */
+    /* #containerは各ページの専用CSSに任せる */
+    .main,
+    .wrapper {
+        max-width: 1700px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        /* 上下のmarginは既存の設定を保持 */
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        /* 上下のpaddingは既存の設定を保持 */
+    }
+}

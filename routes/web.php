@@ -16,6 +16,7 @@ use App\Http\Controllers\MembershipPlanController;
 use App\Http\Controllers\SpecialFeatureController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\PointHistoryController;
+use App\Http\Controllers\ContactController;
 
 
 // TOP
@@ -25,6 +26,19 @@ Route::get('/column', [ColumnController::class, 'index'])->name('column');
 Route::get('/membership/silver', [MembershipPlanController::class, 'silver'])->name('membership.silver');
 Route::get('/membership/gold', [MembershipPlanController::class, 'gold'])->name('membership.gold');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
+
+// お問い合わせ
+Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
+Route::post('/contact/edit', [ContactController::class, 'edit'])->name('contact.edit');
+Route::post('/contact/confirm', [ContactController::class, 'confirm'])->name('contact.confirm');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/contact/complete', [ContactController::class, 'complete'])->name('contact.complete');
+
+// ログイン必須のお問い合わせ関連ルート
+Route::middleware(['auth'])->group(function () {
+    Route::get('/contact/history', [ContactController::class, 'history'])->name('contact.history');
+    Route::get('/contact/{uuid}', [ContactController::class, 'show'])->name('contact.show');
+});
 
 Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
 Route::get('/recipes/category/{category}', [RecipeController::class, 'category'])->name('recipes.category');

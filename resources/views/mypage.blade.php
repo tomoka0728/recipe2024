@@ -73,8 +73,8 @@
                             <div class="menu-s">
                                 <ul>
                                     <li><p class="subject"><span class="disabled-link">よくある質問</span></p>
-                                    <li><p class="subject"><a href="{{ url('/form') }}">お問い合わせフォーム</a></p>
-                                    <li><p class="subject"><span class="disabled-link">お問い合わせ履歴</span></p>
+                                    <li><p class="subject"><a href="{{ route('contact.create') }}">お問い合わせフォーム</a></p>
+                                    <li><p class="subject"><a href="{{ route('contact.history') }}">お問い合わせ履歴</a></p>
                                 </ul>
                             </div>
                         </div>
