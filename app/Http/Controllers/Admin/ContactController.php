@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use App\Enums\ContactStatus;
+use App\Enums\ContactType;
 use App\Mail\ContactReply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,11 @@ class ContactController extends Controller
             $query->where('status', $request->status);
         }
 
+        // 種別フィルター
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
         // 検索フィルター
         if ($request->filled('search')) {
             $search = $request->search;
@@ -36,8 +42,9 @@ class ContactController extends Controller
 
         $contacts = $query->orderBy('created_at', 'desc')->paginate(15);
         $statusOptions = ContactStatus::options();
+        $typeOptions = ContactType::options();
 
-        return view('admin.contacts.index', compact('contacts', 'statusOptions'));
+        return view('admin.contacts.index', compact('contacts', 'statusOptions', 'typeOptions'));
     }
 
     /**

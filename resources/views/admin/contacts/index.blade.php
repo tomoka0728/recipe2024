@@ -1,128 +1,134 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>お問い合わせ管理</h1>
-    </div>
-
-    <!-- フィルター -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="GET" action="{{ route('admin.contacts.index') }}">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="status" class="form-label">ステータス</label>
-                        <select name="status" id="status" class="form-select">
-                            <option value="">すべて</option>
-                            @foreach($statusOptions as $value => $label)
-                                <option value="{{ $value }}" {{ request('status') === $value ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="search" class="form-label">検索</label>
-                        <input type="text" name="search" id="search" class="form-control"
-                               value="{{ request('search') }}" placeholder="名前、メール、件名で検索">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">検索</button>
-                    </div>
-                </div>
-            </form>
+<div class="container mx-auto px-4 py-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-800">お問い合わせ管理</h2>
+        <div class="flex items-center gap-4">
+            <!-- 統計情報 -->
+            <div class="text-center">
+                <div class="font-bold text-yellow-600 text-lg">{{ $contacts->where('status', 'pending')->count() }}</div>
+                <small class="text-gray-500">未対応</small>
+            </div>
+            <div class="text-center">
+                <div class="font-bold text-green-600 text-lg">{{ $contacts->where('status', 'replied')->count() }}</div>
+                <small class="text-gray-500">対応済み</small>
+            </div>
+            <div class="text-center">
+                <div class="font-bold text-blue-600 text-lg">{{ $contacts->count() }}</div>
+                <small class="text-gray-500">総件数</small>
+            </div>
         </div>
     </div>
 
-    <!-- お問い合わせ一覧 -->
-    <div class="card">
-        <div class="card-body">
-            @if($contacts->count() > 0)
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>受付日時</th>
-                                <th>送信者</th>
-                                <th>件名</th>
-                                <th>ステータス</th>
-                                <th>最終更新</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($contacts as $contact)
-                                <tr>
-                                    <td>
-                                        <small>{{ $contact->created_at->format('Y/m/d H:i') }}</small>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <strong>{{ $contact->name }}</strong>
-                                            @if($contact->user)
-                                                <span class="badge bg-info">会員</span>
-                                            @endif
-                                        </div>
-                                        <small class="text-muted">{{ $contact->email }}</small>
-                                    </td>
-                                    <td>
-                                        <div>{{ Str::limit($contact->subject, 30) }}</div>
-                                        <small class="text-muted">{{ Str::limit($contact->message, 50) }}</small>
-                                    </td>
-                                    <td>
-                                        <span class="badge
-                                            @if($contact->status === 'pending') bg-warning text-dark
-                                            @elseif($contact->status === 'replied') bg-success
-                                            @else bg-secondary @endif">
-                                            {{ $contact->status_label }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <small>{{ $contact->updated_at->format('Y/m/d H:i') }}</small>
-                                        @if($contact->admin_replied_at)
-                                            <br><small class="text-success">返信済み</small>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.contacts.show', $contact) }}"
-                                               class="btn btn-sm btn-outline-primary">詳細</a>
-                                            @if($contact->status === 'pending')
-                                                <a href="{{ route('admin.contacts.reply', $contact) }}"
-                                                   class="btn btn-sm btn-success">返信</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+    <form method="GET" class="mb-6 flex flex-wrap items-center gap-4">
+        <input type="text" name="search" placeholder="名前、メール、件名で検索" value="{{ request('search') }}"
+               class="border rounded px-3 py-2 w-64">
 
-                <!-- ページネーション -->
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $contacts->withQueryString()->links() }}
-                </div>
-            @else
-                <div class="text-center py-5">
-                    <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">お問い合わせがありません</h5>
-                    <p class="text-muted">条件に一致するお問い合わせが見つかりませんでした。</p>
-                </div>
-            @endif
+        <select name="status" class="border rounded px-3 py-2">
+            <option value="">全ステータス</option>
+            @foreach($statusOptions as $value => $label)
+                <option value="{{ $value }}" {{ request('status') === $value ? 'selected' : '' }}>
+                    {{ $label }}
+                </option>
+            @endforeach
+        </select>
+
+        <select name="type" class="border rounded px-3 py-2">
+            <option value="">全種別</option>
+            @foreach($typeOptions as $value => $label)
+                <option value="{{ $value }}" {{ request('type') === $value ? 'selected' : '' }}>
+                    {{ $label }}
+                </option>
+            @endforeach
+        </select>
+
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">検索</button>
+        <a href="{{ route('admin.contacts.index') }}"
+           class="bg-gray-300 hover:bg-gray-400 text-gray-800 hover:text-white font-semibold py-2 px-4 rounded">
+            リセット
+        </a>
+    </form>
+
+    <table class="min-w-full bg-white border">
+        <thead>
+            <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                <th class="py-3 px-6">受付日時</th>
+                <th class="py-3 px-6">送信者</th>
+                <th class="py-3 px-6">種別</th>
+                <th class="py-3 px-6">お問い合わせ内容</th>
+                <th class="py-3 px-6">ステータス</th>
+                <th class="py-3 px-6">最終更新</th>
+                <th class="py-3 px-6 text-center w-20">操作</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-600 text-sm">
+            @forelse($contacts as $contact)
+                <tr class="border-b border-gray-200 hover:bg-gray-50 {{ $contact->status === 'pending' ? 'bg-yellow-50' : '' }}">
+                    <td class="py-3 px-6">
+                        <div class="font-bold">{{ $contact->created_at->format('Y/m/d') }}</div>
+                        <div class="text-gray-500">{{ $contact->created_at->format('H:i') }}</div>
+                    </td>
+                    <td class="py-3 px-6">
+                        <div class="font-bold">{{ $contact->name }}</div>
+                        <div class="text-gray-500">{{ $contact->email }}</div>
+                    </td>
+                    <td class="py-3 px-6">
+                        {{ $contact->type->label() }}
+                    </td>
+                    <td class="py-3 px-6">
+                        <div class="font-bold mb-1">{{ Str::limit($contact->subject, 40) }}</div>
+                        <div class="text-gray-500">{{ Str::limit($contact->message, 60) }}</div>
+                    </td>
+                    <td class="py-3 px-6">
+                        @if($contact->status === 'pending')
+                            <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
+                                未対応
+                            </span>
+                        @elseif($contact->status === 'replied')
+                            <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
+                                対応済み
+                            </span>
+                        @else
+                            <span class="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
+                                {{ $contact->status_label }}
+                            </span>
+                        @endif
+                    </td>
+                    <td class="py-3 px-6">
+                        <div class="font-bold">{{ $contact->updated_at->format('Y/m/d') }}</div>
+                        <div class="text-gray-500">{{ $contact->updated_at->format('H:i') }}</div>
+                        @if($contact->admin_replied_at)
+                            <div class="text-green-600 text-xs mt-1">返信済み</div>
+                        @endif
+                    </td>
+                    <td class="py-3 px-6 text-center">
+                        <a href="{{ route('admin.contacts.show', $contact) }}"
+                           class="text-blue-600 hover:underline text-sm" title="詳細表示">
+                            詳細
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7" class="py-8 text-center text-gray-500">
+                        <i class="fas fa-comments text-4xl mb-3"></i>
+                        <div class="text-lg">お問い合わせがありません</div>
+                        @if(request()->hasAny(['status', 'type', 'search']))
+                            <div class="text-sm">検索条件に一致するお問い合わせが見つかりませんでした。</div>
+                        @else
+                            <div class="text-sm">まだお問い合わせが投稿されていません。</div>
+                        @endif
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    @if(method_exists($contacts, 'links'))
+        <div class="mt-6">
+            {{ $contacts->withQueryString()->links() }}
         </div>
-    </div>
+    @endif
 </div>
 @endsection
-
-@push('styles')
-<style>
-.table th {
-    font-weight: 600;
-}
-.btn-group .btn {
-    margin-right: 0;
-}
-</style>
-@endpush

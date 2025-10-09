@@ -245,7 +245,7 @@
                 </section>
 
                 <section class="author">
-                    <a href="{{ url('/form') }}"><img src="{{ Storage::disk('s3')->url('toiawase.png') }}"
+                    <a href="{{ route('contact.create') }}"><img src="{{ Storage::disk('s3')->url('toiawase.png') }}"
                             alt=""></a>
                 </section>
                 @if (!(Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value))
