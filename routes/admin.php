@@ -47,7 +47,6 @@ Route::middleware(['auth:admin'])->group(function () {
     // お問い合わせ管理
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::get('/contacts/{uuid}', [ContactController::class, 'show'])->name('contacts.show');
-    Route::get('/contacts/{uuid}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
     Route::post('/contacts/{uuid}/reply', [ContactController::class, 'sendReply'])->name('contacts.sendReply');
     Route::patch('/contacts/{uuid}/status', [ContactController::class, 'updateStatus'])->name('contacts.updateStatus');
     Route::delete('/contacts/{uuid}', [ContactController::class, 'destroy'])->name('contacts.destroy');

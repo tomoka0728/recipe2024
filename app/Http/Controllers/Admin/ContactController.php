@@ -57,15 +57,6 @@ class ContactController extends Controller
     }
 
     /**
-     * お問い合わせ返答フォーム表示
-     */
-    public function reply($uuid)
-    {
-        $contact = Contact::where('uuid', $uuid)->firstOrFail();
-        return view('admin.contacts.reply', compact('contact'));
-    }
-
-    /**
      * お問い合わせ返答送信
      */
     public function sendReply(Request $request, $uuid)
