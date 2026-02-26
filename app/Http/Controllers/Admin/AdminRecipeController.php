@@ -30,7 +30,8 @@ class AdminRecipeController extends Controller
     {
         // 必要なデータをビューに渡して新規作成ページを表示
         $categories = RCategory::orderBy('category_id', 'asc')->get();
-        return view('admin.recipes.create', compact('categories'));
+        $ingredients = Ingredient::orderBy('name', 'asc')->get();
+        return view('admin.recipes.create', compact('categories', 'ingredients'));
     }
 
     public function store(RecipeRequest $request)
@@ -67,15 +68,19 @@ class AdminRecipeController extends Controller
 
             // 材料保存
             Log::debug('材料保存開始');
-            $ingredientNames = $request->input('ingredient_names');
+            $ingredientUuids = $request->input('ingredient_uuids');
             $units = $request->input('units');
             $quantities = $request->input('quantities');
 
-            foreach ($ingredientNames as $i => $ingredientName) {
-                $ingredient = Ingredient::where('name', $ingredientName)->first();
+            foreach ($ingredientUuids as $i => $ingredientUuid) {
+                if (empty($ingredientUuid)) {
+                    continue; // 空のUUIDはスキップ
+                }
+
+                $ingredient = Ingredient::where('uuid', $ingredientUuid)->first();
                 if (!$ingredient) {
                     DB::rollBack();
-                    return back()->with('error', '指定された材料が見つかりません: ' . $ingredientName);
+                    return back()->with('error', '指定された材料が見つかりません');
                 }
 
                 RecipeIngredient::create([
@@ -145,7 +150,8 @@ class AdminRecipeController extends Controller
     {
         $recipe = Recipe::where('uuid', $uuid)->firstOrFail();
         $categories = RCategory::orderBy('category_id', 'asc')->get();
-        return view('admin.recipes.edit', compact('recipe', 'categories'));
+        $ingredients = Ingredient::orderBy('name', 'asc')->get();
+        return view('admin.recipes.edit', compact('recipe', 'categories', 'ingredients'));
     }
 
     public function search(Request $request)
@@ -163,27 +169,6 @@ class AdminRecipeController extends Controller
     public function update(RecipeRequest $request, string $uuid)
     {
         \Log::info("Update method called for recipe UUID: {$uuid}");
-        $ingredients = Ingredient::all();
-
-        if (is_array($request->ingredient_uuids) && is_array($request->ingredient_names)) {
-            foreach ($request->ingredient_uuids as $index => $ingredientUuid) {
-                $name = $request->ingredient_names[$index] ?? 'なし';
-                $uuid_display = $ingredientUuid ?? 'NULL';
-
-                // UUIDが空なら材料名からUUIDを検索する
-                if (empty($ingredientUuid)) {
-                    $ingredient = \App\Models\Ingredient::where('name', $name)->first();
-                    if ($ingredient) {
-                        $ingredientUuid = $ingredient->uuid;
-                        $uuid_display = $uuid;
-                    }
-                }
-                // UUIDが存在し、ingredientsテーブルに存在するかチェック
-                $exists = $ingredientUuid && \App\Models\Ingredient::where('uuid', $ingredientUuid)->exists();
-
-                \Log::debug("材料{$index} - 名前: {$name}, UUID: {$uuid_display}, DBに存在: " . ($exists ? '〇' : '×'));
-            }
-        }
 
         $validated = $request->validated();
 

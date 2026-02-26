@@ -46,13 +46,13 @@ class IngredientController extends Controller
 
             $validated['seasonality'] = array_map(function($value) {
                 return (int) $value;
-            }, $validated['seasonality']);
+            }, $validated['seasonality'] ?? []);
             $validated['image_path'] = $imagePath;
 
             $ingredient = Ingredient::create([
                 'uuid' => (string) Str::uuid(),
                 'name' => $request->name,
-                'seasonality' => json_encode($request->seasonality),
+                'seasonality' => json_encode($request->seasonality ?? []),
                 'price' => $request->price,
                 'unit' => $request->unit,
                 'image_path' => $imagePath,
@@ -77,7 +77,10 @@ class IngredientController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('材料登録エラー: ' . $e->getMessage());
-            return redirect()->route('admin.ingredients.create')->with('error', '登録に失敗しました');
+            \Log::error('スタックトレース: ' . $e->getTraceAsString());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', '登録に失敗しました: ' . $e->getMessage());
         }
     }
 

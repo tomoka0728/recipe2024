@@ -43,6 +43,8 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/ingredients/{uuid}/edit', [IngredientController::class, 'edit'])->name('ingredients.edit');
     Route::put('/ingredients/{uuid}', [IngredientController::class, 'update'])->name('ingredients.update');
     Route::delete('/ingredients/{uuid}', [IngredientManageController::class, 'destroy'])->name('ingredients.destroy');
+    Route::post('/ingredients/bulk-sale', [IngredientManageController::class, 'bulkSale'])->name('ingredients.bulkSale');
+    Route::delete('/ingredients/{uuid}/remove-sale', [IngredientManageController::class, 'removeSale'])->name('ingredients.removeSale');
 
     // お問い合わせ管理
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');

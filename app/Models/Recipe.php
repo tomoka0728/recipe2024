@@ -45,6 +45,18 @@ class Recipe extends Model
         return $this->belongsToMany(RCategory::class, 'recipe_categories', 'recipe_uuid', 'r_category_uuid');
     }
 
+    // SavedItemsとのリレーション（ブックマーク）
+    public function savedItems()
+    {
+        return $this->morphMany(SavedItem::class, 'item', 'item_type', 'item_uuid');
+    }
+
+    // ブックマーク数を取得
+    public function bookmarksCount()
+    {
+        return $this->savedItems()->count();
+    }
+
     public function getRouteKeyName()
     {
         return 'uuid';

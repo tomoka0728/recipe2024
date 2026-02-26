@@ -71,21 +71,22 @@
             <div id="ingredient-list">
                 @foreach ($recipe->ingredients as $i => $ingredient)
                 <div class="flex items-center mb-4 ingredient-item">
-                    {{-- 材料uuid --}}
-                    <input type="hidden" name="ingredient_uuids[]" value="{{ $ingredient->uuid }}">
-
-                    {{-- 材料名（オートコンプリート） --}}
-                    <input type="text" name="ingredient_names[]" value="{{ $ingredient->name }}"
-                    class="ingredient-name mr-2 flex-1 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
-                    placeholder="材料名" >
-                    <div class="relative">
-                        <ul class="autocomplete-list z-10 bg-white border border-gray-300 rounded-md shadow-md max-h-50 overflow-y-auto hidden"></ul>
-                    </div>
+                    {{-- 材料選択（セレクトボックス） --}}
+                    <select name="ingredient_uuids[]"
+                        class="ingredient-select mr-2 flex-1 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
+                        required>
+                        <option value="">材料を選択</option>
+                        @foreach($ingredients as $ing)
+                            <option value="{{ $ing->uuid }}" {{ $ing->uuid === $ingredient->uuid ? 'selected' : '' }}>
+                                {{ $ing->name }}
+                            </option>
+                        @endforeach
+                    </select>
 
                     {{-- 分量 --}}
                     <input type="text" name="quantities[]" value="{{ $ingredient->pivot->quantity }}"
                         class="mr-2 w-32 rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none sm:text-sm"
-                        placeholder="分量" >
+                        placeholder="分量" required>
 
                     {{-- 単位 --}}
                     <input type="text" name="units[]" value="{{ $ingredient->pivot->unit }}"
@@ -173,10 +174,8 @@
 @endsection
 
 @push('scripts')
-    <script>
-        const ingredientSearchUrl = "{{ route('admin.ingredients.search') }}";
-    </script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    @vite('resources/js/recipe_form.js')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @vite('resources/js/recipe_form_select.js')
 @endpush

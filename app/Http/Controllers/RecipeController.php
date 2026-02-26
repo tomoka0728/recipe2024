@@ -6,6 +6,7 @@ use App\Models\Recipe;
 use Illuminate\Http\Request;
 use App\Models\Ingredient;
 use App\Models\RCategory;
+use App\Models\SavedItem;
 use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
@@ -26,7 +27,16 @@ class RecipeController extends Controller
             }
         }
 
-        return view('recipes.show', compact('recipe'));
+        // ブックマーク状態をチェック
+        $isBookmarked = false;
+        if (Auth::check()) {
+            $isBookmarked = SavedItem::where('user_uuid', Auth::id())
+                ->where('item_type', Recipe::class)
+                ->where('item_uuid', $uuid)
+                ->exists();
+        }
+
+        return view('recipes.show', compact('recipe', 'isBookmarked'));
     }
 
     public function index(Request $request)
@@ -65,7 +75,7 @@ class RecipeController extends Controller
 
         // 並び替え
         if (Auth::check() && Auth::user()->membership_status_code->value == \App\Enums\MembershipStatus::Silver->value && $sort === 'favorites') {
-            $recipesQuery->orderBy('favorite_count', 'desc');
+            $recipesQuery->withCount('savedItems')->orderBy('saved_items_count', 'desc');
         } else {
             $recipesQuery->orderBy('created_at', 'desc');
         }
@@ -74,12 +84,21 @@ class RecipeController extends Controller
         // レシピを取得
         $recipes = $recipesQuery->paginate($perPage);
 
+        // ログインユーザーのブックマークIDリストを取得
+        $bookmarkedRecipeIds = [];
+        if (Auth::check()) {
+            $bookmarkedRecipeIds = SavedItem::where('user_uuid', Auth::id())
+                ->where('item_type', Recipe::class)
+                ->pluck('item_uuid')
+                ->toArray();
+        }
+
         // レシピカテゴリ一覧取得
         $recipeCategories = RCategory::where('category_id', '<=', 12)
                                   ->orderBy('category_id', 'asc')
                                   ->get();
 
-        return view('recipes.index', compact('recipes', 'recipeCategories', 'sort', 'perPage',  'categoryUuid'));
+        return view('recipes.index', compact('recipes', 'recipeCategories', 'sort', 'perPage', 'categoryUuid', 'bookmarkedRecipeIds'));
     }
 
     public function category(Request $request, $categoryUuid)
@@ -101,10 +120,19 @@ class RecipeController extends Controller
 
         $recipes = $recipesQuery->paginate($perPage);
 
+        // ログインユーザーのブックマークIDリストを取得
+        $bookmarkedRecipeIds = [];
+        if (Auth::check()) {
+            $bookmarkedRecipeIds = SavedItem::where('user_uuid', Auth::id())
+                ->where('item_type', Recipe::class)
+                ->pluck('item_uuid')
+                ->toArray();
+        }
+
         $recipeCategories = RCategory::where('category_id', '<=', 12)
                                     ->orderBy('category_id', 'asc')
                                     ->get();
 
-        return view('recipes.index', compact('recipes', 'recipeCategories', 'selectedCategory', 'sort', 'perPage'));
+        return view('recipes.index', compact('recipes', 'recipeCategories', 'selectedCategory', 'sort', 'perPage', 'bookmarkedRecipeIds'));
     }
 }

@@ -64,6 +64,12 @@ class Contact extends Model
         return $this->belongsTo(Admin::class, 'admin_replied_by', 'uuid');
     }
 
+    // メッセージ履歴
+    public function messages()
+    {
+        return $this->hasMany(ContactMessage::class)->orderBy('created_at', 'asc');
+    }
+
     // ステータスの日本語表示
     public function getStatusLabelAttribute()
     {

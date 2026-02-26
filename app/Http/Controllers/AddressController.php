@@ -97,8 +97,18 @@ class AddressController extends Controller
      */
     public function index()
     {
-        $addresses = Address::where('user_uuid', Auth::user()->uuid)->get();
-        return view('address.index', compact('addresses'));
+        $user = Auth::user();
+
+        // デフォルト住所と通常住所を分けて取得
+        $defaultAddress = Address::where('user_uuid', $user->uuid)
+            ->where('is_default', true)
+            ->first();
+
+        $otherAddresses = Address::where('user_uuid', $user->uuid)
+            ->where('is_default', false)
+            ->get();
+
+        return view('address.index', compact('defaultAddress', 'otherAddresses'));
     }
 
     /**
@@ -124,9 +134,17 @@ class AddressController extends Controller
             'phone' => 'required|digits_between:10,11',
         ]);
 
+        $user = Auth::user();
+
+        // ユーザーの既存住所数を確認
+        $existingAddressCount = Address::where('user_uuid', $user->uuid)->count();
+
+        // 最初の住所の場合は自動的にデフォルトにする
+        $isDefault = ($existingAddressCount === 0);
+
         Address::create([
             'uuid' => Str::uuid(),
-            'user_uuid' => Auth::user()->uuid,
+            'user_uuid' => $user->uuid,
             'name' => $validated['name'],
             'zipcode' => $validated['zipcode'],
             'prefectures' => $validated['prefectures'],
@@ -134,6 +152,7 @@ class AddressController extends Controller
             'address' => $validated['address'],
             'room' => $validated['room'],
             'phone' => $validated['phone'],
+            'is_default' => $isDefault,
         ]);
 
         return redirect()->route('address.index')->with('status', 'お届け先が追加されました。');
@@ -186,5 +205,27 @@ class AddressController extends Controller
         $address->delete();
 
         return redirect()->route('address.index')->with('status', 'お届け先が削除されました。');
+    }
+
+    /**
+     * デフォルト住所を設定
+     */
+    public function setDefault($uuid)
+    {
+        $user = Auth::user();
+
+        // 現在のデフォルトを解除
+        Address::where('user_uuid', $user->uuid)
+            ->where('is_default', true)
+            ->update(['is_default' => false]);
+
+        // 新しいデフォルトを設定
+        $address = Address::where('uuid', $uuid)
+                         ->where('user_uuid', $user->uuid)
+                         ->firstOrFail();
+
+        $address->update(['is_default' => true]);
+
+        return redirect()->route('address.index')->with('status', 'デフォルトのお届け先に設定しました。');
     }
 }

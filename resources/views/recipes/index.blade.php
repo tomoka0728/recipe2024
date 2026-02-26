@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-
+{{ Breadcrumbs::render('recipes.index') }}
 <x-guest-layout>
 
     <div id="container" class="wrapper">
@@ -70,11 +70,9 @@
                                     <div class="overlay">
                                         <h3>{{ $recipe->title }}</h3>
                                     </div>
-                                    <div class="favorite-badge">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="heart-icon" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.343 3.172 11.515a4 4 0 010-5.656z" />
-                                        </svg>
-                                        <span>{{ $recipe->favorite_count }}</span>
+                                    <div class="favorite-badge {{ in_array($recipe->uuid, $bookmarkedRecipeIds) ? 'bookmarked' : '' }}">
+                                        <i class="fas fa-bookmark"></i>
+                                        <span>{{ $recipe->bookmarksCount() }}</span>
                                     </div>
                                 </div>
                                 <div class="recipe-details">
@@ -142,4 +140,14 @@
     <!-- slick carouselのスタイルとスクリプト -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <style>
+    .favorite-badge.bookmarked {
+        background-color: #ef4444 !important;
+        color: white !important;
+    }
+    .favorite-badge.bookmarked .heart-icon {
+        color: white !important;
+    }
+    </style>
 @endpush

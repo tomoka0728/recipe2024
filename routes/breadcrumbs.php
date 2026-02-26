@@ -124,6 +124,24 @@ Breadcrumbs::for('purchase.history.show', function ($trail, $purchaseHistory) {
 //     $trail->push($recipe->title, route('recipes.show', ['uuid' => $recipe->uuid]));
 // });
 
+// お問い合わせフォーム
+Breadcrumbs::for('contact.create', function ($trail) {
+    $trail->parent('home');
+    $trail->push('お問い合わせ', route('contact.create'));
+});
+
+// お問い合わせ確認
+Breadcrumbs::for('contact.confirm', function ($trail) {
+    $trail->parent('home');
+    $trail->push('お問い合わせ確認', route('contact.create'));
+});
+
+// お問い合わせ完了
+Breadcrumbs::for('contact.complete', function ($trail) {
+    $trail->parent('home');
+    $trail->push('お問い合わせ完了', route('contact.complete'));
+});
+
 // お問い合わせ履歴
 Breadcrumbs::for('contact.history', function ($trail) {
     $trail->parent('mypage', 'マイページ');
@@ -134,4 +152,46 @@ Breadcrumbs::for('contact.history', function ($trail) {
 Breadcrumbs::for('contact.show', function ($trail, $contact) {
     $trail->parent('contact.history');
     $trail->push('お問い合わせ詳細', route('contact.show', $contact->uuid));
+});
+
+// ブックマーク一覧
+Breadcrumbs::for('bookmarks.index', function ($trail) {
+    $trail->parent('mypage', 'マイページ');
+    $trail->push('ブックマーク一覧', route('bookmarks.index'));
+});
+
+// レシピ一覧
+Breadcrumbs::for('recipes.index', function ($trail) {
+    $trail->parent('home');
+    $trail->push('レシピ一覧', route('recipes.index'));
+});
+
+// レシピ詳細
+Breadcrumbs::for('recipes.show', function ($trail, $recipe) {
+    $trail->parent('recipes.index');
+    $trail->push($recipe->title, route('recipes.show', $recipe->uuid));
+});
+
+// 食材一覧
+Breadcrumbs::for('ingredients.index', function ($trail) {
+    $trail->parent('home');
+    $trail->push('食材一覧', route('ingredients.index'));
+});
+
+// 食材詳細
+Breadcrumbs::for('ingredients.show', function ($trail, $ingredient) {
+    $trail->parent('ingredients.index');
+    $trail->push($ingredient->name, route('ingredients.show', $ingredient->uuid));
+});
+
+// 読み物（コラム）
+Breadcrumbs::for('column', function ($trail) {
+    $trail->parent('home');
+    $trail->push('読み物', route('column'));
+});
+
+// 特集一覧
+Breadcrumbs::for('special-feature', function ($trail) {
+    $trail->parent('home');
+    $trail->push('特集一覧', route('special-feature'));
 });

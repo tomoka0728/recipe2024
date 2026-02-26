@@ -31,14 +31,19 @@
                                                 </a>
                                             </span>
                                             <span class="item-price">
-                                                価格：{{ number_format(Auth::check() ? $item->ingredient->price ?? $item['price'] : $item['price']) }}円
+                                                @if(Auth::check() && isset($item->ingredient) && $item->ingredient->sale)
+                                                    価格：<span style="text-decoration: line-through; color: #999;">{{ number_format($item->ingredient->price) }}円</span>
+                                                    <span style="color: #e74c3c; font-weight: bold; margin-left: 8px;">{{ number_format($item->ingredient->sale_price) }}円</span>
+                                                @else
+                                                    価格：{{ number_format(Auth::check() ? $item->ingredient->sale_price ?? $item['price'] : $item['price']) }}円
+                                                @endif
                                             </span>
                                             <span class="item-quantity">
                                                 数量
                                                 <input type="number" name="quantity[{{ $ingredientUuid }}]"
                                                     value="{{ Auth::check() ? $item->quantity ?? $item['quantity'] : $item['quantity'] ?? 1 }}"
                                                     min="1" class="quantity-input"
-                                                    data-price="{{ Auth::check() ? $item->ingredient->price ?? $item['price'] : $item['price'] }}"
+                                                    data-price="{{ Auth::check() ? $item->ingredient->sale_price ?? $item['price'] : $item['price'] }}"
                                                     data-ingredient-uuid="{{ $ingredientUuid }}" />
                                             </span>
                                             <div class="item-actions">

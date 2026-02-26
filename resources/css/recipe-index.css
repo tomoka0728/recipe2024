@@ -121,7 +121,7 @@ li {
 コンテンツ幅を設定するための共通クラス
 */
 .wrapper {
-  max-width: 1200px;
+  max-width: 1600px;
   padding: 0 16px;
   margin: 0 auto;
 }
@@ -153,7 +153,7 @@ container
 }
 
 main {
-  width: 100%;
+  width: 72%;
 }
 
 main .article-title {
@@ -177,6 +177,21 @@ main .text {
 .box-img{
   margin-top: 10px;
   text-align: right;
+}
+
+/*-------------------------------------------
+aside
+-------------------------------------------*/
+#sidebar {
+  width: 22%;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+#sidebar .side-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  padding: 10px;
 }
 
 

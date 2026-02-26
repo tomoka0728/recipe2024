@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-
+{{ Breadcrumbs::render('ingredients.show', $ingredient) }}
 <x-guest-layout>
 
     <div id="container" class="wrapper">
@@ -13,22 +13,42 @@
                     <div class="item_title">
                         <p><h1>{{ $ingredient->name }}</h1></p>
                     </div>
+
+                    @auth
+                    <div style="margin: 5px 0 20px 0;">
+                        <button id="bookmark-btn"
+                                data-item-type="ingredient"
+                                data-item-uuid="{{ $ingredient->uuid }}"
+                                class="btn-flat-border {{ $isBookmarked ? 'bookmarked' : '' }}"
+                                style="margin-left: 0;">
+                            <i class="fas fa-bookmark"></i>
+                            <span class="bookmark-text">{{ $isBookmarked ? 'ブックマーク済み' : 'ブックマークに追加' }}</span>
+                        </button>
+                    </div>
+                    @endauth
+
                     <div class="item3">
                         <form class="cart-form" data-uuid="{{ $ingredient->uuid }}">
                             @csrf
                         <div>
                             <label for="quantity">数量:</label>
-                            <select name="num" class="quantity-select" data-price="{{ $ingredient->price }}" data-tax-price="{{ $ingredient->price + floor($ingredient->price * 0.1) }}">
+                            <select name="num" class="quantity-select" data-price="{{ $ingredient->sale_price }}" data-tax-price="{{ $ingredient->sale_price + floor($ingredient->sale_price * 0.1) }}">
                                 @for ($i = 1; $i <= 10; $i++)
                                     <option value="{{ $i }}" >{{ $i }}</option>
                                 @endfor
                             </select>
                         </div>
                         <div class="item_info">
-                            <p><h1 class="price">{{ number_format($ingredient->price) }}円</h1></p>
-                            <p class="total-price">(税込み <span class="total-price-display">{{  number_format($ingredient->price + floor($ingredient->price * 0.1))  }}円</span>)</p>
+                            @if($ingredient->sale)
+                                <p><h1 class="price" style="text-decoration: line-through; color: #999;">{{ number_format($ingredient->price) }}円</h1></p>
+                                <p><h1 class="price" style="color: #e74c3c;">{{ number_format($ingredient->sale_price) }}円</h1></p>
+                                <p class="total-price">(税込み <span class="total-price-display">{{  number_format($ingredient->sale_price + floor($ingredient->sale_price * 0.1))  }}円</span>)</p>
+                            @else
+                                <p><h1 class="price">{{ number_format($ingredient->price) }}円</h1></p>
+                                <p class="total-price">(税込み <span class="total-price-display">{{  number_format($ingredient->price + floor($ingredient->price * 0.1))  }}円</span>)</p>
+                            @endif
                         </div>
-                        <div class="kart mt-6">
+                        <div class="kart">
                             <div class="cart-push" style="display: none;">
                                 カートに追加しました
                             </div>
@@ -36,11 +56,12 @@
                                 <a class="into-cart btn btn--pink btn--radius" data-ingredient-id="{{ $ingredient->uuid }}">カートに入れる</a>
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
             <div class="recipe">
-                <div class="title2">
+                <div class="title2 text-rose-950">
                     この食材を使用したレシピ
                 </div>
                 <div class="recipe2">
@@ -105,4 +126,71 @@
     <!-- slick carouselのスタイルとスクリプト -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#bookmark-btn').click(function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const itemType = btn.data('item-type');
+            const itemUuid = btn.data('item-uuid');
+            const isBookmarked = btn.hasClass('bookmarked');
+
+            const url = isBookmarked ? '{{ route("bookmarks.destroy") }}' : '{{ route("bookmarks.store") }}';
+            const method = isBookmarked ? 'DELETE' : 'POST';
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: {
+                    item_type: itemType,
+                    item_uuid: itemUuid,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (isBookmarked) {
+                        btn.removeClass('bookmarked');
+                        btn.find('.bookmark-text').text('ブックマークに追加');
+                    } else {
+                        btn.addClass('bookmarked');
+                        btn.find('.bookmark-text').text('ブックマーク済み');
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 400 && xhr.responseJSON?.limit_exceeded) {
+                        // 上限超過時はログインページまたは会員登録ページへ誘導
+                        alert('ブックマークの上限に達しました。プレミアム会員にアップグレードすると、さらに多くのブックマークが可能です。');
+                        window.location.href = '{{ route("membership.edit") }}';
+                    } else {
+                        alert(xhr.responseJSON?.message || 'エラーが発生しました');
+                    }
+                }
+            });
+        });
+    });
+    </script>
+
+    <style>
+    #bookmark-btn {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #d1d5db;
+        background-color: white;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    #bookmark-btn:hover {
+        background-color: #f3f4f6;
+    }
+    #bookmark-btn.bookmarked {
+        background-color: #f87171;
+        color: white;
+        border-color: #f87171;
+    }
+    #bookmark-btn.bookmarked:hover {
+        background-color: #ef4444;
+        border-color: #ef4444;
+    }
+    </style>
 @endpush

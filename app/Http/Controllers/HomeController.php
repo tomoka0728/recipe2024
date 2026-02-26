@@ -13,7 +13,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $popularRecipes = Recipe::orderBy('favorite_count', 'desc')->take(3)->get();
+        // ブックマーク数でソート（withCount使用）
+        $popularRecipes = Recipe::withCount('savedItems')
+            ->orderBy('saved_items_count', 'desc')
+            ->take(3)
+            ->get();
         $categories = RCategory::orderBy('category_id')->get()->groupBy('group');
 
         $groupImages = [
@@ -33,7 +37,10 @@ class HomeController extends Controller
             $q->whereHas('categories', function($q2) {
                 $q2->where('name', '野菜');
             })
-            ->whereJsonContains('seasonality', $currentMonth);
+            ->whereJsonContains('seasonality', $currentMonth)
+            // 旬が設定されていない（空配列）または全月選択（1-12全て）を除外
+            ->whereRaw('JSON_LENGTH(seasonality) > 0')
+            ->whereRaw('JSON_LENGTH(seasonality) < 12');
         })
         ->take(6)
         ->get();

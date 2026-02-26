@@ -5,6 +5,7 @@ namespace App\Enums;
 enum ContactStatus: string
 {
     case PENDING = 'pending';
+    case IN_PROGRESS = 'in_progress';
     case REPLIED = 'replied';
     case CLOSED = 'closed';
 
@@ -12,8 +13,9 @@ enum ContactStatus: string
     {
         return match($this) {
             self::PENDING => '未対応',
-            self::REPLIED => '返答済み',
-            self::CLOSED => '完了',
+            self::IN_PROGRESS => '対応中',
+            self::REPLIED => '対応中',  // IN_PROGRESSと同じ扱い
+            self::CLOSED => '対応済み',
         };
     }
 

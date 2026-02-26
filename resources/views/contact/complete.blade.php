@@ -2,6 +2,7 @@
 
 @section('content')
 <x-header2 />
+{{ Breadcrumbs::render('contact.complete') }}
 <x-guest-layout>
     <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 mt-10 mb-10 w-full !pt-20">
         <ul class="progressbar">
@@ -14,7 +15,7 @@
         <p class="text-3xl font-extrabold text-yellow-900">お問い合わせ完了</p>
     </div>
     <div class="rq-box">
-        <div class="rq2-box text-center">
+        <div class="rq2-box-wide text-center">
             <div class="mb-6">
                 <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
                     <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

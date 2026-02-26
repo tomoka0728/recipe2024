@@ -137,7 +137,7 @@ class ContactController extends Controller
      */
     public function show($uuid)
     {
-        $contact = Contact::where('uuid', $uuid)->firstOrFail();
+        $contact = Contact::where('uuid', $uuid)->with('messages')->firstOrFail();
 
         // ログインユーザーの場合は自分のお問い合わせのみ表示
         if (Auth::guard('web')->check() && $contact->user_uuid !== Auth::user()->uuid) {
@@ -145,5 +145,38 @@ class ContactController extends Controller
         }
 
         return view('contact.show', compact('contact'));
+    }
+
+    /**
+     * ユーザーからの返信送信
+     */
+    public function sendReply(Request $request, $uuid)
+    {
+        $contact = Contact::where('uuid', $uuid)->firstOrFail();
+
+        // ログインユーザーの場合は自分のお問い合わせのみ
+        if (Auth::guard('web')->check() && $contact->user_uuid !== Auth::user()->uuid) {
+            abort(403);
+        }
+
+        $request->validate([
+            'message' => 'required|string|max:2000',
+        ], [
+            'message.required' => '返信内容は必須です。',
+            'message.max' => '返信内容は2000文字以内で入力してください。',
+        ]);
+
+        // メッセージを保存
+        $contact->messages()->create([
+            'sender_type' => 'user',
+            'sender_id' => Auth::check() ? Auth::user()->uuid : null,
+            'message' => $request->message,
+        ]);
+
+        // ステータスは対応中のまま（管理者の再対応を促すが、やり取り中であることを明示）
+        // 初回でない限り、statusはIN_PROGRESSのまま維持される
+
+        return redirect()->route('contact.show', $contact->uuid)
+            ->with('success', '返信を送信しました。');
     }
 }

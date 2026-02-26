@@ -36,8 +36,18 @@ class IngredientRequest extends FormRequest
     public function messages()
     {
         return [
-            'unit.required' => '単位は必ず指定してください。',
+            'name.required' => '材料名は必ず入力してください。',
+            'name.max' => '材料名は255文字以内で入力してください。',
+            'price.required' => '価格は必ず入力してください。',
+            'price.numeric' => '価格は数値で入力してください。',
+            'unit.required' => '単位は必ず入力してください。',
+            'unit.max' => '単位は10文字以内で入力してください。',
+            'image.required' => '画像は必ず選択してください。',
+            'image.image' => '画像ファイルを選択してください。',
+            'image.mimes' => '画像はjpeg、png、jpg、gif形式でアップロードしてください。',
+            'image.max' => '画像のサイズは2MB以下にしてください。',
             'i_category_uuid.required' => 'カテゴリーは必ず選択してください。',
+            'i_category_uuid.exists' => '選択されたカテゴリーが存在しません。',
         ];
     }
 }

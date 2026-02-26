@@ -34,8 +34,9 @@
                                 </div>
                                 <div class="ml-4">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                        @if($contact->status === 'pending') bg-yellow-100 text-yellow-800
-                                        @elseif($contact->status === 'replied') bg-green-100 text-green-800
+                                        @if($contact->status->value === 'pending') bg-red-100 text-red-800
+                                        @elseif($contact->status->value === 'in_progress' || $contact->status->value === 'replied') bg-blue-100 text-blue-800
+                                        @elseif($contact->status->value === 'closed') bg-green-100 text-green-800
                                         @else bg-gray-100 text-gray-800 @endif">
                                         {{ $contact->status_label }}
                                     </span>

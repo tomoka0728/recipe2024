@@ -24,8 +24,9 @@ class RecipeRequest extends FormRequest
         return [
             'title' => 'required|string|max:50',
             'description' => 'nullable|string',
-            'ingredient_names.*' => 'required|string',
-            'quantities.*' => 'nullable|string',
+            'ingredient_uuids' => 'required|array|min:1',
+            'ingredient_uuids.*' => 'required|exists:ingredients,uuid',
+            'quantities.*' => 'required|string',
             'units.*' => 'nullable|string',
             'step_descriptions.*' => 'required|string|max:255',
             'step_images.*' => 'nullable|image',
@@ -46,8 +47,12 @@ class RecipeRequest extends FormRequest
             'cooking_time.required' => '調理時間は必ず指定してください。',
             'servings.required' => '人数は必ず指定してください。',
             'image.required' => '画像は必ず指定してください。',
-            'ingredient_names.0.required' => '1つ目の材料名は必ず指定してください。',
-            'step_descriptions.0.required' => '1つ目の手順説明は必ず指定してください。',
+            'ingredient_uuids.required' => '材料は必ず1つ以上選択してください。',
+            'ingredient_uuids.min' => '材料は必ず1つ以上選択してください。',
+            'ingredient_uuids.*.required' => '材料を選択してください。',
+            'ingredient_uuids.*.exists' => '選択された材料が存在しません。',
+            'quantities.*.required' => '分量は必ず入力してください。',
+            'step_descriptions.*.required' => '手順の説明は必ず入力してください。',
         ];
     }
 }

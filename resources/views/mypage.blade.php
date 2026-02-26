@@ -33,10 +33,11 @@
 
                     <div class="item">
                         <div class="item_s">
-                            <h3 id="title">お気に入りレシピ</h3>
+                            <h3 id="title">ブックマーク</h3>
                             <div class="menu-s">
                                 <ul>
-                                    <li><p class="subject"><span class="disabled-link">お気に入りレシピ閲覧・削除</span></p>
+                                    <li><p class="subject"><a href="{{ route('bookmarks.recipes') }}">レシピ</a></p>
+                                    <li><p class="subject"><a href="{{ route('bookmarks.ingredients') }}">食材</a></p>
                                 </ul>
                             </div>
                         </div>

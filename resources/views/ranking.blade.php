@@ -5,11 +5,11 @@
             <main>
                 <h1 class="ranking-title"><span class="marker7">{{ $title }}</span></h1>
                 <ul class="ranking1">
-                    @foreach ($ingredients as $ingredient)
+                    @foreach ($ingredients as $index => $ingredient)
                         <div class="item">
                             <div class="item2">
                                 <div class="num">
-                                    <li>{{ $loop->iteration }}</li>
+                                    <li>{{ $ingredients->firstItem() + $index }}</li>
                                 </div>
                                 <div class="item_img">
                                     <a href="{{ route('ingredients.show', $ingredient->uuid) }}">

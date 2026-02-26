@@ -40,8 +40,17 @@ class PaymentController extends Controller
         // セッションを更新
         session()->put('sum', $sum);
 
+        // デフォルト住所を取得
+        $defaultAddress = Auth::check() ? Auth::user()->addresses()->where('is_default', true)->first() : null;
+
     // ビューに変数を渡す
-    return view('payment', ['carts' => $carts, 'sum' => $sum, 'tax' => $tax, 'sendPrice' => $sendPrice]);
+    return view('payment', [
+        'carts' => $carts,
+        'sum' => $sum,
+        'tax' => $tax,
+        'sendPrice' => $sendPrice,
+        'defaultAddress' => $defaultAddress
+    ]);
     }
 
 
@@ -320,6 +329,7 @@ class PaymentController extends Controller
                     $addressUuid = Str::uuid()->toString();
                     $address = $user->addresses()->create([
                         'uuid'        => $addressUuid,
+                        'user_uuid'   => $user->uuid,  // 明示的に設定
                         'name'        => $addressData['name'] ?? '',
                         'zipcode'     => $addressData['zipcode'] ?? '',
                         'prefectures' => $addressData['prefectures'] ?? '',

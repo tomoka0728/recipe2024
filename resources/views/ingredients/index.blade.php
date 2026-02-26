@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-
+{{ Breadcrumbs::render('ingredients.index') }}
 <x-guest-layout>
 
     <div id="container" class="wrapper">
@@ -62,8 +62,16 @@
                             <h2>{{ $ingredient->name }}</h2>
                         </div>
                         <div class="all-products-info">
-                            <h3 class="price">{{ number_format($ingredient->price) }}円</h3>
-                            <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->price + floor($ingredient->price * 0.1)) }}円</span>)</p>
+                            @if($ingredient->sale)
+                                <h3 class="price">
+                                    <span style="text-decoration: line-through; color: #999;">{{ number_format($ingredient->price) }}円</span>
+                                    <span style="color: #e74c3c; font-weight: bold; margin-left: 8px;">{{ number_format($ingredient->sale_price) }}円</span>
+                                </h3>
+                                <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->sale_price + floor($ingredient->sale_price * 0.1)) }}円</span>)</p>
+                            @else
+                                <h3 class="price">{{ number_format($ingredient->price) }}円</h3>
+                                <p class="all-products-total-price">(税込み <span class="total-price-display">{{ number_format($ingredient->price + floor($ingredient->price * 0.1)) }}円</span>)</p>
+                            @endif
                         </div>
                         <div class="all-products-btn">
                         <div class="cart-push2" style="display: none;">

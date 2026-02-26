@@ -14,12 +14,16 @@ class Address extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'uuid', 'user_uuid', 'name', 'zipcode', 'prefectures', 'city', 'address', 'room', 'phone'
+        'uuid', 'user_uuid', 'name', 'zipcode', 'prefectures', 'city', 'address', 'room', 'phone', 'is_default'
+    ];
+
+    protected $casts = [
+        'is_default' => 'boolean',
     ];
 
     // ユーザーとのリレーション
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_uuid', 'uuid');
     }
 }

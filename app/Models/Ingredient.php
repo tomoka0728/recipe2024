@@ -73,4 +73,16 @@ class Ingredient extends Model
         }
         return $this->price;
     }
+
+    // SavedItemsとのリレーション（ブックマーク）
+    public function savedItems()
+    {
+        return $this->morphMany(SavedItem::class, 'item', 'item_type', 'item_uuid');
+    }
+
+    // ブックマーク数を取得
+    public function bookmarksCount()
+    {
+        return $this->savedItems()->count();
+    }
 }

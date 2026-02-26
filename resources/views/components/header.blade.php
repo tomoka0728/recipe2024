@@ -141,13 +141,127 @@
                     <span class="mx-1 border-l border-yellow-900/20 h-5 hidden md:inline-block"></span>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('bookmarks.index') }}" id="header-bookmark-link"
                         class="rounded-md px-2 md:px-4 py-1 text-sm md:text-base text-rose-950 ring-offset-2 ring-offset-current transition duration-500 ease-in-out whitespace-nowrap">ブックマーク</a>
                 </li>
             </ul>
         </div>
     </div>
 </section>
+
+{{-- プレミアム会員モーダル（ブックマーク用） --}}
+@guest
+<div id="headerBookmarkModal" class="modal" style="display: none;">
+    <div class="modal-content" style="padding: 30px; position: relative; text-align: center; background: #fff; border-radius: 10px; max-width: 600px; margin: 0 auto;">
+        <span class="close" id="headerBookmarkModalClose" style="position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer;">&times;</span>
+
+        <!-- アイコン -->
+        <img src="{{ Storage::disk('s3')->url('premium.png') }}" alt="" style="width: 80px; height: auto; margin: 0 auto; display: block;">
+
+        <!-- タイトル -->
+        <h2 style="font-size: 28px; color: #d4af37; font-weight: bold; margin-bottom: 20px;">プレミアム会員限定</h2>
+
+        <!-- 比較表 -->
+        <table style="width: 100%; font-size: 16px; border-collapse: collapse; margin-bottom: 30px;">
+            <thead>
+                <tr>
+                    <th style="text-align: left; padding: 12px;">　</th>
+                    <th style="padding: 12px;">無料</th>
+                    <th style="background-color: #fffae7; padding: 12px;">シルバー</th>
+                    <th style="background-color: #fffae7; padding: 12px;">ゴールド</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="text-align: left; padding: 12px;">すべてのレシピ閲覧</td>
+                    <td><i class="fa-solid fa-check" style="color: #a0a0a0;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="text-align: left; padding: 12px;">広告なし</td>
+                    <td><i class="fa-solid fa-xmark" style="color: #a0a0a0;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="text-align: left; padding: 12px;">人気ランキング</td>
+                    <td><i class="fa-solid fa-xmark" style="color: #a0a0a0;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="text-align: left; padding: 12px;">ブックマーク保存数</td>
+                    <td style="color: #a0a0a0;">10件</td>
+                    <td style="background-color: #fffae7; color: #a0a0a0;">50件</td>
+                    <td style="background-color: #fffae7; color: #d4af37;">100件</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="text-align: left; padding: 12px;">ポイント還元率</td>
+                    <td style="color: #a0a0a0;">1%</td>
+                    <td style="background-color: #fffae7; color: #a0a0a0;">3%</td>
+                    <td style="background-color: #fffae7; color: #d4af37;">5%</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="text-align: left; padding: 12px;">レシピ登録</td>
+                    <td><i class="fa-solid fa-xmark" style="color: #a0a0a0;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-xmark" style="color: #a0a0a0;"></i></td>
+                    <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 登録ボタン -->
+        <a href="{{ route('register') }}" class="btn" style="background-color: #d4af37; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+            まずは会員登録から
+        </a>
+    </div>
+</div>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.modal-content {
+    margin: 5% auto;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bookmarkLink = document.getElementById('header-bookmark-link');
+    const modal = document.getElementById('headerBookmarkModal');
+    const closeBtn = document.getElementById('headerBookmarkModalClose');
+
+    if (bookmarkLink && modal) {
+        bookmarkLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'block';
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+@endguest
 
 <script>
     window.appRoutes = {

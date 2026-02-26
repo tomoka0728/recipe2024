@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+    {{ Breadcrumbs::render('special-feature') }}
     <x-guest-layout>
         <div id="container" class="wrapper">
             <main>

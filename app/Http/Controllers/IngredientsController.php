@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\RCategory;
+use App\Models\SavedItem;
 use Illuminate\Support\Facades\Auth;
 
 class IngredientsController extends Controller {
@@ -47,7 +48,7 @@ class IngredientsController extends Controller {
 
             // ひらがな・カタカナをひらがなに変換
             $keyword = mb_convert_kana($keyword, 'c', 'UTF-8');  // カタカナをひらがなに変換
-            
+
             // 検索キーワードを使用してDB検索
             $query->where('name', 'like', '%' . $keyword . '%');
         }
@@ -64,7 +65,16 @@ class IngredientsController extends Controller {
         $ingredient = Ingredient::where('uuid', $uuid)->firstOrFail();
         $recipes = $ingredient->recipes()->limit(8)->get();
 
-        return view('ingredients.show', compact('ingredient', 'recipes'));
+        // ブックマーク状態をチェック
+        $isBookmarked = false;
+        if (Auth::check()) {
+            $isBookmarked = SavedItem::where('user_uuid', Auth::id())
+                ->where('item_type', Ingredient::class)
+                ->where('item_uuid', $uuid)
+                ->exists();
+        }
+
+        return view('ingredients.show', compact('ingredient', 'recipes', 'isBookmarked'));
     }
 
      // カートに商品を追加
@@ -72,9 +82,9 @@ class IngredientsController extends Controller {
      {
          $ingredientUuid = $request->input('ingredientUuid');
          $quantity = $request->input('num');
- 
+
          $carts = session()->get('carts', []);
- 
+
          // すでにカートにあるなら数量を増やす
          if (isset($carts[$ingredientUuid])) {
              $carts[$ingredientUuid]['quantity'] += $quantity;
@@ -82,22 +92,22 @@ class IngredientsController extends Controller {
              // 新しくカートに追加
              $ingredient = Ingredient::where('uuid', $ingredientUuid)->first();
              if (!$ingredient) {
- 
+
                  return response()->json(['message' => 'リクエストが不正です'], 400);
              }
- 
+
              $carts[$ingredientUuid] = [
                  'name' => $ingredient->name,
-                 'price' => $ingredient->price,
+                 'price' => $ingredient->sale_price,
                  'quantity' => $quantity,
                  'image_path' => $ingredient->image_path,
              ];
          }
- 
+
          session()->put('carts', $carts);
- 
+
          Log::info('カートの中身:', session('carts'));
- 
+
          return response()->json(['carts'=> $carts]);
      }
 

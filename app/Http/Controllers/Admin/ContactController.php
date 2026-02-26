@@ -52,7 +52,7 @@ class ContactController extends Controller
      */
     public function show($uuid)
     {
-        $contact = Contact::where('uuid', $uuid)->with(['user'])->firstOrFail();
+        $contact = Contact::where('uuid', $uuid)->with(['user', 'messages'])->firstOrFail();
         return view('admin.contacts.show', compact('contact'));
     }
 
@@ -70,13 +70,24 @@ class ContactController extends Controller
             'admin_reply.max' => '返答内容は2000文字以内で入力してください。',
         ]);
 
+        // メッセージを保存
+        $contact->messages()->create([
+            'sender_type' => 'admin',
+            'sender_id' => Auth::guard('admin')->user()->uuid,
+            'message' => $request->admin_reply,
+        ]);
+
         // お問い合わせを更新
         $contact->update([
-            'admin_reply' => $request->admin_reply,
-            'status' => ContactStatus::REPLIED,
+            'status' => ContactStatus::IN_PROGRESS,
             'admin_replied_at' => now(),
-            'admin_replied_by' => Auth::guard('admin')->id(),
+            'admin_replied_by' => Auth::guard('admin')->user()->uuid,
         ]);
+
+        // admin_replyフィールドも更新（互換性のため）
+        if (!$contact->admin_reply) {
+            $contact->update(['admin_reply' => $request->admin_reply]);
+        }
 
         // ユーザーに返答メール送信
         Mail::to($contact->email)->send(new ContactReply($contact));

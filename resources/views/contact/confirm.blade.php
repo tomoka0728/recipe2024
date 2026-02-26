@@ -2,6 +2,7 @@
 
 @section('content')
 <x-header2 />
+{{ Breadcrumbs::render('contact.confirm') }}
 <x-guest-layout>
     <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 mt-10 mb-10 w-full !pt-20">
         <ul class="progressbar">
@@ -15,7 +16,7 @@
     </div>
     <div class="rq-box">
         <div class="rq2-box">
-            <p class="text-gray-600 mb-6">以下の内容でお問い合わせを送信します。よろしければ「送信する」ボタンをクリックしてください。</p>
+            <p class="text-gray-600 mb-6">以下の内容でお問い合わせを送信します。<br>よろしければ「送信する」ボタンをクリックしてください。</p>
 
             <div class="space-y-4 mb-8">
                 <div class="border-b pb-4">

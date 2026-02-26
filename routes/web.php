@@ -17,6 +17,7 @@ use App\Http\Controllers\SpecialFeatureController;
 use App\Http\Controllers\ColumnController;
 use App\Http\Controllers\PointHistoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BookmarkController;
 
 
 // TOP
@@ -38,6 +39,7 @@ Route::get('/contact/complete', [ContactController::class, 'complete'])->name('c
 Route::middleware(['auth'])->group(function () {
     Route::get('/contact/history', [ContactController::class, 'history'])->name('contact.history');
     Route::get('/contact/{uuid}', [ContactController::class, 'show'])->name('contact.show');
+    Route::post('/contact/{uuid}/reply', [ContactController::class, 'sendReply'])->name('contact.sendReply');
 });
 
 Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
@@ -63,7 +65,17 @@ Route::middleware(['auth'])->group(function () {
     // 購入履歴
     Route::get('/purchase-history', [App\Http\Controllers\PurchaseHistoryController::class, 'index'])->name('purchase.history.index');
     Route::get('/purchase-history/{uuid}', [App\Http\Controllers\PurchaseHistoryController::class, 'show'])->name('purchase.history.show');
+
+    // ブックマーク（書き込み系）
+    Route::post('/bookmarks', [BookmarkController::class, 'store'])->name('bookmarks.store');
+    Route::delete('/bookmarks', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
+    Route::get('/bookmarks/check', [BookmarkController::class, 'check'])->name('bookmarks.check');
 });
+
+// ブックマーク（読み込み系、ログインしていない場合はモーダル表示）
+Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
+Route::get('/bookmarks/recipes', [BookmarkController::class, 'recipes'])->name('bookmarks.recipes');
+Route::get('/bookmarks/ingredients', [BookmarkController::class, 'ingredients'])->name('bookmarks.ingredients');
 
 //カート
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
@@ -112,6 +124,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/address/{uuid}/edit', [AddressController::class, 'edit'])->name('address.edit');
     Route::patch('/address/{uuid}', [AddressController::class, 'update'])->name('address.update');
     Route::delete('/address/{uuid}', [AddressController::class, 'destroy'])->name('address.destroy');
+    Route::post('/address/{uuid}/set-default', [AddressController::class, 'setDefault'])->name('address.setDefault');
 });
 
 require __DIR__.'/auth.php';

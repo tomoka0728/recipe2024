@@ -10,9 +10,11 @@
         </div>
         <div class="flex items-center gap-3">
             <!-- ステータス表示 -->
-            @if($contact->status === 'pending')
-                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">受付中</span>
-            @elseif($contact->status === 'replied')
+            @if($contact->status->value === 'pending')
+                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">未対応</span>
+            @elseif($contact->status->value === 'in_progress' || $contact->status->value === 'replied')
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">対応中</span>
+            @elseif($contact->status->value === 'closed')
                 <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">対応済み</span>
             @else
                 <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">{{ $contact->status->label() }}</span>
@@ -53,102 +55,60 @@
 
             <!-- お問い合わせ内容 -->
             <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">お問い合わせ内容</h3>
-                <div class="bg-gray-50 p-4 rounded border-l-4 border-blue-500">
-                    <div class="whitespace-pre-line text-gray-700 leading-relaxed">{{ $contact->message }}</div>
+                <h3 class="text-base font-semibold text-gray-800 mb-4">お問い合わせ内容</h3>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="text-xs text-gray-500 mb-2">{{ $contact->created_at->format('Y年m月d日 H:i') }} - {{ $contact->name }}</div>
+                    <div class="whitespace-pre-line text-gray-700 leading-relaxed text-sm">{{ $contact->message }}</div>
                 </div>
             </div>
 
-            <!-- 管理者返答 -->
-            @if($contact->admin_reply)
+            <!-- メッセージ -->
+            @if($contact->messages && $contact->messages->count() > 0)
                 <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">管理者返答</h3>
-                    <div class="mb-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-1">返答日時</label>
-                                <p class="text-gray-800">{{ $contact->admin_replied_at?->format('Y年m月d日 H:i') }}</p>
-                            </div>
-                            @if($contact->adminRepliedBy)
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-600 mb-1">返答者</label>
-                                    <p class="text-gray-800">{{ $contact->adminRepliedBy->name }}</p>
+                    <div class="space-y-3">
+                        @foreach($contact->messages as $message)
+                            <div class="{{ $message->sender_type === 'admin' ? 'bg-blue-50' : 'bg-white border border-gray-200' }} rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm {{ $message->sender_type === 'admin' ? 'text-blue-600' : 'text-gray-700' }} font-medium">
+                                        {{ $message->sender_name }}
+                                    </span>
+                                    <span class="text-xs text-gray-400">{{ $message->created_at->format('Y/m/d H:i') }}</span>
                                 </div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="bg-green-50 p-4 rounded border-l-4 border-green-500 mb-6">
-                        <div class="whitespace-pre-line text-gray-700 leading-relaxed">{{ $contact->admin_reply }}</div>
-                    </div>
-
-                    <!-- 追加返答フォーム -->
-                    <div class="border-t pt-6">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-4">追加返答</h4>
-                        <form method="POST" action="{{ route('admin.contacts.sendReply', $contact->uuid) }}">
-                            @csrf
-                            <div class="mb-4">
-                                <label for="admin_reply" class="block text-sm font-medium text-gray-600 mb-2">追加返答内容</label>
-                                <textarea name="admin_reply" id="admin_reply" rows="8"
-                                          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                          placeholder="追加の返答内容を入力してください...">{{ old('admin_reply') }}</textarea>
-                                @error('admin_reply')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                                <p class="text-sm text-gray-500 mt-1">2000文字以内で入力してください。</p>
+                                <div class="whitespace-pre-line text-gray-700 leading-relaxed text-sm">{{ $message->message }}</div>
                             </div>
-                            <div class="flex gap-3">
-                                <button type="submit"
-                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg">
-                                    <i class="fas fa-plus mr-2"></i> 追加返答を送信
-                                </button>
-                                <button type="button" onclick="insertTemplate()"
-                                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg">
-                                    <i class="fas fa-clipboard mr-2"></i> テンプレート
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            @else
-                <!-- 返答待ち・返答フォーム -->
-                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                    <div class="text-center mb-6">
-                        <div class="text-yellow-600 mb-3">
-                            <i class="fas fa-clock text-3xl"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-yellow-800 mb-2">返答待ち</h3>
-                        <p class="text-yellow-700 mb-4">このお問い合わせにはまだ返答されていません。</p>
-                    </div>
-
-                    <!-- 返答フォーム -->
-                    <div class="bg-white p-6 rounded-lg border">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-4">返答内容</h4>
-                        <form method="POST" action="{{ route('admin.contacts.sendReply', $contact->uuid) }}">
-                            @csrf
-                            <div class="mb-4">
-                                <label for="admin_reply" class="block text-sm font-medium text-gray-600 mb-2">返答メッセージ</label>
-                                <textarea name="admin_reply" id="admin_reply" rows="10"
-                                          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                          placeholder="お客様への返答内容を入力してください...">{{ old('admin_reply') }}</textarea>
-                                @error('admin_reply')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                                <p class="text-sm text-gray-500 mt-1">2000文字以内で入力してください。この返答は {{ $contact->email }} 宛にメールで送信されます。</p>
-                            </div>
-                            <div class="flex gap-3">
-                                <button type="submit"
-                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg">
-                                    <i class="fas fa-reply mr-2"></i> 返答を送信
-                                </button>
-                                <button type="button" onclick="insertTemplate()"
-                                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg">
-                                    <i class="fas fa-clipboard mr-2"></i> テンプレート
-                                </button>
-                            </div>
-                        </form>
+                        @endforeach
                     </div>
                 </div>
             @endif
+
+            <!-- 返答フォーム -->
+            <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+                <form method="POST" action="{{ route('admin.contacts.sendReply', $contact->uuid) }}">
+                    @csrf
+                    <div class="mb-4">
+                        <textarea name="admin_reply" id="admin_reply" rows="8"
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 text-sm {{ $contact->status->value === 'closed' ? 'bg-gray-100 text-gray-500 cursor-not-allowed' : '' }}"
+                                  placeholder="返答内容を入力..."
+                                  {{ $contact->status->value === 'closed' ? 'disabled' : '' }}>{{ old('admin_reply') }}</textarea>
+                        @error('admin_reply')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-5 rounded-lg transition {{ $contact->status->value === 'closed' ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                {{ $contact->status->value === 'closed' ? 'disabled' : '' }}>
+                            送信
+                        </button>
+                        <button type="button" onclick="openTemplateModal()"
+                                class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-4 rounded-lg transition {{ $contact->status->value === 'closed' ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                {{ $contact->status->value === 'closed' ? 'disabled' : '' }}>
+                            テンプレート
+                        </button>
+                    </div>
+                </form>
+            </div>
+
         </div>
 
         <div class="lg:col-span-1">
@@ -193,24 +153,25 @@
             </div>
 
             <!-- ステータス管理 -->
-            @if($contact->status !== 'closed')
             <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">お問い合わせをクローズ</h3>
-                <form method="POST" action="{{ route('admin.contacts.updateStatus', $contact->uuid) }}">
-                    @csrf
-                    @method('PATCH')
-                    <input type="hidden" name="status" value="closed">
-                    <div class="mb-4">
-                        <p class="text-sm text-gray-600 mb-3">このお問い合わせを完了としてクローズしますか？</p>
-                        <p class="text-sm text-red-600">※ クローズ後も内容の確認は可能ですが、ステータスの変更はできなくなります。</p>
-                    </div>
-                    <button type="submit" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
-                            onclick="return confirm('このお問い合わせをクローズしますか？')">
-                        <i class="fas fa-check mr-2"></i> お問い合わせをクローズ
+                @if($contact->status->value === 'closed')
+                    <button type="button" disabled
+                            class="w-full bg-gray-300 text-gray-500 font-semibold py-2 px-4 rounded cursor-not-allowed">
+                        <i class="fas fa-check mr-2"></i> クローズ完了
                     </button>
-                </form>
+                @else
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">お問い合わせをクローズ</h3>
+                    <form method="POST" action="{{ route('admin.contacts.updateStatus', $contact->uuid) }}">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="status" value="closed">
+                        <button type="submit" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                                onclick="return confirm('このお問い合わせをクローズしますか？')">
+                            <i class="fas fa-check mr-2"></i> お問い合わせをクローズ
+                        </button>
+                    </form>
+                @endif
             </div>
-            @endif
         </div>
     </div>
 
@@ -237,70 +198,185 @@
     </div>
 </div>
 
+<!-- テンプレートモーダル -->
+<div id="templateModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] flex flex-col">
+        <!-- ヘッダー -->
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">テンプレートを選択</h3>
+            <button onclick="closeTemplateModal()" class="text-white hover:text-gray-100 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- コンテンツ -->
+        <div class="px-6 py-4 flex-1 overflow-y-auto">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">テンプレート</label>
+                <select id="templateSelect" onchange="previewTemplate()"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400">
+                    <option value="">選択してください</option>
+                    <option value="0">お礼の返答</option>
+                    <option value="1">情報提供の返答</option>
+                    <option value="2">お詫びの返答</option>
+                    <option value="3">確認依頼の返答</option>
+                    <option value="4">対応完了の返答</option>
+                </select>
+            </div>
+
+            <div id="templatePreview" class="hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-2">プレビュー</label>
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <pre id="previewContent" class="whitespace-pre-wrap text-sm text-gray-700 font-sans"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- フッター -->
+        <div class="px-6 py-4 border-t flex justify-end gap-3">
+            <button onclick="closeTemplateModal()"
+                    class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition">
+                キャンセル
+            </button>
+            <button onclick="insertSelectedTemplate()"
+                    class="px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition">
+                挿入
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
-function insertTemplate() {
-    const textarea = document.getElementById('admin_reply');
-    const templates = [
-        {
-            title: 'お礼の返答',
-            content: `{{ $contact->name }} 様
+const templates = [
+    {
+        title: 'お礼の返答',
+        content: `{{ $contact->name }} 様
 
-この度は貴重なお時間を割いて、お問い合わせをいただき誠にありがとうございます。
+この度は温かいお言葉をお寄せいただき、
+誠にありがとうございます。
 
-いただいたご連絡を拝読させていただきました。
-お客様のご意見は私どもにとって大変貴重なものであり、心より感謝申し上げます。
+大変励みになり、関係者一同心より感謝しております。
+今後もご期待に添えるよう、より一層努めてまいります。
 
-今後ともどうぞよろしくお願いいたします。
+引き続き何卒よろしくお願いいたします。
 
-Recipe2024 サポートチーム`
-        },
-        {
-            title: '情報提供の返答',
-            content: `{{ $contact->name }} 様
+RecipeMart サポートチーム`
+    },
+    {
+        title: '情報提供の返答',
+        content: `{{ $contact->name }} 様
 
-お問い合わせいただき、ありがとうございます。
+平素よりお世話になっております。
+お問い合わせいただいた件につきまして、以下のとおりご回答いたします。
 
-ご質問の件についてご案内させていただきます。
+【質問内容】
+【回答】
 
-【ここに具体的な情報を記載してください】
+上記内容でご不明な点がございましたら、お気軽にお問い合わせください。
+何卒よろしくお願いいたします。
 
-ご不明な点がございましたら、お気軽にお問い合わせください。
+RecipeMart サポートチーム`
+    },
+    {
+        title: 'お詫びの返答',
+        content: `{{ $contact->name }} 様
 
-Recipe2024 サポートチーム`
-        },
-        {
-            title: 'お詫びの返答',
-            content: `{{ $contact->name }} 様
+平素より大変お世話になっております。
+この度は【ご返信／対応】が遅くなり、誠に申し訳ございませんでした。
 
-この度はご迷惑をおかけし、誠に申し訳ございません。
+本件につきましては現在確認を進めており、
+【○月○日まで】に改めてご連絡いたします。
 
-いただいたご指摘を真摯に受け止め、改善に努めてまいります。
+ご不便・ご迷惑をおかけいたしましたこと、重ねてお詫び申し上げます。
+何卒よろしくお願いいたします。
 
-【ここに具体的な対応策を記載してください】
+RecipeMart サポートチーム`
+    },
+    {
+        title: '確認依頼の返答',
+        content: `{{ $contact->name }} 様
 
-今後このようなことがないよう十分注意いたします。
-何かご不明な点がございましたら、お気軽にお問い合わせください。
+平素よりお世話になっております。
+お問い合わせいただいた件につきまして、詳細を確認させていただきたく存じます。
 
-Recipe2024 サポートチーム`
-        }
-    ];
+【確認したい内容を記載してください】
 
-    // シンプルな選択ダイアログ
-    let choice = prompt(
-        "テンプレートを選択してください:\n" +
-        "1: お礼の返答\n" +
-        "2: 情報提供の返答\n" +
-        "3: お詫びの返答\n\n" +
-        "番号を入力してください (1-3):"
-    );
+お手数をおかけいたしますが、ご確認のうえご返信いただけますと幸いです。
+何卒よろしくお願いいたします。
 
-    const index = parseInt(choice) - 1;
-    if (index >= 0 && index < templates.length) {
-        if (textarea.value.trim() === '' || confirm('既存の内容を置き換えますか？')) {
-            textarea.value = templates[index].content;
-            textarea.focus();
-        }
+RecipeMart サポートチーム`
+    },
+    {
+        title: '対応完了の返答',
+        content: `{{ $contact->name }} 様
+
+平素よりお世話になっております。
+お問い合わせいただいておりました件につきまして、
+下記のとおり対応が完了いたしました。
+
+【対応内容を記載してください】
+
+ご確認いただき、万が一不明点等がございましたらお気軽にお知らせください。
+今後とも何卒よろしくお願いいたします。
+
+RecipeMart サポートチーム`
+    }
+];
+
+function openTemplateModal() {
+    document.getElementById('templateModal').classList.remove('hidden');
+    document.getElementById('templateSelect').value = '';
+    document.getElementById('templatePreview').classList.add('hidden');
+}
+
+function closeTemplateModal() {
+    document.getElementById('templateModal').classList.add('hidden');
+}
+
+function previewTemplate() {
+    const select = document.getElementById('templateSelect');
+    const preview = document.getElementById('templatePreview');
+    const content = document.getElementById('previewContent');
+
+    if (select.value !== '') {
+        const template = templates[parseInt(select.value)];
+        content.textContent = template.content;
+        preview.classList.remove('hidden');
+    } else {
+        preview.classList.add('hidden');
     }
 }
+
+function insertSelectedTemplate() {
+    const select = document.getElementById('templateSelect');
+    const textarea = document.getElementById('admin_reply');
+
+    if (select.value !== '') {
+        const template = templates[parseInt(select.value)];
+        if (textarea.value.trim() === '' || confirm('既存の内容を置き換えますか？')) {
+            textarea.value = template.content;
+            closeTemplateModal();
+            textarea.focus();
+        }
+    } else {
+        alert('テンプレートを選択してください。');
+    }
+}
+
+// モーダル外クリックで閉じる
+document.getElementById('templateModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeTemplateModal();
+    }
+});
+
+// Escapeキーで閉じる
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeTemplateModal();
+    }
+});
 </script>
 @endsection

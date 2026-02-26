@@ -115,7 +115,7 @@
   }
 
   .item-in-cart {
-    background-color: #FFDEDE;
+    background-color: rgb(223, 201, 201) !important;
     padding: 8px;
     font-size: 24px;
     font-weight: bold;
@@ -234,7 +234,7 @@
 
   .total-summary .summary-list {
     list-style: none;
-    background-color: #FFDEDE;
+    background-color: #ffefef;
     padding: 30px;
   }
 

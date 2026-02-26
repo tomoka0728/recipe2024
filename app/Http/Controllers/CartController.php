@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ingredient;
-use App\Models\SavedItem;
+use App\Models\SavedForLater;
 use App\Models\PurchaseDetail;
 use App\Models\PurchaseHistory;
 use App\Models\CartItem;
@@ -45,7 +45,7 @@ class CartController extends Controller
 
         // ログインしている場合のみデータベースから取得
         if (Auth::check()) {
-            $saveForLaterItems = SavedItem::with('ingredient')
+            $saveForLaterItems = SavedForLater::with('ingredient')
                 ->where('user_uuid', Auth::user()->uuid)
                 ->get();
 
@@ -79,7 +79,7 @@ class CartController extends Controller
 
             $carts[$ingredientUuid] = [
                 'name' => $ingredient->name,
-                'price' => $ingredient->price,
+                'price' => $ingredient->sale_price,
                 'quantity' => $quantity,
                 'image_path' => $ingredient->image_path,
             ];
@@ -240,12 +240,12 @@ class CartController extends Controller
 
             if (auth()->check()) {
                 $user = auth()->user();
-                $exists = SavedItem::where('user_uuid', $user->uuid)
+                $exists = SavedForLater::where('user_uuid', $user->uuid)
                     ->where('ingredient_uuid', $ingredientUuid)
                     ->first();
 
                 if (!$exists) {
-                    SavedItem::create([
+                    SavedForLater::create([
                         'uuid' => (string) Str::uuid(),
                         'user_uuid' => $user->uuid,
                         'ingredient_uuid' => $ingredientUuid,
@@ -330,12 +330,12 @@ class CartController extends Controller
                 session()->put('carts', $carts); // セッションを更新
 
                 // 「後で買う」にアイテムを追加
-                $exists = SavedItem::where('user_uuid', $user->uuid)
+                $exists = SavedForLater::where('user_uuid', $user->uuid)
                     ->where('ingredient_uuid', $ingredientUuid)
                     ->first();
 
                 if (!$exists) {
-                    SavedItem::create([
+                    SavedForLater::create([
                         'uuid' => (string) Str::uuid(),
                         'user_uuid' => $user->uuid,
                         'ingredient_uuid' => $ingredientUuid,
@@ -382,7 +382,7 @@ class CartController extends Controller
 
         if (auth()->check()) {
             $user = auth()->user();
-            $savedItem = SavedItem::where('user_uuid', $user->uuid)
+            $savedItem = SavedForLater::where('user_uuid', $user->uuid)
                 ->where('ingredient_uuid', $ingredientUuid)
                 ->first();
 
@@ -501,7 +501,7 @@ class CartController extends Controller
     {
         if (auth()->check()) {
             $user = auth()->user();
-            $savedItem = \App\Models\SavedItem::where('user_uuid', $user->uuid)
+            $savedItem = SavedForLater::where('user_uuid', $user->uuid)
                 ->where('ingredient_uuid', $ingredientUuid)
                 ->first();
 

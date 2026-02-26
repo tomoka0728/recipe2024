@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
                 'ingredient_uuid' => $ingredientUuid,
                 'type' => 'cart',
             ]);
-    
+
             $cartItem->quantity = $item['quantity'];
             $cartItem->price = $item['price'];
             $cartItem->save();
@@ -52,7 +52,7 @@ class AuthenticatedSessionController extends Controller
                     'ingredient_uuid' => $ingredientUuid,
                     'type' => 'saveForLater',
                 ]);
-    
+
                 // 数量を追加（既に存在する場合）
                 $savedItem->quantity += $item['quantity'];
                 $savedItem->price = $item['price']; // 必要に応じて価格も更新
@@ -62,22 +62,22 @@ class AuthenticatedSessionController extends Controller
             // セッションから「後で買う」情報を削除
             session()->forget('saveForLater');
         }
-    
+
         $cartItems = \App\Models\CartItem::where('user_uuid', $user->uuid)
             ->where('type', 'cart')
             ->with('ingredient')
             ->get();
-    
+
         $newCarts = [];
         foreach ($cartItems as $item) {
             $newCarts[$item->ingredient_uuid] = [
                 'name' => $item->ingredient->name,
-                'price' => $item->ingredient->price,
+                'price' => $item->ingredient->sale_price,
                 'quantity' => $item->quantity,
                 'image_path' => $item->ingredient->image_path,
             ];
         }
-    
+
         session()->put('carts', $newCarts);
 
         $redirectTo = $request->input('redirect_to');

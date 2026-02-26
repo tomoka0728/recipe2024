@@ -206,6 +206,12 @@
                                 <td style="background-color: #fffae7;"><i class="fa-solid fa-check" style="color: #d4af37;"></i></td>
                             </tr>
                             <tr style="border-bottom: 1px solid #eee;">
+                                <td style="text-align: left; padding: 12px;">ブックマーク保存数</td>
+                                <td style="color: #a0a0a0;">10件</td>
+                                <td style="background-color: #fffae7; color: #a0a0a0;">50件</td>
+                                <td style="background-color: #fffae7; color: #d4af37;">100件</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
                                 <td style="text-align: left; padding: 12px;">ポイント還元率</td>
                                 <td style="color: #a0a0a0;">1%</i></td>
                                 <td style="background-color: #fffae7; color: #a0a0a0;"></i>3%</td>

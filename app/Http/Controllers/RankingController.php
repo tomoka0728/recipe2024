@@ -66,7 +66,7 @@ class RankingController extends Controller
 
             $carts[$ingredientUuid] = [
                 'name' => $ingredient->name,
-                'price' => $ingredient->price,
+                'price' => $ingredient->sale_price,
                 'quantity' => $quantity,
                 'image_path' => $ingredient->image_path,
             ];

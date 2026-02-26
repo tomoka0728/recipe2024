@@ -4,6 +4,18 @@
 <div class="mx-auto max-w-4xl bg-white p-8 rounded shadow">
     <h2 class="text-2xl font-bold mb-6">材料登録</h2>
 
+    @if (session('success'))
+        <div class="p-4 mb-4 bg-green-100 text-green-800 rounded">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="p-4 mb-4 bg-red-100 text-red-800 rounded">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <x-validation-errors />
 
     <form action="{{ route('admin.ingredients.store') }}" method="POST" enctype="multipart/form-data">
@@ -19,6 +31,7 @@
 
                 <div>
                     <label>季節（該当月を選択）</label>
+                    <p class="text-sm text-gray-600 mt-1">※調味料や加工食品など旬がない材料は選択不要です</p>
                     <div class="flex flex-wrap gap-x-2 mt-2">
                         @for ($i = 1; $i <= 12; $i++)
                             <label class="flex items-center mr-2">

@@ -121,7 +121,7 @@ li {
 コンテンツ幅を設定するための共通クラス
 */
 .wrapper {
-  max-width: 1200px;
+  max-width: 1600px;
   padding: 0 16px;
   margin: 0 auto;
 }
@@ -168,7 +168,7 @@ container
   margin-bottom: 10px;
 }
 main {
-  width: 80%;
+  width: 72%;
 }
 
 main .article-title {
@@ -198,7 +198,7 @@ main .text {
 aside
 -------------------------------------------*/
 #sidebar {
-  width: 20%;
+  width: 22%;
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 20px;
@@ -285,10 +285,10 @@ p.title{
 
 .recipe .title2{
   font-size: 1.2em;
-    background: #ff9090;
+    background: rgb(237 231 224 / var(--tw-bg-opacity, 1)) !important;
     padding: 4px;
     text-align: center;
-    color: #FFF;
+    color: #000000;
     font-weight: bold;
     letter-spacing: 0.05em;
 }
@@ -573,7 +573,7 @@ a.btn--pink:hover {
 -------------------------------------------*/
 .recipe-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
     margin-top: 30px;
 }

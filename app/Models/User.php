@@ -88,6 +88,21 @@ class User extends Authenticatable
         return $this->hasMany(Address::class, 'user_uuid', 'uuid');
     }
 
+    public function savedItems()
+    {
+        return $this->hasMany(SavedItem::class, 'user_uuid', 'uuid');
+    }
+
+    public function savedRecipes()
+    {
+        return $this->savedItems()->where('item_type', Recipe::class);
+    }
+
+    public function savedIngredients()
+    {
+        return $this->savedItems()->where('item_type', Ingredient::class);
+    }
+
     public function isPremium(): bool
     {
         return $this->membership_status_code?->isPremium() ?? false;

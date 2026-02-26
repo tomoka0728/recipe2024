@@ -7,11 +7,15 @@
         <div class="flex items-center gap-4">
             <!-- 統計情報 -->
             <div class="text-center">
-                <div class="font-bold text-yellow-600 text-lg">{{ $contacts->where('status', 'pending')->count() }}</div>
+                <div class="font-bold text-red-600 text-lg">{{ $contacts->where('status', 'pending')->count() }}</div>
                 <small class="text-gray-500">未対応</small>
             </div>
             <div class="text-center">
-                <div class="font-bold text-green-600 text-lg">{{ $contacts->where('status', 'replied')->count() }}</div>
+                <div class="font-bold text-blue-600 text-lg">{{ $contacts->whereIn('status', ['in_progress', 'replied'])->count() }}</div>
+                <small class="text-gray-500">対応中</small>
+            </div>
+            <div class="text-center">
+                <div class="font-bold text-green-600 text-lg">{{ $contacts->where('status', 'closed')->count() }}</div>
                 <small class="text-gray-500">対応済み</small>
             </div>
             <div class="text-center">
@@ -64,7 +68,7 @@
         </thead>
         <tbody class="text-gray-600 text-sm">
             @forelse($contacts as $contact)
-                <tr class="border-b border-gray-200 hover:bg-gray-50 {{ $contact->status === 'pending' ? 'bg-yellow-50' : '' }}">
+                <tr class="border-b border-gray-200 hover:bg-gray-50 {{ $contact->status->value === 'pending' ? 'bg-red-50' : '' }}">
                     <td class="py-3 px-6">
                         <div class="font-bold">{{ $contact->created_at->format('Y/m/d') }}</div>
                         <div class="text-gray-500">{{ $contact->created_at->format('H:i') }}</div>
@@ -81,11 +85,15 @@
                         <div class="text-gray-500">{{ Str::limit($contact->message, 60) }}</div>
                     </td>
                     <td class="py-3 px-6">
-                        @if($contact->status === 'pending')
-                            <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
+                        @if($contact->status->value === 'pending')
+                            <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded">
                                 未対応
                             </span>
-                        @elseif($contact->status === 'replied')
+                        @elseif($contact->status->value === 'in_progress' || $contact->status->value === 'replied')
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                                対応中
+                            </span>
+                        @elseif($contact->status->value === 'closed')
                             <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
                                 対応済み
                             </span>
@@ -98,9 +106,6 @@
                     <td class="py-3 px-6">
                         <div class="font-bold">{{ $contact->updated_at->format('Y/m/d') }}</div>
                         <div class="text-gray-500">{{ $contact->updated_at->format('H:i') }}</div>
-                        @if($contact->admin_replied_at)
-                            <div class="text-green-600 text-xs mt-1">返信済み</div>
-                        @endif
                     </td>
                     <td class="py-3 px-6 text-center">
                         <a href="{{ route('admin.contacts.show', $contact) }}"

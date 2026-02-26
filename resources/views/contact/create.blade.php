@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+{{ Breadcrumbs::render('contact.create') }}
 <x-guest-layout>
     <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 mt-10 mb-10 w-full !pt-20">
         <ul class="progressbar">

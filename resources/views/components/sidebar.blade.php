@@ -24,10 +24,16 @@
             <span>商品管理</span>
         </a>
         {{-- お問い合わせ履歴 --}}
+        @php
+            $pendingCount = \App\Models\Contact::where('status', 'pending')->count();
+        @endphp
         <a href="{{ route('admin.contacts.index') }}"
-            class="flex flex-col items-center px-4 py-2 hover:bg-blue-600 hover:text-white {{ str_starts_with($currentRoute, 'admin.contacts') ? 'bg-blue-600 text-white' : 'text-gray-200' }}">
+            class="flex flex-col items-center px-4 py-2 hover:bg-blue-600 hover:text-white relative {{ str_starts_with($currentRoute, 'admin.contacts') ? 'bg-blue-600 text-white' : 'text-gray-200' }}">
             <i class="fas fa-comments text-2xl mb-2"></i>
             <span>お問い合わせ</span>
+            @if($pendingCount > 0)
+                <span class="absolute top-1 right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">{{ $pendingCount }}</span>
+            @endif
         </a>
         {{-- 売上 --}}
         <a href="#"

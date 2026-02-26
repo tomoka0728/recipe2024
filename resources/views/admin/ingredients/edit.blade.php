@@ -20,8 +20,7 @@
                 </div>
 
                 <div>
-                    <label>季節</label>
-                    @php
+                    <label>季節</label>                    <p class="text-sm text-gray-600 mt-1">※調味料や加工食品など旬がない材料は選択不要です</p>                    @php
                         $selectedMonths = json_decode($ingredient->seasonality, true) ?? [];
                     @endphp
                     <div class="flex flex-wrap gap-x-2 mt-2">

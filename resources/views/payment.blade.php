@@ -28,7 +28,9 @@
                                 @php
                                     $addresses = Auth::user()->addresses ?? collect();
                                     $oldAddressType = old('address_type', 'existing');
-                                    $selectedAddressId = old('existing_address_id', $addresses->first()?->id);
+                                    // デフォルト住所があればそれを選択、なければ最初の住所
+                                    $defaultSelected = $defaultAddress ? $defaultAddress->uuid : $addresses->first()?->uuid;
+                                    $selectedAddressId = old('existing_address_id', $defaultSelected);
                                 @endphp
 
                                 {{-- バリデーションエラー表示 --}}
@@ -48,7 +50,8 @@
                                             class="w-full border rounded p-2 mx-8">
                                             @foreach ($addresses as $address)
                                                 <option value="{{ $address->uuid }}"
-                                                    {{ $selectedAddressId == $address->id ? 'selected' : '' }}>
+                                                    {{ $selectedAddressId == $address->uuid ? 'selected' : '' }}>
+                                                    @if($address->is_default)★ @endif
                                                     {{ $address->zipcode }}
                                                     {{ $address->prefectures }}{{ $address->city }}{{ $address->address }}{{ $address->building }}
                                                     {{ $address->name }}

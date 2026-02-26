@@ -41,7 +41,7 @@ export function addToCart() {
         const button = $(this);
         const form = button.closest('.item3, .all-products-item');
         const ingredientUuid = $(this).data('ingredient-id');
-        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const csrfToken = $('meta[name="csrf-token"]').attr('content') || $('input[name="_token"]').val();
         let quantity = $(this).data('quantity');  // ここでデフォルトで1を設定
         if (!quantity) {
             quantity = $(this).closest('.item3').find('select').val();  // 他のページでは数量選択を取得
@@ -52,7 +52,8 @@ export function addToCart() {
             type: "POST",
             data: {
                 ingredientUuid: ingredientUuid,
-                num: quantity
+                num: quantity,
+                _token: csrfToken  // dataにもトークンを追加
             },
             headers: {
                 'X-CSRF-TOKEN': csrfToken,  // metaタグからCSRFトークンを取得
