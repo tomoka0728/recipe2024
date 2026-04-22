@@ -14,85 +14,92 @@ class IngredientsCategoriesTableSeeder extends Seeder
      */
     public function run(): void
     {
+        // 材料名からUUIDを取得
+        $tamanegi = DB::table('ingredients')->where('name', '玉ねぎ')->value('uuid');
+        $syouyu = DB::table('ingredients')->where('name', 'しょうゆ')->value('uuid');
+        $mizu = DB::table('ingredients')->where('name', '水')->value('uuid');
+        $hondashi = DB::table('ingredients')->where('name', 'ほんだし')->value('uuid');
+        $butakoma = DB::table('ingredients')->where('name', '豚肉こま切れ')->value('uuid');
+        $mirin = DB::table('ingredients')->where('name', 'みりん')->value('uuid');
+        $sato = DB::table('ingredients')->where('name', '砂糖')->value('uuid');
+        $ryorisyu = DB::table('ingredients')->where('name', '料理酒')->value('uuid');
+        $ninjin = DB::table('ingredients')->where('name', 'にんじん')->value('uuid');
+        $jagaimo = DB::table('ingredients')->where('name', 'じゃがいも(メークイン)')->value('uuid');
+        $sirataki = DB::table('ingredients')->where('name', 'しらたき')->value('uuid');
+
+        // カテゴリIDからUUIDを取得
+        $yasai = DB::table('i_categories')->where('category_id', 4)->value('uuid'); // 野菜
+        $tyomiryou = DB::table('i_categories')->where('category_id', 9)->value('uuid'); // 調味料
+        $sonota = DB::table('i_categories')->where('category_id', 11)->value('uuid'); // その他
+        $niku = DB::table('i_categories')->where('category_id', 1)->value('uuid'); // 肉
+
         DB::table('ingredients_categories')->insert([
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => '1b61b51d-e80d-4984-9d4e-fe6b77da58d7',//玉ねぎ
-             'i_category_uuid' => 'f94d8330-5e98-433e-bcb1-8d653a337ded',
+             'ingredient_uuid' => $tamanegi,
+             'i_category_uuid' => $yasai,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => '26624281-db75-4e46-8922-1a03587efe48', // しょうゆ
-             'i_category_uuid' => '874906ba-69ce-4561-9bb7-c7bca360f7c0', // 調味料
+             'ingredient_uuid' => $syouyu,
+             'i_category_uuid' => $tyomiryou,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => '3b0b0c8a-8f2f-4c51-a60f-d3a5a6b9ae55', // 水
-             'i_category_uuid' => '10cd8a45-37ff-4d5c-95b6-a3d6af4ed33d', // その他
+             'ingredient_uuid' => $mizu,
+             'i_category_uuid' => $sonota,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => '58306aef-91c6-4d1c-a7ef-5de1b849ae5b', // ほんだし
-             'i_category_uuid' => '874906ba-69ce-4561-9bb7-c7bca360f7c0', // 調味料
+             'ingredient_uuid' => $hondashi,
+             'i_category_uuid' => $tyomiryou,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => '591af533-d3a8-4ebf-9c37-c35575b9a047', // 豚肉こま切れ
-             'i_category_uuid' => '0861b284-3332-4ae0-b068-4264667725c8', // 肉
+             'ingredient_uuid' => $butakoma,
+             'i_category_uuid' => $niku,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => '6700ddec-48c7-4856-9590-8d2625de7ada', // みりん
-             'i_category_uuid' => '874906ba-69ce-4561-9bb7-c7bca360f7c0', // 調味料
+             'ingredient_uuid' => $mirin,
+             'i_category_uuid' => $tyomiryou,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => '866ab940-2829-4091-8b54-b8ac4d5a53bc', // 砂糖
-             'i_category_uuid' => '874906ba-69ce-4561-9bb7-c7bca360f7c0', // 調味料
+             'ingredient_uuid' => $sato,
+             'i_category_uuid' => $tyomiryou,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => 'a824b379-73c6-4f16-91eb-60621df868d3', // 料理酒
-             'i_category_uuid' => '874906ba-69ce-4561-9bb7-c7bca360f7c0', // 調味料
+             'ingredient_uuid' => $ryorisyu,
+             'i_category_uuid' => $tyomiryou,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => 'c9040958-3e2a-4b25-ba1c-820ac4dda7b6', // にんじん
-             'i_category_uuid' => 'f94d8330-5e98-433e-bcb1-8d653a337ded', // 野菜
+             'ingredient_uuid' => $ninjin,
+             'i_category_uuid' => $yasai,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => 'cdc9a092-fdd2-43f5-a197-877f2b4e598a', // じゃがいも(メークイン)
-             'i_category_uuid' => 'f94d8330-5e98-433e-bcb1-8d653a337ded', // 野菜
+             'ingredient_uuid' => $jagaimo,
+             'i_category_uuid' => $yasai,
              'created_at' => now(),
              'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => 'd8d01b38-d5b4-4926-b440-3f2d847e5240', // しらたき
-             'i_category_uuid' => '10cd8a45-37ff-4d5c-95b6-a3d6af4ed33d', // その他
+             'ingredient_uuid' => $sirataki,
+             'i_category_uuid' => $sonota,
              'created_at' => now(),
              'updated_at' => now(),
             ],
-            ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => 'ea3c9d15-befd-4cd6-86c3-9694c1cd08b7', // 塩
-             'i_category_uuid' => '874906ba-69ce-4561-9bb7-c7bca360f7c0', // 調味料
-             'created_at' => now(),
-             'updated_at' => now(),
-            ],
-            ['uuid' => (string) Str::uuid(),
-             'ingredient_uuid' => 'ffd6919b-aa1f-4736-a813-1b0ae575848d', // インゲン
-             'i_category_uuid' => 'f94d8330-5e98-433e-bcb1-8d653a337ded', // 野菜
-             'created_at' => now(),
-             'updated_at' => now(),
-            ]
         ]);
     }
 }

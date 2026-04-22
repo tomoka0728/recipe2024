@@ -14,39 +14,31 @@ class RecipeCategoriesTableSeeder extends Seeder
      */
     public function run(): void
     {
+        // カテゴリIDから動的にUUIDを取得
+        $wasyoku = DB::table('r_categories')->where('category_id', 1)->value('uuid');
+        $niku = DB::table('r_categories')->where('category_id', 4)->value('uuid');
+        $buta = DB::table('r_categories')->where('category_id', 13)->value('uuid');
+        $recipeUuid = DB::table('recipes')->first()->uuid ?? 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607';
+
         DB::table('recipe_categories')->insert([
             [
                 'uuid' => (string) Str::uuid(),
-                'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607', // 黄金比で簡単肉じゃがのレシピUUID
-                'r_category_uuid' => 'f03ec40a-e44b-4abd-b0d4-6e4d5039d5a3', // 和食
+                'recipe_uuid' => $recipeUuid,
+                'r_category_uuid' => $wasyoku, // 和食
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'uuid' => (string) Str::uuid(),
-                'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607', // 黄金比で簡単肉じゃがのレシピUUID
-                'r_category_uuid' => 'db50c5cd-9d41-468e-b3ad-4509e0afc2f1', // 肉
+                'recipe_uuid' => $recipeUuid,
+                'r_category_uuid' => $niku, // 肉料理
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'uuid' => (string) Str::uuid(),
-                'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607', // 黄金比で簡単肉じゃがのレシピUUID
-                'r_category_uuid' => 'f7802285-143a-4611-b663-3f27dacc47fa', // 豚
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'uuid' => (string) Str::uuid(),
-                'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607', // 黄金比で簡単肉じゃがのレシピUUID
-                'r_category_uuid' => 'eb235cf2-7d64-41ea-b5eb-22c3f357f715', // ジャガイモ
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'uuid' => (string) Str::uuid(),
-                'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607', // 黄金比で簡単肉じゃがのレシピUUID
-                'r_category_uuid' => 'ce5a6540-19b8-4fa9-8861-502beae0718e', // にんじん
+                'recipe_uuid' => $recipeUuid,
+                'r_category_uuid' => $buta, // 豚肉料理
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

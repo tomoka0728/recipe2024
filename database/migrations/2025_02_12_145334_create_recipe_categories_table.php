@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('recipe_uuid')->references('uuid')->on('recipes')->onDelete('cascade');
-            $table->foreign('category_uuid')->references('uuid')->on('categories')->onDelete('cascade');
+            // 外部キー制約は後で追加（カラムリネーム後）
         });
     }
 

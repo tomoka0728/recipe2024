@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('ingredients_categories', function (Blueprint $table) {
-            $table->renameColumn('ingredients_uuid', 'ingredient_uuid');
+        Schema::create('r_categories', function (Blueprint $table) {
+            $table->uuid('uuid')->primary();
+            $table->integer('category_id')->unique();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('ingredients_categories', function (Blueprint $table) {
-            $table->renameColumn('ingredient_uuid', 'ingredients_uuid');
-        });
+        Schema::dropIfExists('r_categories');
     }
 };

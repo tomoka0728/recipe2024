@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('recipe_categories', function (Blueprint $table) {
-            $table->renameColumn('category_uuid', 'r_category_uuid');
+            // リネーム後のカラムに外部キーを追加
+            $table->foreign('r_category_uuid')
+                ->references('uuid')
+                ->on('r_categories')
+                ->onDelete('cascade');
         });
     }
 
@@ -22,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('recipe_categories', function (Blueprint $table) {
-            $table->renameColumn('r_category_uuid', 'category_uuid');
+            $table->dropForeign(['r_category_uuid']);
         });
     }
 };

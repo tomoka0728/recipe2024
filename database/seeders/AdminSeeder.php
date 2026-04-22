@@ -16,7 +16,14 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         DB::table('admin')->insert([
-            ['admin_id' => 'admin01', 'admin_name' => 'RecipeMart サポートチーム', 'password' => Hash::make('12345678')]
+            [
+                'uuid' => (string) Str::uuid(),
+                'admin_id' => 'admin01',
+                'admin_name' => 'RecipeMart サポートチーム',
+                'password' => Hash::make('12345678'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ]);
     }
 }

@@ -14,98 +14,115 @@ class RecipeIngredientsTableSeeder extends Seeder
      */
     public function run(): void
     {
+        // レシピUUIDを取得
+        $recipeUuid = DB::table('recipes')->where('title', '黄金比で簡単肉じゃが')->value('uuid');
+
+        // 材料UUIDを取得
+        $butakoma = DB::table('ingredients')->where('name', '豚肉こま切れ')->value('uuid');
+        $jagaimo = DB::table('ingredients')->where('name', 'じゃがいも(メークイン)')->value('uuid');
+        $ninjin = DB::table('ingredients')->where('name', 'にんじん')->value('uuid');
+        $tamanegi = DB::table('ingredients')->where('name', '玉ねぎ')->value('uuid');
+        $sirataki = DB::table('ingredients')->where('name', 'しらたき')->value('uuid');
+        $ingen = DB::table('ingredients')->where('name', 'インゲン')->value('uuid');
+        $mizu = DB::table('ingredients')->where('name', '水')->value('uuid');
+        $sake = DB::table('ingredients')->where('name', '料理酒')->value('uuid');
+        $sato = DB::table('ingredients')->where('name', '砂糖')->value('uuid');
+        $mirin = DB::table('ingredients')->where('name', 'みりん')->value('uuid');
+        $syouyu = DB::table('ingredients')->where('name', 'しょうゆ')->value('uuid');
+        $hondashi = DB::table('ingredients')->where('name', 'ほんだし')->value('uuid');
+
         DB::table('recipe_ingredients')->insert([
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => '591af533-d3a8-4ebf-9c37-c35575b9a047',//豚こま
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $butakoma,
             'quantity' => 400,
             'unit' => 'g',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => 'cdc9a092-fdd2-43f5-a197-877f2b4e598a',//じゃがいも(メークイン)
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $jagaimo,
             'quantity' => 6,
             'unit' => '個',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => 'c9040958-3e2a-4b25-ba1c-820ac4dda7b6',//にんじん
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $ninjin,
             'quantity' => 1,
             'unit' => '本',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => '1b61b51d-e80d-4984-9d4e-fe6b77da58d7',//玉ねぎ
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $tamanegi,
             'quantity' => 1,
             'unit' => '個',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => 'd8d01b38-d5b4-4926-b440-3f2d847e5240',//しらたき
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $sirataki,
             'quantity' => 1,
             'unit' => '袋',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => 'ffd6919b-aa1f-4736-a813-1b0ae575848d',//インゲン
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $ingen,
             'quantity' => 6,
             'unit' => '本',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => '3b0b0c8a-8f2f-4c51-a60f-d3a5a6b9ae55',//水
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $mizu,
             'quantity' => 400,
             'unit' => 'cc',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => 'a824b379-73c6-4f16-91eb-60621df868d3',//酒
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $sake,
             'quantity' => '大4',
             'unit' => '杯',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => '26624281-db75-4e46-8922-1a03587efe48',//しょうゆ
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $syouyu,
             'quantity' => '大4',
             'unit' => '杯',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => '6700ddec-48c7-4856-9590-8d2625de7ada',//みりん
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $mirin,
             'quantity' => '大4',
             'unit' => '杯',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => '866ab940-2829-4091-8b54-b8ac4d5a53bc',//砂糖
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $sato,
             'quantity' => '大4',
             'unit' => '杯',
             'created_at' => now(),
             'updated_at' => now(),
             ],
             ['uuid' => (string) Str::uuid(),
-            'recipe_uuid' => 'b6cb7cdb-0052-4443-ab0a-00f9a2aa8607',
-            'ingredient_uuid' => '58306aef-91c6-4d1c-a7ef-5de1b849ae5b',//だし
+            'recipe_uuid' => $recipeUuid,
+            'ingredient_uuid' => $hondashi,
             'quantity' => '大1',
             'unit' => '杯',
             'created_at' => now(),

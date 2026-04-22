@@ -129,7 +129,7 @@
             <main>
                 <div class="comment">
                     <article>
-                        {!! nl2br(e($recipe->description)) !!}
+                        {!! nl2br(e(str_replace(['\r\n', '\n', '\r'], "\n", $recipe->description))) !!}
                     </article>
                 </div>
                 <div class="count">
